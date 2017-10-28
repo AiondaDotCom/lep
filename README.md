@@ -20,4 +20,3 @@ The goal is that this LEP portal becomes international standard how to handle po
 * Immediate or delayed response by email
 * Response as CSV and PDF file to be used in trials
 * Immediate automatic responses (in case logging is disabled)
-
