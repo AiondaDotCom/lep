@@ -12,3 +12,9 @@ heroku buildpacks:set https://github.com/hone/heroku-buildpack-static
 ```sh
 heroku static:deploy
 ```
+
+# Scale
+```sh
+heroku ps:scale web=1
+heroku ps:scale web=0
+```
