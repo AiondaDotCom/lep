@@ -1,5 +1,8 @@
+Static buildpack doku:
+> https://github.com/heroku/heroku-buildpack-static
 
-# Initialize
+
+# Initialize1
 ```sh
 heroku git:remote --app aionda-lep-spa
 ```
