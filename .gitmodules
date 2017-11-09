@@ -1,3 +1,6 @@
 [submodule "lep-api"]
 	path = lep-api
 	url = git@github.com:AiondaDotCom/lep-api.git
+[submodule "lep-spa"]
+	path = lep-spa
+	url = git@github.com:AiondaDotCom/lep-spa.git
