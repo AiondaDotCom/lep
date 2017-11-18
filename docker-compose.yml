@@ -53,6 +53,9 @@ api:
 spa:
   build: lep-spa
   ports:
-    - "80:80"
+    - 80:80
   links:
     - api
+  volumes:
+    # Static files are mounted as a volume.
+    - ./lep-spa/src/:/usr/share/nginx/html
