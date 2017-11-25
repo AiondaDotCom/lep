@@ -10,6 +10,7 @@ api:
   links:
     - mysql
   environment:
+    DEVELOPMENT: 1
     JAWSDB_URL: "mysql://root:superSecure@mysql:3306/qgx4mamkob3zgpg7"
     DEVEL_PRIVATE_KEY: |
       -----BEGIN RSA PRIVATE KEY-----
