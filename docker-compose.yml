@@ -59,4 +59,4 @@ spa:
     - api
   volumes:
     # Static files are mounted as a volume.
-    - ./lep-spa/src/:/usr/share/nginx/html
+    - ./lep-spa/:/usr/share/nginx/html
