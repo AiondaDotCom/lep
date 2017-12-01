@@ -39,6 +39,10 @@ http {
       root /app/spa/src/;
     }
 
+    location /node_modules/ {
+        root /app/;
+    }
+
     location /api/ {
       proxy_pass      http://127.0.0.1:4242/;
     }

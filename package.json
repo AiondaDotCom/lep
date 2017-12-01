@@ -13,7 +13,16 @@
     "jsonwebtoken": "^8.1.0",
     "node-mysql": "^0.4.2",
     "sendgrid": "^5.2.3",
-    "swagger-express-mw": "^0.1.0"
+    "swagger-express-mw": "^0.1.0",
+    
+    "ajax": "^0.0.4",
+    "angular": "^1.6.7",
+    "bootstrap": "^4.0.0-beta.2",
+    "bower": "^1.8.2",
+    "jquery": "^3.2.1",
+    "ladda-bootstrap": "msurguy/Ladda-bootstrap",
+    "popper.js": "^1.12.9",
+    "spin": "^0.0.1"
   },
   "devDependencies": {
     "should": "^7.1.0",
