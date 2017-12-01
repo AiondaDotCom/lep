@@ -1,0 +1,16 @@
+{
+  "name": "src",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "ajax": "^0.0.4",
+    "angular": "^1.6.7",
+    "bootstrap": "^4.0.0-beta.2",
+    "bower": "^1.8.2",
+    "jquery": "^3.2.1",
+    "ladda-bootstrap": "msurguy/Ladda-bootstrap",
+    "popper.js": "^1.12.9",
+    "spin": "^0.0.1"
+  }
+}

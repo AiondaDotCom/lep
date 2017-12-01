@@ -1,0 +1,13 @@
+{
+  "root": "src",
+  "clean_urls": true,
+  "routes": {
+    "/**": "index.html"
+  },
+  "https_only": true,
+  "proxies": {
+    "/api/": {
+      "origin": "https://aionda-lep-api.herokuapp.com/"
+    }
+  }
+}

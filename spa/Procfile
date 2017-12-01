@@ -1,0 +1,2 @@
+web: mv node_modules src/ && bin/boot
+

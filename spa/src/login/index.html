@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- source: http://getbootstrap.com/docs/4.0/examples/signin/ -->
+    <title>Aionda LEP</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="/node_modules/ladda-bootstrap/dist/ladda-themeless.min.css">
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
+
+    <!-- Custom styles for this template -->
+    <link href="login.css" rel="stylesheet">
+  </head>
+  <body>
+
+    <div class="container">
+      <form id="loginForm" class="form-signin">
+        <h2 class="form-signin-heading">Please sign in</h2>
+        (or <a href="/register">create account</a>)
+        <label for="inputEmail" class="sr-only">Email address</label>
+        <input id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <div id="alertLoginSuccess" class="alert alert-success" role="alert">
+          Login successful!
+        </div>
+        <div id="alertLoginFailure" class="alert alert-danger" role="alert">
+          Wrong username or password.
+        </div>
+        <button id="signInButton" class="btn btn-lg btn-primary btn-block ladda-button" data-style="expand-left" type="submit"><span class="ladda-label">Sign in</span></button>
+        <!--<button id="signInButton" class="btn btn-lg btn-primary btn-block ladda-button" type="submit" data-style="expand-left" data-size="xs"><span class="ladda-label">Sign in</span></button>-->
+      </form>
+
+    </div> <!-- /container -->
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="/node_modules/popper.js/dist/umd/popper.min.js"></script>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <script src="/node_modules/ladda-bootstrap/dist/spin.min.js"></script>
+    <script src="/node_modules/ladda-bootstrap/dist/ladda.min.js"></script>
+
+    <script src="login.js"></script>
+
+  </body>
+</html>

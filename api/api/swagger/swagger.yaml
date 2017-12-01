@@ -1,0 +1,185 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: Aionda LEP
+# during dev, should point to your local machine
+host: localhost:10010
+# basePath prefixes all resource paths
+basePath: /
+#
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+    #
+    # User management related things
+    # /user/login
+    # /user/create
+    # /user/modify
+    #  -X DELETE
+    #
+  /user/login:
+    x-swagger-router-controller: login
+    get:
+      description: Endpoint used to obtain a JSON Webtoken from the server. This token is used to authenicate the user for subsequent requestes
+      # used as the method name of the controller
+      operationId: login
+      parameters:
+        - name: name
+          in: query
+          description: Username
+          required: true
+          type: string
+        - name: password
+          in: query
+          description: Password corresponding to username
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: object
+            required:
+              - jwt
+            properties:
+              jwt:
+                type: string
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /user/create:
+    x-swagger-router-controller: login
+    get:
+      description: Create a new account. It is checked, if the username is inside an allowd set of domains
+      operationId: createAccount
+      parameters:
+        - name: name
+          in: query
+          description: Requested username
+          required: true
+          type: string
+        - name: password
+          in: query
+          description: Password
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /user/delete:
+    x-swagger-router-controller: login
+    get:
+      description: Delete account
+      operationId: deleteAccount
+      parameters:
+        - name: name
+          in: query
+          description: username
+          required: true
+          type: string
+        - name: password
+          in: query
+          description: Password
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /user/modify:
+    x-swagger-router-controller: login
+    get:
+      description: Modify account (change password, etc.)
+      operationId: modifyAccount
+      parameters:
+        - name: name
+          in: query
+          description: username
+          required: true
+          type: string
+        - name: password
+          in: query
+          description: Password
+          required: true
+          type: string
+        - name: newpassword
+          in: query
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /restricted:
+    x-swagger-router-controller: restricted
+    get:
+      description: Endpoint used to test the jwt authentication
+      # used as the method name of the controller
+      operationId: restricted
+      parameters:
+        - name: jwt
+          in: query
+          description: JSON Web token
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+definitions:
+  HelloWorldResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
