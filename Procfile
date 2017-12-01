@@ -1,1 +1,1 @@
-web: bin/start-nginx sh run.sh
+web: bin/start-nginx npm start
