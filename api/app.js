@@ -15,8 +15,9 @@ SwaggerExpress.create(config, function(err, swaggerExpress) {
 
   // install middleware
   swaggerExpress.register(app);
-  
+
   //var port = process.env.PORT || 10010;
+  // Use fixed port
   var port = 4242;
   fs.openSync('/tmp/app-initialized', 'w');
 

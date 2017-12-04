@@ -6,7 +6,7 @@ mysql:
     MYSQL_ROOT_PASSWORD: "superSecure"
 
 api:
-  build: lep-api
+  build: api
   links:
     - mysql
   environment:
@@ -50,13 +50,16 @@ api:
       oXPOjOYvmAbbmqRv1RAD1cHEgJiFvPMXVvWoymM7qhwA4/ToxFb5ceuq4QaVvDsh
       DwIDAQAB
       -----END PUBLIC KEY-----
+  volumes:
+    # Static files are mounted as a volume.
+    - ./:/srv
 
 spa:
-  build: lep-spa
+  build: spa
   ports:
     - 80:80
   links:
     - api
   volumes:
     # Static files are mounted as a volume.
-    - ./lep-spa/:/usr/share/nginx/html
+    - ./:/usr/share/nginx/html
