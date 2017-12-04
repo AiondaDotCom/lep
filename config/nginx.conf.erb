@@ -32,7 +32,7 @@ http {
 
 	server {
 		listen <%= ENV["PORT"] %>;
-		server_name _;
+		server_name aionda-lep-spa.herokuapp.com;
 		keepalive_timeout 5;
 
     if ($scheme = http) {
