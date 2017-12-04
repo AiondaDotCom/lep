@@ -33,9 +33,10 @@ http {
 
 	server {
 		listen <%= ENV["PORT"] %>;
-		server_name aionda-lep-spa.herokuapp.com;
+		server_name <%= ENV["SERVER_NAME"] %>;
 		keepalive_timeout 5;
 
+    # Redirect http traffic to https
     if ($http_x_forwarded_proto = http) {
       return 301 https://$server_name$request_uri;
     }
