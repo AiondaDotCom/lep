@@ -11,10 +11,3 @@ heroku git:remote -a aionda-lep-api
 ```sh
 heroku buildpacks:set https://github.com/heroku/heroku-buildpack-nodejs -a aionda-lep-api
 ```
-
-## Generate RSA SHA256 keypair
-```sh
-openssl genrsa -out private.key 2048
-# Extract public key:
-openssl rsa -pubout -in private.key -out public_key.pem
-```
