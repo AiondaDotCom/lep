@@ -35,7 +35,7 @@ http {
 		server_name aionda-lep-spa.herokuapp.com;
 		keepalive_timeout 5;
 
-    if ($scheme = http) {
+    if ($http_x_protocol = http) {
       return 301 https://$server_name$request_uri;
     }
 
