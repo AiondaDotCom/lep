@@ -16,7 +16,7 @@ http {
 	server_tokens off;
 
   # Heroku headers: https://devcenter.heroku.com/articles/http-routing
-	log_format l2met 'measure#nginx.service=$request_time request_id=$http_x_request_id protocol=$http_x_forwarded-proto';
+	log_format l2met 'measure#nginx.service=$request_time request_id=$http_x_request_id protocol=$http_x_forwarded_proto';
 	access_log logs/nginx/access.log l2met;
 	error_log logs/nginx/error.log;
 
@@ -36,7 +36,7 @@ http {
 		server_name aionda-lep-spa.herokuapp.com;
 		keepalive_timeout 5;
 
-    if ($http_x_forwarded-proto = http) {
+    if ($http_x_forwarded_proto = http) {
       return 301 https://$server_name$request_uri;
     }
 
