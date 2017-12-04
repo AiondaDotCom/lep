@@ -1,14 +1,18 @@
-dev:
+installDependencies:
+	######################
+	# Fetch node_modules #
+	######################
+	docker run --rm -v $(CURDIR):/src lep_helper yarn install
+
+dev: installDependencies
+	#################################
+	# Build and start docker images #
+	#################################
 	docker-compose build
 	docker-compose up -d
 
 deploy:
-	##############
-	# Deploy API #
-	##############
-	(cd lep-api && git push heroku)
-	
-	##############
-	# Deploy SPA #
-	##############
-	(cd lep-spa && git push heroku)
+	####################
+	# Deploy to heroku #
+	####################
+	git push heroku dev:master

@@ -5,6 +5,9 @@ mysql:
   environment:
     MYSQL_ROOT_PASSWORD: "superSecure"
 
+helper:
+  build: helper
+
 api:
   build: api
   links:
