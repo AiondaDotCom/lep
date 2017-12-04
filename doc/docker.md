@@ -2,8 +2,7 @@ For local development with docker and docker-compose
 
 # Build and deploy
 ```sh
-docker-compose build
-docker-compuse up
+make dev
 ```
 
 # Setup MySQL database
@@ -12,6 +11,9 @@ docker-compose run api bash
  mysql --host mysql -psuperSecure
   cerate database qgx4mamkob3zgpg7;
   use qgx4mamkob3zgpg7;
-  CREATE TABLE testTable (id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, name VARCHAR(30) NOT NULL, name2 VARCHAR(30) NOT NULL);
+  # create tables as documented in api/login.md
   exit;
 ```
+
+# See also
+[api/login.md](api/login.md)
