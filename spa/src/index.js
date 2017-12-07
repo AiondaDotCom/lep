@@ -1,4 +1,11 @@
 $(document).ready(function() {
+
+  $('#loginModal').on('shown.bs.modal', function() {
+    // Focus email input when loginModal gets visible
+    $('#inputEmail').focus()
+  })
+
+
   $('#loginForm').on('submit', function(evt) {
     evt.preventDefault();
 
@@ -21,18 +28,19 @@ $(document).ready(function() {
           // Unauthorized
           console.log('Wrong username or password')
           console.log(response);
-          $('#alertLoginSuccess').hide()
-          $('#alertLoginFailure').show()
+          $('#alertLoginSuccess').slideUp('slow');
+          $('#alertLoginFailure').slideDown('slow');
         }
       },
       success: function(data) {
         //console.log(data);
-        $('#alertLoginSuccess').show();
-        $('#alertLoginFailure').hide();
+        $('#alertLoginSuccess').slideDown('slow');
+        $('#alertLoginFailure').slideUp('slow');
         var jwt = data['jwt'];
         console.log(jwt);
         // Save JSON Web Token
         localStorage.setItem("jwt", jwt);
+        localStorage.setItem("userName", data['userName']);
 
         /*
         // Test token
