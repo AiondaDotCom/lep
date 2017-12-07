@@ -1,5 +1,12 @@
 $(document).ready(function() {
 
+  var app = new Vue({
+    el: '#app',
+    data: {
+      message: 'Hello Vue!'
+    }
+  })
+
   $('#loginModal').on('shown.bs.modal', function() {
     // Focus email input when loginModal gets visible
     $('#inputEmail').focus()
