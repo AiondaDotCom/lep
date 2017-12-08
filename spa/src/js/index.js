@@ -15,9 +15,37 @@ $(document).ready(function() {
         logoutInDuration: '',
         accountType: '',
       },
+      createAccountModal: {
+        error: false,
+        errorMessage: 'Error'
+      },
       restrictedContent: ''
+    },
+    methods: {
+      testRestrictedAPI: function() {
+        console.log('CLICK!!')
+        var jwt = localStorage.getItem('jwt');
+
+        // Test token
+        $.ajax({
+          type: "GET",
+          url: '/api/restricted',
+          data: {
+            'jwt': jwt,
+          },
+          success: function(data) {
+            console.log(data)
+            app.restrictedContent = data;
+          },
+          error: function(error) {
+            console.log(error)
+            app.restrictedContent = "An error occured: " + error;
+          }
+        })
+      }
     }
   })
+
 
   $('#loginModal').on('shown.bs.modal', function() {
     // Focus email input when loginModal gets visible
@@ -60,9 +88,16 @@ $(document).ready(function() {
       success: function(data) {
         console.log(data)
         $('#createAccountModal').modal('hide');
+        app.createAccountModal.error = true;
       },
       error: function(error) {
-        console.log('ERROR', error);
+        app.createAccountModal.error = true;
+        console.log(error);
+        if ('message' in error.responseJSON) {
+          app.createAccountModal.errorMessage = 'Error: ' + error.responseJSON.message;
+        } else {
+          app.createAccountModal.errorMessage = 'Error';
+        }
       }
     }).always(function() {
       l.stop(); // Stop the loading animation
@@ -113,36 +148,14 @@ $(document).ready(function() {
 
         $('#loginModal').modal('hide');
 
-        $('#logoutInDuration').html(
-          '<time class="timeago" datetime="' + new Date(data['expireTimestamp'] * 1000).toISOString() + '">'
-        );
+        app.user.isLoggedIn = true;
+
+        app.user.logoutInDuration = '<time class="timeago" datetime="' + new Date(data['expireTimestamp'] * 1000).toISOString() + '">';
         $("time.timeago").timeago();
 
         app.user.name = data['userName'];
         app.user.accountType = data['accountType'];
-        app.user.logoutInDuration = data['expireTimestamp'];
-
-        app.user.isLoggedIn = true;
-
-
-        /*
-        // Test token
-        $.ajax({
-          type: "GET",
-          url: '/api/restricted',
-          data: {
-            'jwt': data,
-          },
-          success: function(data) {
-                // callback code here
-                //console.log('success')
-                //console.log(data.success)
-                console.log(data)
-
-                // Save JSON Web Token
-                //localStorage.setItem("jwt", data);
-              }
-        })*/
+        //app.user.logoutInDuration = data['expireTimestamp'];
       },
       error: function(error) {
         app.user.isLoggedIn = false;

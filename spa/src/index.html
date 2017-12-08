@@ -75,6 +75,9 @@
               <input id="createAccountInputEmail" class="form-control" placeholder="Email address" required>
               <label for="createAccountInputPassword" class="sr-only">Password</label>
               <input type="password" id="createAccountInputPassword" class="form-control" placeholder="Password" required>
+              <div v-if="createAccountModal.error" id="alerCreateAccountFailure" class="alert alert-danger" role="alert">
+                {{ createAccountModal.errorMessage }}
+              </div>
               <button id="createAccountButton" class="btn btn-lg btn-primary btn-block ladda-button" data-style="expand-left" type="submit"><span class="ladda-label">Create Account</span></button>
             </form>
           </div>
@@ -110,7 +113,7 @@
               </form>-->
         <button id="showCreateAccountModalButton" class="btn btn-info" data-toggle="modal" data-target="#createAccountModal">Register</button>
         <button id="showLoginModalButton" class="btn btn-info" data-toggle="modal" data-target="#loginModal">Login</button>
-        <button id="logoutButton" class="btn btn-danger" style="display:none;">Logout (in <span id="logoutInDuration"></span>)</button>
+        <button id="logoutButton" class="btn btn-danger" style="display:none;">Logout</button>
         <!--<a href="/login/" class="btn btn-info" role="button">Login</a>-->
       </div>
     </nav>
@@ -126,10 +129,10 @@
           <h1>Welcome {{ user.name }}!</h1>
           <ul>
             <li>Your account has <strong>{{ user.accountType }}</strong> privileges</li>
-            <li>Your login expires in {{ user.logoutInDuration }}</li>
+            <li>Your login expires <span v-html="user.logoutInDuration"></span></li>
             <li>Your last login occured at {{ user.lastLogin }}</li>
           </ul>
-          <button id="testRestrictedAPIButton" class="btn btn-danger">Request restricted content</button>
+          <button v-on:click="testRestrictedAPI" class="btn btn-danger">Request restricted content</button>
           <br>
           {{ restrictedContent }}
         </div>
