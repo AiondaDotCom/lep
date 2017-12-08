@@ -1,5 +1,10 @@
 $(document).ready(function() {
 
+
+  $.timeago.settings.allowFuture = true;
+  $("time.timeago").timeago();
+
+
   var app = new Vue({
     el: '#app',
     data: {
@@ -10,6 +15,11 @@ $(document).ready(function() {
   $('#loginModal').on('shown.bs.modal', function() {
     // Focus email input when loginModal gets visible
     $('#inputEmail').focus()
+  })
+
+  $('#logoutButton').on('click', function(evt){
+    // TODO: Delete saved jwt, reset everything / reload page
+    location.reload();
   })
 
 
@@ -45,9 +55,23 @@ $(document).ready(function() {
         $('#alertLoginFailure').slideUp('slow');
         var jwt = data['jwt'];
         console.log(jwt);
+        console.log('Login expires at ', data['expireTimestamp']);
         // Save JSON Web Token
         localStorage.setItem("jwt", jwt);
         localStorage.setItem("userName", data['userName']);
+
+        $('#showCreateAccountModalButton').hide();
+        $('#showLoginModalButton').hide();
+
+        $('#logoutButton').show();
+
+        $('#loginModal').modal('hide');
+
+        $('#logoutInDuration').html(
+          '<time class="timeago" datetime="' + new Date(data['expireTimestamp'] * 1000).toISOString() + '">'
+        );
+        $("time.timeago").timeago();
+
 
         /*
         // Test token
@@ -67,6 +91,14 @@ $(document).ready(function() {
                 //localStorage.setItem("jwt", data);
               }
         })*/
+      },
+      error: function(error) {
+        console.log('ERROR', error);
+        $('#showCreateAccountModalButton').show();
+        $('#showLoginModalButton').show();
+
+        $('#logoutButton').hide();
+
       }
     }).always(function() {
       l.stop(); // Stop the loading animation

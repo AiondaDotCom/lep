@@ -735,7 +735,7 @@ isstream@~0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/isstream/-/isstream-0.1.2.tgz#47e63f7af55afa6f92e1500e690eb8b8529c099a"
 
-jquery@^3.2.1:
+jquery@>=1.2.3, jquery@^3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"
 
@@ -1787,6 +1787,12 @@ tar@^2.2.1:
     block-stream "*"
     fstream "^1.0.2"
     inherits "2"
+
+timeago@^1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/timeago/-/timeago-1.6.1.tgz#fa9aa932e6cfae1f0c9b62f49d8a6071fdf69c5b"
+  dependencies:
+    jquery ">=1.2.3"
 
 tough-cookie@~2.3.3:
   version "2.3.3"

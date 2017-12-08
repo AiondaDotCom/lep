@@ -74,9 +74,10 @@ function login(req, res) {
             console.log('Account type:', rows[0]['accounttype'])
             console.log('signing...')
             var expiresInNSeconds = 15 * 60; // Expires in 15 minutes
+            var expireTimestamp = Math.floor(Date.now() / 1000) + expiresInNSeconds;
             jwt.sign({
                 type: 'user',
-                exp: Math.floor(Date.now() / 1000) + expiresInNSeconds
+                exp: expireTimestamp
               },
               privateKey, {
                 algorithm: 'RS256'
@@ -93,7 +94,9 @@ function login(req, res) {
                   // Signing was successful, return the token
                   console.log(token);
                   res.json({
-                    'jwt': token
+                    'jwt': token,
+                    'userName': userName,
+                    'expireTimestamp': expireTimestamp
                   });
                 }
               })
