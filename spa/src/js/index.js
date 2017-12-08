@@ -8,7 +8,13 @@ $(document).ready(function() {
   var app = new Vue({
     el: '#app',
     data: {
-      message: 'Hello Vue!'
+      user: {
+        isLoggedIn: false,
+        name: 'test',
+        lastLogin: '',
+        logoutInDuration: '',
+        accountType: '',
+      }
     }
   })
 
@@ -17,7 +23,7 @@ $(document).ready(function() {
     $('#inputEmail').focus()
   })
 
-  $('#logoutButton').on('click', function(evt){
+  $('#logoutButton').on('click', function(evt) {
     // TODO: Delete saved jwt, reset everything / reload page
     location.reload();
   })
@@ -72,6 +78,12 @@ $(document).ready(function() {
         );
         $("time.timeago").timeago();
 
+        app.user.name = data['userName'];
+        app.user.accountType = data['accountType'];
+        app.user.logoutInDuration = data['expireTimestamp'];
+
+        app.user.isLoggedIn = true;
+
 
         /*
         // Test token
@@ -93,6 +105,7 @@ $(document).ready(function() {
         })*/
       },
       error: function(error) {
+        user.isLoggedIn = false;
         console.log('ERROR', error);
         $('#showCreateAccountModalButton').show();
         $('#showLoginModalButton').show();
