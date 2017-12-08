@@ -105,7 +105,7 @@ $(document).ready(function() {
         })*/
       },
       error: function(error) {
-        user.isLoggedIn = false;
+        app.user.isLoggedIn = false;
         console.log('ERROR', error);
         $('#showCreateAccountModalButton').show();
         $('#showLoginModalButton').show();
