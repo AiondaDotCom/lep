@@ -14,7 +14,8 @@ $(document).ready(function() {
         lastLogin: '',
         logoutInDuration: '',
         accountType: '',
-      }
+      },
+      restrictedContent: ''
     }
   })
 
@@ -28,6 +29,45 @@ $(document).ready(function() {
     location.reload();
   })
 
+  /*$('#testRestrictedAPIButton').on('click', function(evt) {
+    console.log('click');
+  })*/
+
+
+
+  $('#createAccountForm').on('submit', function(evt) {
+    evt.preventDefault();
+    // Initialize Ladda for this button
+    var l = Ladda.create(document.querySelector('#createAccountButton'));
+    l.start(); // Start the loading animation
+
+    var mail = $('#createAccountInputEmail').val();
+    var password = $('#createAccountInputPassword').val();
+
+    $.ajax({
+      type: "GET",
+      url: '/api/user/create',
+      data: {
+        'name': mail,
+        'password': password
+      },
+      statusCode: {
+        401: function(response) {
+          // Unauthorized
+          console.log('Unauthorized');
+        }
+      },
+      success: function(data) {
+        console.log(data)
+        $('#createAccountModal').modal('hide');
+      },
+      error: function(error) {
+        console.log('ERROR', error);
+      }
+    }).always(function() {
+      l.stop(); // Stop the loading animation
+    });
+  })
 
   $('#loginForm').on('submit', function(evt) {
     evt.preventDefault();
