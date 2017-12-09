@@ -24,6 +24,7 @@ function restricted(req, res) {
   jwt.verify(token, publicKey, function(err, decoded) {
     if (err){
       console.log(err)
+      res.status(401); // 401 Unauthorized
       res.json('ERROR: Verification failed')
     }
     else {
