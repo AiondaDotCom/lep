@@ -125,7 +125,7 @@
           <p>Insert short introduction</p>
         </div>
 
-        <div v-if="user.isLoggedIn">
+        <div v-cloak v-if="user.isLoggedIn">
           <h1>Welcome {{ user.name }}!</h1>
           <ul>
             <li>Your account has <strong>{{ user.accountType }}</strong> privileges</li>
