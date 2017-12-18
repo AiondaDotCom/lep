@@ -36,18 +36,21 @@ http {
 		server_name <%= ENV["SERVER_NAME"] %>;
 		keepalive_timeout 5;
 
+		root /app/spa/dist;
+
+
     # Redirect http traffic to https
     if ($http_x_forwarded_proto = http) {
       return 301 https://$server_name$request_uri;
     }
 
     location / {
-      root /app/spa/src/;
+			 try_files $uri /index.html;
     }
 
-    location /node_modules/ {
-        root /app/;
-    }
+    #location /node_modules/ {
+    #    root /app/;
+    #}
 
     location /api/ {
       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

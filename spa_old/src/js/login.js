@@ -1,6 +1,8 @@
 require(['jquery', 'vue', 'ladda', 'bootstrap', 'timeago'], function($, Vue, Ladda) {
 
   $(document).ready(function() {
+    $('#loadingAnimation').hide();
+
     $.timeago.settings.allowFuture = true;
     $("time.timeago").timeago();
 
@@ -45,6 +47,40 @@ require(['jquery', 'vue', 'ladda', 'bootstrap', 'timeago'], function($, Vue, Lad
       }
     })
 
+    // Check if the user is already logged in
+    if (localStorage.getItem('jwt')) {
+      $.ajax({
+        type: "GET",
+        url: '/api/restricted',
+        data: {
+          'jwt': localStorage.getItem('jwt'),
+        },
+        success: function(data) {
+          //console.log(data)
+          //app.restrictedContent = data;
+
+          $('#showCreateAccountModalButton').hide();
+          $('#showLoginModalButton').hide();
+
+          $('#logoutButton').show();
+
+          $('#loginModal').modal('hide');
+
+          app.user.isLoggedIn = true;
+
+          //  app.user.logoutInDuration = '<time class="timeago" datetime="' + new Date(data['expireTimestamp'] * 1000).toISOString() + '">';
+          //  $("time.timeago").timeago();
+
+          //app.user.name = data['userName'];
+          //app.user.accountType = data['accountType'];
+          //app.user.logoutInDuration = data['expireTimestamp'];
+        },
+        error: function(error) {
+          console.log(error)
+          //app.restrictedContent = "An error occured: " + error;
+        }
+      })
+    }
 
     $('#loginModal').on('shown.bs.modal', function() {
       // Focus email input when loginModal gets visible
@@ -53,6 +89,7 @@ require(['jquery', 'vue', 'ladda', 'bootstrap', 'timeago'], function($, Vue, Lad
 
     $('#logoutButton').on('click', function(evt) {
       // TODO: Delete saved jwt, reset everything / reload page
+      localStorage.removeItem('jwt');
       location.reload();
     })
 

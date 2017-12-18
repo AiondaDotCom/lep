@@ -8,6 +8,7 @@
   "license": "",
   "main": "app.js",
   "dependencies": {
+    "bcrypt": "^1.0.3",
     "express": "^4.12.3",
     "jsonwebtoken": "^8.1.0",
     "node-mysql": "^0.4.2",

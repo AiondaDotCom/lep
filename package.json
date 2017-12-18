@@ -9,10 +9,12 @@
   "main": "app.js",
   "dependencies": {
     "module-api": "file:api",
-    "module-spa": "file:spa"
+    "module-spa": "file:spa",
+    "@angular/cli": "1.6.1"
   },
   "scripts": {
     "start": "node api/app.js",
-    "test": "swagger project test"
+    "test": "swagger project test",
+    "postinstall": "cd spa && ng build --aot -prod"
   }
 }
