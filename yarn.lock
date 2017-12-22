@@ -158,6 +158,10 @@
   dependencies:
     tslib "^1.7.1"
 
+"@ng-bootstrap/ng-bootstrap@^1.0.0-beta.8":
+  version "1.0.0-beta.8"
+  resolved "https://registry.yarnpkg.com/@ng-bootstrap/ng-bootstrap/-/ng-bootstrap-1.0.0-beta.8.tgz#04871e24d1c8a78bcf5a0476edc25044d28abb09"
+
 "@ngtools/json-schema@1.1.0", "@ngtools/json-schema@^1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@ngtools/json-schema/-/json-schema-1.1.0.tgz#c3a0c544d62392acc2813a42c8a0dc6f58f86922"
@@ -300,6 +304,10 @@ alphanum-sort@^1.0.1, alphanum-sort@^1.0.2:
 amdefine@>=0.0.4:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
+
+angular-in-memory-web-api@^0.5.2:
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/angular-in-memory-web-api/-/angular-in-memory-web-api-0.5.2.tgz#ff2ea666abfd04dd7d16c953ec972e1318a09824"
 
 ansi-html@0.0.7:
   version "0.0.7"
@@ -784,6 +792,10 @@ boom@5.x.x:
   resolved "https://registry.yarnpkg.com/boom/-/boom-5.2.0.tgz#5dd9da6ee3a5f302077436290cb717d3f4a54e02"
   dependencies:
     hoek "4.x.x"
+
+bootstrap@4.0.0-beta.2:
+  version "4.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.0.0-beta.2.tgz#4d67d2aa2219f062cd90bc1247e6747b9e8fd051"
 
 bottleneck@^1.12.0:
   version "1.16.0"
@@ -4148,9 +4160,12 @@ mkdirp@0.5.x, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.0, mkd
     "@angular/platform-browser" "^5.0.0"
     "@angular/platform-browser-dynamic" "^5.0.0"
     "@angular/router" "^5.0.0"
+    "@ng-bootstrap/ng-bootstrap" "^1.0.0-beta.8"
     "@types/jasmine" "~2.5.53"
     "@types/jasminewd2" "~2.0.2"
     "@types/node" "~6.0.60"
+    angular-in-memory-web-api "^0.5.2"
+    bootstrap "4.0.0-beta.2"
     codelyzer "^4.0.1"
     core-js "^2.4.1"
     jasmine-core "~2.6.2"
