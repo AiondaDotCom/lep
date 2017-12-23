@@ -1,3 +1,15 @@
-<p>
-  login works!
-</p>
+<form id="loginForm" class="form-signin">
+  <!--<h2 class="form-signin-heading">Please sign in</h2>-->
+  <label for="inputEmail" class="sr-only">Email address</label>
+  <input [(ngModel)]="name" name="username" id="inputEmail" class="form-control" placeholder="Email address" required>
+  <label for="inputPassword" class="sr-only">Password</label>
+  <input [(ngModel)]="password" name="password" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+  <div *ngIf="loginMessage" class="alert" [class.alert-danger]="error == true" [class.alert-success]="error == false" role="alert">
+    {{ loginMessage }}
+  </div>
+  <!--<div id="alertLoginFailure" class="alert alert-danger" role="alert">
+    Wrong username or password.
+  </div>-->
+  <button (click)="signIn()" id="signInButton" class="btn btn-lg btn-primary btn-block ladda-button" data-style="expand-left" type="submit"><span class="ladda-label">Sign in</span></button>
+  <!--<button id="signInButton" class="btn btn-lg btn-primary btn-block ladda-button" type="submit" data-style="expand-left" data-size="xs"><span class="ladda-label">Sign in</span></button>-->
+</form>
