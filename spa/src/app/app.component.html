@@ -1,12 +1,15 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
-  <a class="navbar-brand" href="#">{{ title }}</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-  <div class="collapse navbar-collapse" id="navbarCollapse">
+  <a class="navbar-brand" routerLink="/" (click)="navbarCollapsed = true">{{ title }}</a>
+  <!-- collapsable navbar see: https://github.com/ng-bootstrap/ng-bootstrap/issues/738 -->
+  <button class="navbar-toggler navbar-toggler-right" type="button" (click)="navbarCollapsed = !navbarCollapsed"
+         [attr.aria-expanded]="!navbarCollapsed" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+   <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div [ngbCollapse]="navbarCollapsed" class="collapse navbar-collapse" id="navbarCollapse">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a class="nav-link" routerLink="/dashboard">Dashboard</a>
+        <a class="nav-link" routerLink="/dashboard" (click)="navbarCollapsed = true">Dashboard</a>
       </li>
       <!--<li class="nav-item">
         <a class="nav-link" href="#">Link</a>
@@ -16,7 +19,7 @@
       </li>-->
     </ul>
 
-    <a class="btn btn-info" routerLink="/login">Login</a>
+    <a class="btn btn-info" routerLink="/login" (click)="navbarCollapsed = true">Login</a>
   </div>
 </nav>
 
