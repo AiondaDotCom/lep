@@ -14,9 +14,6 @@ import { User } from '../user';
 export class LoginComponent implements OnInit {
 
   model = new User('', '');
-
-  //email: string;
-  //password: string;
   loginMessage: string;
   error: boolean;
   success: boolean;
@@ -27,20 +24,22 @@ export class LoginComponent implements OnInit {
   }
 
   signIn(): void {
-    console.log(this.model.email, this.model.password);
+    // TODO: check if email-domain is whitelisted
 
-    // TODO: Detect if login was successful
-    this.error = false;
     this.authService.login(this.model)
-            .subscribe(result => this.loginMessage = result);
-            //.subscribe(result => console.log(result));
+      .subscribe(
+      result => {
+        this.error = false;
+        console.log(result.jwt);
+        this.loginMessage = `Login successful\n(privileges: ${result.accountType})`;
+      },
+      err => {
+        this.error = true;
+        this.loginMessage = `ERROR: ${err.message}`;
+        console.log(err);
+      }
+      );
 
-
-    //this.error = false;
-    //this.loginMessage = "Login successful!";
-
-    //this.error = true;
-    //this.loginMessage = "Login failed...";
   }
 
 }
