@@ -1,36 +1,46 @@
-<form (ngSubmit)="signIn()"  #loginForm="ngForm" class="form-signin">
-  <h2 class="form-signin-heading">Please sign in</h2>
-  <label for="inputEmail" class="sr-only">Email address</label>
-  <input type="email" class="form-control" id="inputEmail" required email
-          [(ngModel)]="model.email" name="inputEmail"
-          placeholder="Email address" #email="ngModel" autofocus>
+<ngb-tabset type="pills" justify="center">
+  <ngb-tab title="Login">
+    <ng-template ngbTabContent>
+      <form (ngSubmit)="signIn()"  #loginForm="ngForm" class="form-signin">
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <label for="inputEmail" class="sr-only">Email address</label>
+        <input type="email" class="form-control" id="inputEmail" required email
+                [(ngModel)]="model.email" name="inputEmail"
+                placeholder="Email address" #email="ngModel" autofocus>
 
-  <label for="inputPassword" class="sr-only">Password</label>
-  <input type="password" class="form-control" id="inputPassword" required
-          [(ngModel)]="model.password" name="inputPassword"
-          placeholder="Password" #password="ngModel">
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" class="form-control" id="inputPassword" required
+                [(ngModel)]="model.password" name="inputPassword"
+                placeholder="Password" #password="ngModel">
 
-  <div [hidden]="email.valid || email.pristine"
-       class="alert alert-danger">
-    Please input a valid mailadress
-  </div>
+        <div [hidden]="email.valid || email.pristine"
+             class="alert alert-danger">
+          Please input a valid mailadress
+        </div>
 
-  <div [hidden]="password.valid || password.pristine"
-       class="alert alert-danger">
-    Password is required
-  </div>
+        <div [hidden]="password.valid || password.pristine"
+             class="alert alert-danger">
+          Password is required
+        </div>
 
-  <div *ngIf="loginMessage" class="alert"
-    [class.alert-danger]="error == true"
-    [class.alert-success]="error == false" role="alert">
-    {{ loginMessage }}
-  </div>
+        <div *ngIf="loginMessage" class="alert"
+          [class.alert-danger]="error == true"
+          [class.alert-success]="error == false" role="alert">
+          {{ loginMessage }}
+        </div>
 
-
-  <button [disabled]="!loginForm.form.valid"
-      class="btn btn-lg btn-primary btn-block ladda-button"
-      data-style="expand-left" type="submit">
-        <span class="ladda-label">Sign in</span>
-  </button>
-  <!--<button id="signInButton" class="btn btn-lg btn-primary btn-block ladda-button" type="submit" data-style="expand-left" data-size="xs"><span class="ladda-label">Sign in</span></button>-->
-</form>
+        <button [disabled]="!loginForm.form.valid"
+            class="btn btn-lg btn-primary btn-block ladda-button"
+            data-style="expand-left" type="submit">
+              <span class="ladda-label">Sign in</span>
+        </button>
+        <!--<button id="signInButton" class="btn btn-lg btn-primary btn-block ladda-button" type="submit" data-style="expand-left" data-size="xs"><span class="ladda-label">Sign in</span></button>-->
+      </form>
+    </ng-template>
+  </ngb-tab>
+  <ngb-tab title="Register">
+    <ng-template ngbTabContent>
+      Foobar
+    </ng-template>
+  </ngb-tab>
+</ngb-tabset>
