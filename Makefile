@@ -2,6 +2,7 @@ installDependencies:
 	######################
 	# Fetch node_modules #
 	######################
+	docker-compose build helper
 	docker run --rm -v $(CURDIR):/src lep_helper yarn install
 
 dev: installDependencies
