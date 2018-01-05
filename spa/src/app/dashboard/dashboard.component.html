@@ -1,3 +1,20 @@
-<p>
-  dashboard works!
-</p>
+<div *ngIf="!this.authService.isLoggedIn" class="jumbotron">
+  <h1 class="display-3">Dashboard</h1>
+  <p>You need to login!</p>
+</div>
+
+<div *ngIf="this.authService.isLoggedIn">
+  <h1>Dashboard</h1>
+
+  <p>Welcome {{ authService.user.email }}!</p>
+
+  <ul>
+    <li>Your account has <strong>{{ authService.user.accountType }}</strong> privileges</li>
+    <li>Your login expires {{ authService.user.expireTimestamp }}</li>
+    <li>Your last login occured at {{ authService.user.lastLogin }}</li>
+  </ul>
+  <button (click)="requestRestricted()" class="btn btn-danger">Request restricted content</button>
+  <br>
+  {{ restrictedContent }}
+
+<div>

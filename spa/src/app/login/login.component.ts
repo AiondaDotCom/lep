@@ -21,6 +21,7 @@ export class LoginComponent implements OnInit {
   constructor(private authService: AuthService) { }
 
   ngOnInit() {
+    //console.log(this.authService.testVar);
   }
 
   signIn(): void {
@@ -32,11 +33,14 @@ export class LoginComponent implements OnInit {
         this.error = false;
         console.log(result.jwt);
         this.loginMessage = `Login successful\n(privileges: ${result.accountType})`;
+        this.authService.isLoggedIn = true;
       },
       err => {
         this.error = true;
         this.loginMessage = `ERROR: ${err.message}`;
         console.log(err);
+        this.authService.isLoggedIn = false;
+
       }
       );
 

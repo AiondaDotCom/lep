@@ -19,8 +19,9 @@
       </li>-->
     </ul>
 
-    <a class="btn btn-info" routerLink="/login" (click)="navbarCollapsed = true">Login</a>
-    <a class="btn btn-info" routerLink="/settings" (click)="navbarCollapsed = true">Settings</a>
+    <a *ngIf="!authService.isLoggedIn" class="btn btn-info" routerLink="/login" (click)="navbarCollapsed = true">Login</a>
+    <a *ngIf="authService.isLoggedIn" class="btn btn-info" routerLink="/settings" (click)="navbarCollapsed = true">Settings</a>
+    <a *ngIf="authService.isLoggedIn" class="btn btn-danger" (click)="navbarCollapsed = true">Logout</a>
 
   </div>
 </nav>
