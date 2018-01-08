@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { AuthService } from '../auth.service';
 
@@ -11,7 +11,7 @@ import { User } from '../user';
 })
 
 
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy  {
 
   model = new User('', '');
   loginMessage: string;
@@ -24,6 +24,11 @@ export class LoginComponent implements OnInit {
     //console.log(this.authService.testVar);
   }
 
+  ngOnDestroy() {
+    // TODO: Unsubscribe if subscribed
+    //this.authService.unsubscribe();
+  }
+
   signIn(): void {
     // TODO: check if email-domain is whitelisted
 
@@ -33,13 +38,13 @@ export class LoginComponent implements OnInit {
         this.error = false;
         console.log(result.jwt);
         this.loginMessage = `Login successful\n(privileges: ${result.accountType})`;
-        this.authService.isLoggedIn = true;
+        //this.authService.isLoggedIn = true;
       },
       err => {
         this.error = true;
         this.loginMessage = `ERROR: ${err.message}`;
         console.log(err);
-        this.authService.isLoggedIn = false;
+        //this.authService.isLoggedIn = false;
 
       }
       );

@@ -18,7 +18,7 @@ export class DashboardComponent implements OnInit {
 
   requestRestricted() {
     console.log("request restricted content...");
-    console.log(this.authService.user)
+    console.log(this.authService.userProfile)
     this.authService.restricted().subscribe(
       result => {
         console.log(result);
