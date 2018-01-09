@@ -11,6 +11,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { SettingsComponent } from './settings/settings.component';
 
 import { AuthService } from './auth/auth.service';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { AuthService } from './auth/auth.service';
     AppComponent,
     LoginComponent,
     DashboardComponent,
-    SettingsComponent
+    SettingsComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,

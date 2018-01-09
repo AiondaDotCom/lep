@@ -7,6 +7,8 @@ import { AuthGuard } from './auth/auth.guard';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SettingsComponent } from './settings/settings.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -20,8 +22,8 @@ const routes: Routes = [
     path: 'settings', component: SettingsComponent, canActivate: [
       AuthGuard
     ]
-  }//,
-  //{ path: 'detail/:id', component: HeroDetailComponent }
+  },
+  { path: '**', component: PageNotFoundComponent }
 ];
 
 @NgModule({
