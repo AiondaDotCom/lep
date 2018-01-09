@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-page-not-found',
@@ -7,9 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PageNotFoundComponent implements OnInit {
 
-  constructor() { }
+  invalidRoute: any;
+  constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.invalidRoute = this.route.snapshot.url;
+    console.log(this.invalidRoute);
   }
 
 }
