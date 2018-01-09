@@ -1,3 +1,26 @@
-<p>
-  register works!
-</p>
+<!--
+<form (ngSubmit)="register()"  #loginForm="ngForm" class="form-signin">
+  <h2 class="form-signin-heading">Create new account</h2>
+  <label for="inputRegisterEmail" class="sr-only">Email address</label>
+  <input type="email" class="form-control" id="inputRegisterEmail" required email
+          [(ngModel)]="modelRegister.email" name="inputRegisterEmail"
+          placeholder="Email address" #emailRegister="ngModel" autofocus>
+
+  <div [hidden]="emailRegister.valid || emailRegister.pristine"
+       class="alert alert-danger">
+    Please input a valid mailadress
+  </div>
+
+  <div *ngIf="registerMessage" class="alert"
+    [class.alert-danger]="error == true"
+    [class.alert-success]="error == false" role="alert">
+    {{ registerMessage }}
+  </div>
+
+  <button [disabled]="!registerForm.form.valid"
+      class="btn btn-lg btn-primary btn-block ladda-button"
+      data-style="expand-left" type="submit">
+        <span class="ladda-label">Register</span>
+  </button>
+</form>
+-->
