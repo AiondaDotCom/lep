@@ -12,6 +12,7 @@ import { SettingsComponent } from './settings/settings.component';
 
 import { AuthService } from './auth/auth.service';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { RegisterComponent } from './login/register/register.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     LoginComponent,
     DashboardComponent,
     SettingsComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,

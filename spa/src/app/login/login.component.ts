@@ -2,6 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { AuthService } from '../auth/auth.service';
 
+import { RegisterComponent } from './register/register.component'
+
 import { User } from '../user';
 
 @Component({
@@ -11,7 +13,7 @@ import { User } from '../user';
 })
 
 
-export class LoginComponent implements OnInit, OnDestroy  {
+export class LoginComponent implements OnInit, OnDestroy {
 
   model = new User('', '');
   loginMessage: string;
