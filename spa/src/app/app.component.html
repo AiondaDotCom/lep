@@ -17,7 +17,7 @@
     </ul>
 
     <a *ngIf="!authService.authenticated" class="btn btn-info" routerLink="/login" (click)="navbarCollapsed = true">Login</a>
-    <a *ngIf="authService.authenticated" class="btn btn-danger" (click)="navbarCollapsed = true; authService.logout()">Logout</a>
+    <a *ngIf="authService.authenticated" class="btn btn-danger" (click)="navbarCollapsed = true; logout()">Logout</a>
 
   </div>
 </nav>

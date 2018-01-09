@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { AuthService } from '../auth/auth.service';
 
@@ -20,7 +21,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   error: boolean;
   success: boolean;
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
     //console.log(this.authService.testVar);
@@ -40,14 +41,14 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.error = false;
         console.log(result.jwt);
         this.loginMessage = `Login successful\n(privileges: ${result.accountType})`;
-        //this.authService.isLoggedIn = true;
+
+        // Redirect to /dashboard
+        this.router.navigate(['/dashboard']);
       },
       err => {
         this.error = true;
         this.loginMessage = `ERROR: ${err.message}`;
         console.log(err);
-        //this.authService.isLoggedIn = false;
-
       }
       );
 
