@@ -14,7 +14,6 @@ import { AuthService } from './auth/auth.service';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { RegisterComponent } from './login/register/register.component';
 
-
 @NgModule({
   declarations: [
     AppComponent,
