@@ -8,9 +8,9 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-
-import { AuthService } from './auth.service';
 import { SettingsComponent } from './settings/settings.component';
+
+import { AuthService } from './auth/auth.service';
 
 
 @NgModule({
