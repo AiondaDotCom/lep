@@ -1,25 +1,78 @@
+<div *ngIf="requestRegistrationMode">
+  <form (ngSubmit)="requestRegistration()" #requestRegistrationForm="ngForm" class="form-signin">
+    <h2 class="form-signin-heading">Create new account</h2>
+    <label for="inputRegisterEmail" class="sr-only">Email address</label>
 
-<form (ngSubmit)="register()"  #registerForm="ngForm" class="form-signin">
-  <h2 class="form-signin-heading">Create new account</h2>
-  <label for="inputEmail" class="sr-only">Email address</label>
-  <input type="email" class="form-control" id="inputEmail" required email
-          [(ngModel)]="myEmail" name="inputEmail"
-          placeholder="Email address" #email="ngModel" autofocus>
+    <input type="email" class="form-control" id="inputRegisterEmail" required email
+            [(ngModel)]="myEmail" name="inputRegisterEmail" placeholder="Email address"
+            #email="ngModel" autofocus>
 
-  <div [hidden]="email.valid || email.pristine"
-       class="alert alert-danger">
-    Please input a valid mailadress
-  </div>
+    <div [hidden]="email.valid || email.pristine" class="alert alert-danger">
+      Please input a valid mailadress
+    </div>
 
-  <div *ngIf="registerMessage" class="alert"
-    [class.alert-danger]="error == true"
-    [class.alert-success]="error == false" role="alert">
-    {{ registerMessage }}
-  </div>
+    <div *ngIf="registerMessage" class="alert" [class.alert-danger]="error == true" [class.alert-success]="error == false" role="alert">
+      {{ registerMessage }}
+    </div>
 
-  <button [disabled]="!registerForm.form.valid"
-      class="btn btn-lg btn-primary btn-block ladda-button"
-      data-style="expand-left" type="submit">
-        <span class="ladda-label">Register</span>
-  </button>
-</form>
+    <button [disabled]="!requestRegistrationForm.form.valid" class="btn btn-lg btn-primary btn-block ladda-button" data-style="expand-left" type="submit">
+          <span class="ladda-label">Register</span>
+    </button>
+  </form>
+</div>
+
+<div *ngIf="!requestRegistrationMode">
+  <h2>Complete your registration</h2>
+
+  <form (ngSubmit)="register()" #registerForm="ngForm" class="form-signin" autocomplete="off">
+    <!--<label for="inputEmail" class="sr-only">Email address</label>
+    <input type="email" class="form-control" id="inputEmail" required email [(ngModel)]="myEmail" name="inputEmail" placeholder="Email address" #email="ngModel" autofocus>
+
+    <div [hidden]="email.valid || email.pristine" class="alert alert-danger">
+      Please input a valid mailadress
+    </div>-->
+
+    <div class="form-group row">
+      <label for="inputTest" class="col-2 col-form-label">Email</label>
+      <div class="col-10">
+        <input type="text" class="form-control" id="inputTest"
+                name="inputTest"
+                [(ngModel)]="newUser.email"
+                placeholder="max@mustermann.de"
+                disabled>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="inputFullName" class="col-2 col-form-label">Name</label>
+      <div class="col-10">
+        <input type="text" class="form-control" id="inputFullName" required
+                name="inputFullName"
+                [(ngModel)]="newUser.fullName"
+                placeholder="Max Mustermann" autofocus autocomplete="off">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="inputPassword" class="col-2 col-form-label">Password</label>
+      <div class="col-10">
+        <input id="inputRegisterPassword" type="password" class="form-control" required
+                name="inputRegisterPassword"
+                [(ngModel)]="newUser.password"
+                placeholder="Password"
+                autocomplete="off">
+      </div>
+    </div>
+
+
+    <div *ngIf="registerMessage" class="alert" [class.alert-danger]="error == true" [class.alert-success]="error == false" role="alert">
+      {{ registerMessage }}
+    </div>
+
+    <button [disabled]="!registerForm.form.valid" class="btn btn-lg btn-primary btn-block ladda-button" data-style="expand-left" type="submit">
+          <span class="ladda-label">Register</span>
+    </button>
+  </form>
+
+  {{ newUser | json}}
+</div>

@@ -44,7 +44,7 @@ export class AuthService {
   }
 
 
-  register(mail: string): Observable<any> {
+  requestRegistration(mail: string): Observable<any> {
     //this.userProfile = user;
     return this.http.get(`${this.apiUrl}/user/requestRegistration`, {
       params: {
@@ -53,6 +53,18 @@ export class AuthService {
     })
   }
 
+
+  register(user: User, registrationToken: string): Observable<any> {
+    //this.userProfile = user;
+    return this.http.get(`${this.apiUrl}/user/register`, {
+      params: {
+        'token': registrationToken,
+        'email': user.email,
+        'fullName': user.fullName,
+        'password': user.password
+      }
+    })
+  }
 
   restricted(): Observable<any> {
     // Demo metod to test jwt token on restricted content

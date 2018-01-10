@@ -43,7 +43,7 @@ connection.connect();
 
 module.exports = {
   login: login,
-  //createAccount: createAccount,
+  register: register,
   requestRegistration: requestRegistration,
   deleteAccount: deleteAccount,
   modifyAccount: modifyAccount
@@ -122,63 +122,119 @@ function login(req, res) {
   });
 }
 
-function requestRegistration(req, res){
+function requestRegistration(req, res) {
   // Sends an "invitiaion"-link to the provided mailadress
   // TODO: potentially protect this endpoint via captcha
   var email = req.swagger.params.email.value;
 
   console.log('registration for adress ' + email + ' was requested.');
   console.log('Generating invitation link and sending mail...')
-  res.json('yay')
+
+  // TODO: check if email has already a account
+
+  // Generate TOKEN
+  var expiresInNSeconds = 24 * 60 * 60; // Expires in 24 hours
+  var expireTimestamp = Math.floor(Date.now() / 1000) + expiresInNSeconds;
+  jwt.sign({
+      type: 'user',
+      action: 'registration',
+      exp: expireTimestamp,
+      email: email
+    },
+    privateKey, {
+      algorithm: 'RS256'
+    },
+    function(err, token) {
+      if (err) {
+        // Something went wrong during signing
+        console.log(err);
+        res.status(500); // Internal Server error
+        res.json({
+          'message': 'Internal server error'
+        });
+      } else {
+        // Signing was successful
+        // TODO send the token via Mail
+        console.log(token);
+        console.log(`
+  To complete your registration please visit:
+    http://localhost:4200/register?email=${email}&token=${token}
+`);
+        res.json('regitration mail sent');
+      }
+    })
 }
 
-function createAccount(req, res) {
-  var userName = req.swagger.params.name.value;
-  var userPassword = req.swagger.params.password.value;
+function register(req, res) {
+  var fullName = req.swagger.params.fullName.value;
+  var password = req.swagger.params.password.value;
+  var token = req.swagger.params.token.value;
+  //var email = req.swagger.params.email.value;
 
-  var accountType = 'admin'
+  //var userPassword = req.swagger.params.password.value;
+
+  var accountType = 'user';
   // TODO: decide what accountType to use
   // TODO: check if the username is valid
   //        -> is a valid mailadress
   //        -> domain is listed in police_domain_names.json
 
-  bcrypt.hash(userPassword, saltRounds, function(err, passwordHash) {
+
+  jwt.verify(token, publicKey, function(err, decoded) {
     if (err) {
-      // Problems creating hash of password
-      console.log(err);
-      res.status(500); // Internal Server error
-      res.json({
-        'message': 'Internal server error'
-      });
-    } else {
-      // Password was hashed successfully, create new entry in 'users' table
-      connection.query('INSERT INTO users (username, password, accounttype) VALUES (?, ?, ?);', [userName, passwordHash, accountType], function(err, rows, fields) {
+      console.log(err)
+      res.status(401); // 401 Unauthorized
+      res.json('ERROR: Verification failed')
+    } else if (decoded.action == 'registration') {
+      // token is valid for registration
+      console.log(decoded)
+      bcrypt.hash(password, saltRounds, function(err, passwordHash) {
         if (err) {
-          if (err.code == 'ER_DUP_ENTRY') {
-            // Username already exists in database
-            res.status(400); // 400 Bad Request
-            res.json({
-              'message': 'User already exists'
-            });
-          } else {
-            // Something else went wrong
-            // Fail safely when error occurs
-            console.log(err);
-            res.status(500); // Internal Server error
-            res.json({
-              'message': 'Internal server error'
-            });
-          }
-        } else {
-          // Insertion into DB was successful
-          console.log('Inserted ', userName)
+          // Problems creating hash of password
+          console.log(err);
+          res.status(500); // Internal Server error
           res.json({
-            'message': 'User created'
+            'message': 'Internal server error'
           });
+        } else {
+          // Password was hashed successfully, create new entry in 'users' table
+           connection.query('INSERT INTO users (username, password, accounttype) VALUES (?, ?, ?);', [decoded.email, passwordHash, accountType], function(err, rows, fields) {
+              if (err) {
+                if (err.code == 'ER_DUP_ENTRY') {
+                  // Username already exists in database
+                  console.log(`ERR: Tried to create duplicate user: ${decoded.email}`)
+                  res.status(400); // 400 Bad Request
+                  res.json({
+                    'message': 'User already exists'
+                  });
+                } else {
+                  // Something else went wrong
+                  // Fail safely when error occurs
+                  console.log(err);
+                  res.status(500); // Internal Server error
+                  res.json({
+                    'message': 'Internal server error'
+                  });
+                }
+              } else {
+                // Insertion into DB was successful
+                console.log(`Inserted ${decoded.email}`)
+                res.json({
+                  'message': `User ${decoded.email} created`
+                });
+              }
+            });
         }
       });
+      //res.json('Access granted!')
+    }
+    else {
+      // Token valid, but not assigned for registration
+      res.status(401); // 401 Unauthorized
+      res.json('ERROR: Verification failed')
     }
   });
+
 }
 
 

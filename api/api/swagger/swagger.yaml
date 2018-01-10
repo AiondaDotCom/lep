@@ -82,6 +82,39 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /user/register:
+    x-swagger-router-controller: login
+    get:
+      description: Create a new account. It is checked, if the username is in an allowed set of domains
+      operationId: register
+      parameters:
+        - name: token
+          in: query
+          required: true
+          type: string
+        - name: email
+          in: query
+          required: true
+          type: string
+        - name: password
+          in: query
+          required: true
+          type: string
+        - name: fullName
+          in: query
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /user/delete:
     x-swagger-router-controller: login
     get:

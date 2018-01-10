@@ -2,6 +2,10 @@
 @import '../login/login.component.css';
 
 
+.form-signin {
+  max-width: 500px;
+}
+
 .form-signin input[type="email"] {
   margin-bottom: 10px;
 }
