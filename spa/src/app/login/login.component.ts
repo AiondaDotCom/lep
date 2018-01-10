@@ -3,8 +3,6 @@ import { Router } from '@angular/router';
 
 import { AuthService } from '../auth/auth.service';
 
-import { RegisterComponent } from './register/register.component'
-
 import { User } from '../user';
 
 @Component({

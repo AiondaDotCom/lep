@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { AuthService } from '../../auth/auth.service';
+import { AuthService } from '../auth/auth.service';
 
 
 @Component({
@@ -16,7 +16,9 @@ export class RegisterComponent implements OnInit {
 
   constructor(private authService: AuthService) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    // Check if parameter ?token=???? is supplied
+  }
 
   register(): void {
     // TODO: check if email-domain is whitelisted

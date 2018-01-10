@@ -1,5 +1,5 @@
 
-@import '../login.component.css';
+@import '../login/login.component.css';
 
 
 .form-signin input[type="email"] {

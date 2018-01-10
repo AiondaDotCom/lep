@@ -12,7 +12,7 @@ import { SettingsComponent } from './settings/settings.component';
 
 import { AuthService } from './auth/auth.service';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { RegisterComponent } from './login/register/register.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
