@@ -1,12 +1,12 @@
-<!--
-<form (ngSubmit)="register()"  #loginForm="ngForm" class="form-signin">
-  <h2 class="form-signin-heading">Create new account</h2>
-  <label for="inputRegisterEmail" class="sr-only">Email address</label>
-  <input type="email" class="form-control" id="inputRegisterEmail" required email
-          [(ngModel)]="modelRegister.email" name="inputRegisterEmail"
-          placeholder="Email address" #emailRegister="ngModel" autofocus>
 
-  <div [hidden]="emailRegister.valid || emailRegister.pristine"
+<form (ngSubmit)="register()"  #registerForm="ngForm" class="form-signin">
+  <h2 class="form-signin-heading">Create new account</h2>
+  <label for="inputEmail" class="sr-only">Email address</label>
+  <input type="email" class="form-control" id="inputEmail" required email
+          [(ngModel)]="myEmail" name="inputEmail"
+          placeholder="Email address" #email="ngModel" autofocus>
+
+  <div [hidden]="email.valid || email.pristine"
        class="alert alert-danger">
     Please input a valid mailadress
   </div>
@@ -23,4 +23,3 @@
         <span class="ladda-label">Register</span>
   </button>
 </form>
--->

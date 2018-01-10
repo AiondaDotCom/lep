@@ -43,7 +43,8 @@ connection.connect();
 
 module.exports = {
   login: login,
-  createAccount: createAccount,
+  //createAccount: createAccount,
+  requestRegistration: requestRegistration,
   deleteAccount: deleteAccount,
   modifyAccount: modifyAccount
 };
@@ -121,11 +122,22 @@ function login(req, res) {
   });
 }
 
+function requestRegistration(req, res){
+  // Sends an "invitiaion"-link to the provided mailadress
+  // TODO: potentially protect this endpoint via captcha
+  var email = req.swagger.params.email.value;
+
+  console.log('registration for adress ' + email + ' was requested.');
+  console.log('Generating invitation link and sending mail...')
+  res.json('yay')
+}
+
 function createAccount(req, res) {
   var userName = req.swagger.params.name.value;
   var userPassword = req.swagger.params.password.value;
 
-  var accountType = 'admin' // TODO: decide what accountType to use
+  var accountType = 'admin'
+  // TODO: decide what accountType to use
   // TODO: check if the username is valid
   //        -> is a valid mailadress
   //        -> domain is listed in police_domain_names.json

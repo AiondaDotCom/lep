@@ -21,7 +21,7 @@ paths:
     #
     # User management related things
     # /user/login
-    # /user/create
+    # /user/requestRegistration
     # /user/modify
     #  -X DELETE
     #
@@ -60,20 +60,15 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /user/create:
+  /user/requestRegistration:
     x-swagger-router-controller: login
     get:
-      description: Create a new account. It is checked, if the username is inside an allowd set of domains
-      operationId: createAccount
+      description: Create a new account. It is checked, if the username is in an allowed set of domains
+      operationId: requestRegistration
       parameters:
-        - name: name
+        - name: email
           in: query
-          description: Requested username
-          required: true
-          type: string
-        - name: password
-          in: query
-          description: Password
+          description: emailadress
           required: true
           type: string
       responses:

@@ -40,8 +40,19 @@ export class AuthService {
       tap(
         response => this._setSession(response)
       )
-    )
+      )
   }
+
+
+  register(mail: string): Observable<any> {
+    //this.userProfile = user;
+    return this.http.get(`${this.apiUrl}/user/requestRegistration`, {
+      params: {
+        'email': mail
+      }
+    })
+  }
+
 
   restricted(): Observable<any> {
     // Demo metod to test jwt token on restricted content
