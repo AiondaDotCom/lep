@@ -49,6 +49,28 @@ module.exports = {
   modifyAccount: modifyAccount
 };
 
+function logInteraction(username, action, error, description) {
+  // This function is used to create a protocol of user interactions
+  return new Promise(function(fulfill, reject) {
+    connection.query('INSERT INTO loginLog SET ?', {
+      'username': username,
+      'action': action,
+      'error': error,
+      'description': description
+    }, function(err, rows, fields) {
+      if (err) {
+        // Something went wrong
+        console.log(`Error inserting into table loginLog: ${err}`);
+        reject(err);
+      } else {
+        // Insertion into DB was successful
+        console.log(`Inserted interaction: ${username}, ${action}, ${description}`)
+        fulfill(true);
+      }
+    });
+  })
+}
+
 function login(req, res) {
   // variables defined in the Swagger document can be referenced using req.swagger.params.{parameter_name}
   var userName = req.swagger.params.name.value;
@@ -95,16 +117,36 @@ function login(req, res) {
                 } else {
                   // Signing was successful, return the token
                   console.log(token);
-                  res.json({
-                    'jwt': token,
-                    'userName': userName,
-                    'expireTimestamp': expireTimestamp,
-                    'accountType': accountType
-                  });
+
+                  connection.query('SELECT * FROM loginLog WHERE username=? AND action=? AND error=? ORDER BY timestamp DESC LIMIT ?', [userName, false, 'login', 1], function(err, rows, fields) {
+                    if (err) {
+                      console.log(err);
+                      res.json({
+                        'jwt': token,
+                        'userName': userName,
+                        'expireTimestamp': expireTimestamp,
+                        'accountType': accountType,
+                        'lastLogin': false
+                      });
+                    } else {
+                      console.log(rows);
+                      if (rows.length > 0) {
+                        logInteraction(userName, 'login', false, 'Successful login');
+                        res.json({
+                          'jwt': token,
+                          'userName': userName,
+                          'expireTimestamp': expireTimestamp,
+                          'accountType': accountType,
+                          'lastLogin': rows[0].timestamp
+                        });
+                      }
+                    }
+                  })
                 }
               })
           } else {
             // Password is invalid
+            logInteraction(userName, 'login', true, 'Attempted login with wrong password')
             res.status(401); // 401 Unauthorized
             res.json({
               'message': 'Wrong credentials. Access denied!'
@@ -154,13 +196,15 @@ function requestRegistration(req, res) {
         });
       } else {
         // Signing was successful
-        // TODO send the token via Mail
-        console.log(token);
-        console.log(`
-  To complete your registration please visit:
-    http://localhost:4200/register?email=${email}&token=${token}
-`);
-        res.json('regitration mail sent');
+        res.json('registration mail sent');
+
+        if (process.env.DEVELOPMENT) {
+          console.log(`To complete your registration please visit:\nhttp://localhost:4200/register?email=${email}&token=${token}`);
+        } else {
+          // TODO send the token via Mail
+          console.log(`To complete your registration please visit:\nhttps://aionda-lep.herokuapp.com/register?email=${email}&token=${token}`);
+
+        }
       }
     })
 }
@@ -198,37 +242,36 @@ function register(req, res) {
           });
         } else {
           // Password was hashed successfully, create new entry in 'users' table
-           connection.query('INSERT INTO users (username, password, accounttype) VALUES (?, ?, ?);', [decoded.email, passwordHash, accountType], function(err, rows, fields) {
-              if (err) {
-                if (err.code == 'ER_DUP_ENTRY') {
-                  // Username already exists in database
-                  console.log(`ERR: Tried to create duplicate user: ${decoded.email}`)
-                  res.status(400); // 400 Bad Request
-                  res.json({
-                    'message': 'User already exists'
-                  });
-                } else {
-                  // Something else went wrong
-                  // Fail safely when error occurs
-                  console.log(err);
-                  res.status(500); // Internal Server error
-                  res.json({
-                    'message': 'Internal server error'
-                  });
-                }
-              } else {
-                // Insertion into DB was successful
-                console.log(`Inserted ${decoded.email}`)
+          connection.query('INSERT INTO users (username, password, accounttype) VALUES (?, ?, ?);', [decoded.email, passwordHash, accountType], function(err, rows, fields) {
+            if (err) {
+              if (err.code == 'ER_DUP_ENTRY') {
+                // Username already exists in database
+                console.log(`ERR: Tried to create duplicate user: ${decoded.email}`)
+                res.status(400); // 400 Bad Request
                 res.json({
-                  'message': `User ${decoded.email} created`
+                  'message': 'User already exists'
+                });
+              } else {
+                // Something else went wrong
+                // Fail safely when error occurs
+                console.log(err);
+                res.status(500); // Internal Server error
+                res.json({
+                  'message': 'Internal server error'
                 });
               }
-            });
+            } else {
+              // Insertion into DB was successful
+              console.log(`Inserted ${decoded.email}`)
+              res.json({
+                'message': `User ${decoded.email} created`
+              });
+            }
+          });
         }
       });
       //res.json('Access granted!')
-    }
-    else {
+    } else {
       // Token valid, but not assigned for registration
       res.status(401); // 401 Unauthorized
       res.json('ERROR: Verification failed')
