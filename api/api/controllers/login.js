@@ -129,17 +129,19 @@ function login(req, res) {
                         'lastLogin': false
                       });
                     } else {
+                      logInteraction(userName, 'login', false, 'Successful login');
                       console.log(rows);
+                      var lastLoginTimestamp = false;
                       if (rows.length > 0) {
-                        logInteraction(userName, 'login', false, 'Successful login');
-                        res.json({
-                          'jwt': token,
-                          'userName': userName,
-                          'expireTimestamp': expireTimestamp,
-                          'accountType': accountType,
-                          'lastLogin': rows[0].timestamp
-                        });
+                        var lastLoginTimestamp = rows[0].timestamp;
                       }
+                      res.json({
+                        'jwt': token,
+                        'userName': userName,
+                        'expireTimestamp': expireTimestamp,
+                        'accountType': accountType,
+                        'lastLogin': lastLoginTimestamp
+                      });
                     }
                   })
                 }
