@@ -5,6 +5,8 @@ var mysql = require('mysql'); // Database connection
 var jwt = require('jsonwebtoken'); // Generate and verify jwts
 var bcrypt = require('bcrypt'); // Hash passwords
 
+var mail = require('../helpers/mail');
+
 var dbURL = process.env.JAWSDB_URL;
 if (!dbURL) {
   throw new Error('ENV VAR "JAWSDB_URL" missing');
@@ -200,13 +202,12 @@ function requestRegistration(req, res) {
         // Signing was successful
         res.json('registration mail sent');
 
-        if (process.env.DEVELOPMENT) {
-          console.log(`To complete your registration please visit:\nhttp://localhost:4200/register?email=${email}&token=${token}`);
-        } else {
-          // TODO send the token via Mail
-          console.log(`To complete your registration please visit:\nhttps://aionda-lep.herokuapp.com/register?email=${email}&token=${token}`);
+        let bodyText = `To complete your registration please visit:\nhttps://aionda-lep.herokuapp.com/register?email=${email}&token=${token}`;
+        let bodyHtml = `To complete your registration please visit:
+<a href="https://aionda-lep.herokuapp.com/register?email=${email}&token=${token}">Finish registration</a>`;
 
-        }
+        mail.send(email, 'register@aionda-lep.herokuapp.com', 'Confirm your registration', bodyText, bodyHtml)
+
       }
     })
 }
