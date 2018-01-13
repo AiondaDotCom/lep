@@ -176,40 +176,57 @@ function requestRegistration(req, res) {
   console.log('registration for adress ' + email + ' was requested.');
   console.log('Generating invitation link and sending mail...')
 
-  // TODO: check if email has already a account
+  // TODO: check if registration was already requested previously
 
-  // Generate TOKEN
-  var expiresInNSeconds = 24 * 60 * 60; // Expires in 24 hours
-  var expireTimestamp = Math.floor(Date.now() / 1000) + expiresInNSeconds;
-  jwt.sign({
-      type: 'user',
-      action: 'registration',
-      exp: expireTimestamp,
-      email: email
-    },
-    privateKey, {
-      algorithm: 'RS256'
-    },
-    function(err, token) {
-      if (err) {
-        // Something went wrong during signing
-        console.log(err);
-        res.status(500); // Internal Server error
-        res.json({
-          'message': 'Internal server error'
-        });
-      } else {
-        // Signing was successful
-        res.json('registration mail sent');
+  connection.query('SELECT * FROM users WHERE username=?', [email], function(err, rows, fields) {
+    if (err) {
+      console.log(err);
+      res.status(500); // Internal Server error
+      res.json({
+        'message': 'Internal server error'
+      });
+    } else if (rows.length > 0) {
+      // User already exists
+      res.status(400); // Bad request
+      res.json('ERROR: User already exists')
+    } else {
+      // Everything is ok
 
-        let bodyText = `To complete your registration please visit:\nhttps://aionda-lep.herokuapp.com/register?email=${email}&token=${token}`;
-        let bodyHtml = `To complete your registration please visit:
-<a href="https://aionda-lep.herokuapp.com/register?email=${email}&token=${token}">Finish registration</a>`;
+      // Generate TOKEN
+      var expiresInNSeconds = 24 * 60 * 60; // Expires in 24 hours
+      var expireTimestamp = Math.floor(Date.now() / 1000) + expiresInNSeconds;
+      jwt.sign({
+          type: 'user',
+          action: 'registration',
+          exp: expireTimestamp,
+          email: email
+        },
+        privateKey, {
+          algorithm: 'RS256'
+        },
+        function(err, token) {
+          if (err) {
+            // Something went wrong during signing
+            console.log(err);
+            res.status(500); // Internal Server error
+            res.json({
+              'message': 'Internal server error'
+            });
+          } else {
+            // Signing was successful
+            res.json('registration mail sent');
 
-        mail.send(email, 'register@aionda-lep.herokuapp.com', 'Confirm your registration', bodyText, bodyHtml)
+            let bodyText = `To complete your registration please visit:\nhttps://aionda-lep.herokuapp.com/register?email=${email}&token=${token}`;
+            let bodyHtml = `To complete your registration please visit:
+          <a href="https://aionda-lep.herokuapp.com/register?email=${email}&token=${token}">Finish registration</a>`;
 
-      }
-    })
+            mail.send(email, 'register@aionda-lep.herokuapp.com', 'Confirm your registration', bodyText, bodyHtml)
+
+          }
+        })
+    }
+
+  })
 }
 
 function register(req, res) {
@@ -245,7 +262,12 @@ function register(req, res) {
           });
         } else {
           // Password was hashed successfully, create new entry in 'users' table
-          connection.query('INSERT INTO users (username, password, accounttype) VALUES (?, ?, ?);', [decoded.email, passwordHash, accountType], function(err, rows, fields) {
+          connection.query('INSERT INTO users SET ?', {
+            username: decoded.email,
+            password: passwordHash,
+            accounttype: accountType,
+            realname: fullName
+          }, function(err, rows, fields) {
             if (err) {
               if (err.code == 'ER_DUP_ENTRY') {
                 // Username already exists in database
