@@ -4,11 +4,16 @@ CREATE TABLE users (
   id          INT(6)       UNSIGNED NOT NULL AUTO_INCREMENT,
   username    VARCHAR(100) NOT NULL,
   password    VARCHAR(100) NOT NULL,
-  realname    VARCHAR(50),
-  accounttype VARCHAR(10)  NOT NULL,
+  realname    VARCHAR(100),
+  accounttype VARCHAR(100)  NOT NULL,
+  accountstate VARCHAR(100),
   PRIMARY KEY (id),
   UNIQUE KEY (username)
   );
+
+ALTER TABLE users ADD accountstate VARCHAR(20);
+
+ALTER TABLE users MODIFY accountstate VARCHAR(100);
 
 SELECT * FROM users;
 DELETE FROM users WHERE username='awe@some';

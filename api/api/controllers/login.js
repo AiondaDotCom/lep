@@ -86,6 +86,8 @@ function login(req, res) {
         'message': 'Internal server error'
       });
     } else {
+      // TODO: Check if accountstate=='active'
+      
       console.log(rows);
       if (rows.length > 0) {
         // An entry for the given username was fond in the DB
@@ -178,17 +180,30 @@ function requestRegistration(req, res) {
 
   // TODO: check if registration was already requested previously
 
-  connection.query('SELECT * FROM users WHERE username=?', [email], function(err, rows, fields) {
+  connection.query('INSERT INTO users SET ?', {
+    username: email,
+    password: '<placeholder>',
+    accounttype: 'user',
+    realname: '<placeholder>',
+    accountstate: 'registration_pending'
+  }, function(err, rows, fields) {
     if (err) {
-      console.log(err);
-      res.status(500); // Internal Server error
-      res.json({
-        'message': 'Internal server error'
-      });
-    } else if (rows.length > 0) {
-      // User already exists
-      res.status(400); // Bad request
-      res.json('ERROR: User already exists')
+      if (err.code == 'ER_DUP_ENTRY') {
+        // Username already exists in database
+        console.log(`ERR: Tried to create duplicate user: ${email}`)
+        res.status(400); // 400 Bad Request
+        res.json({
+          'message': 'User already exists'
+        });
+      } else {
+        // Something else went wrong
+        // Fail safely when error occurs
+        console.log(err);
+        res.status(500); // Internal Server error
+        res.json({
+          'message': 'Internal server error'
+        });
+      }
     } else {
       // Everything is ok
 
@@ -261,13 +276,14 @@ function register(req, res) {
             'message': 'Internal server error'
           });
         } else {
-          // Password was hashed successfully, create new entry in 'users' table
-          connection.query('INSERT INTO users SET ?', {
-            username: decoded.email,
+          // Password was hashed successfully, update user information
+          // TODO: Prevent user from updating multiple times (verify if accountstate is 'registration_pending')
+          connection.query('UPDATE users SET ? WHERE username=?', [{
             password: passwordHash,
             accounttype: accountType,
-            realname: fullName
-          }, function(err, rows, fields) {
+            realname: fullName,
+            accountstate: 'active'
+          }, decoded.email], function(err, rows, fields) {
             if (err) {
               if (err.code == 'ER_DUP_ENTRY') {
                 // Username already exists in database
