@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthService } from '../auth/auth.service';
+import { MessageService } from '../message.service';
 
 import { User } from '../user';
 
@@ -19,10 +20,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   error: boolean;
   success: boolean;
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router, private messageService: MessageService) { }
 
   ngOnInit() {
-    //console.log(this.authService.testVar);
+    this.messageService.message('INIT login component')
   }
 
   ngOnDestroy() {

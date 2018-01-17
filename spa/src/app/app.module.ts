@@ -14,6 +14,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { RegisterComponent } from './register/register.component';
 
 import { AuthService } from './auth/auth.service';
+import { MessageService } from './message.service';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,7 @@ import { AuthService } from './auth/auth.service';
     SettingsModule,
     AppRoutingModule
   ],
-  providers: [AuthService],
+  providers: [AuthService, MessageService],
   bootstrap: [AppComponent]
 })
 
