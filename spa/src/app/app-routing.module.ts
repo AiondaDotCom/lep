@@ -19,12 +19,19 @@ const routes: Routes = [
     path: 'dashboard', component: DashboardComponent, canActivate: [
       AuthGuard
     ]
-  },
+  },/*
   {
-    path: 'settings', component: SettingsComponent, canActivate: [
+    path: 'settings',
+    loadChildren: 'app/settings/settings.module#SettingsModule',
+    canActivate: [
       AuthGuard
     ]
-  },
+  },*/
+  //{
+  //  path: 'settings', component: SettingsComponent, canActivate: [
+  //    AuthGuard
+  //  ]
+  //},
   { path: '**', component: PageNotFoundComponent }
 ];
 
