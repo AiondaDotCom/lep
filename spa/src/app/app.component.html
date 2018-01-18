@@ -22,6 +22,14 @@
   </div>
 </nav>
 
+<div class="container">
+  <!--<p *ngFor="let alert of this.messageService.lastMessage">-->
+  <div *ngIf="this.messageService.lastMessage">
+    <ngb-alert [type]="this.messageService.lastMessage.type" (close)="this.messageService.delete(this.messageService.lastMessage)">{{ this.messageService.lastMessage.message }}</ngb-alert>
+  </div>
+  <!--</p>-->
+</div>
+
 <main role="main" class="container">
   <router-outlet></router-outlet>
 </main>

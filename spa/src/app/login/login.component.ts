@@ -22,9 +22,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   constructor(private authService: AuthService, private router: Router, private messageService: MessageService) { }
 
-  ngOnInit() {
-    this.messageService.message('INIT login component')
-  }
+  ngOnInit() { }
 
   ngOnDestroy() {
     // TODO: Unsubscribe if subscribed
@@ -41,12 +39,16 @@ export class LoginComponent implements OnInit, OnDestroy {
         console.log(result.jwt);
         this.loginMessage = `Login successful\n(privileges: ${result.accountType})`;
 
+        this.messageService.message({type: 'info', message: 'Successful login'})
+
         // Redirect to /dashboard
         this.router.navigate(['/dashboard']);
       },
       err => {
         this.error = true;
         this.loginMessage = `ERROR: ${err.message}`;
+        this.messageService.message({type: 'danger', message: 'Error logging in'})
+
         console.log(err);
       }
       );
