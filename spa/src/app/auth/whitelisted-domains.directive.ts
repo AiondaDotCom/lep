@@ -6,7 +6,7 @@ import { AbstractControl, NG_VALIDATORS, Validator, ValidatorFn, Validators } fr
 // TODO: Better solution
 declare var require: any;
 
-export function forbiddenNameValidator(): ValidatorFn {
+export function whitelistdDomainValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } => {
     // Load the domain whitelist via webpack
     let domainWhitelist = require('../../../../assets/police_domain_names.json')
@@ -29,14 +29,11 @@ export function forbiddenNameValidator(): ValidatorFn {
 
 @Directive({
   selector: '[appForbiddenName]',
-  providers: [{ provide: NG_VALIDATORS, useExisting: ForbiddenValidatorDirective, multi: true }]
+  providers: [{ provide: NG_VALIDATORS, useExisting: WhitelistdDomainValidatorDirective, multi: true }]
 })
 
-export class ForbiddenValidatorDirective implements Validator {
-  @Input() forbiddenName: string;
-
+export class WhitelistdDomainValidatorDirective implements Validator {
   validate(control: AbstractControl): { [key: string]: any } {
-    return this.forbiddenName ? forbiddenNameValidator()(control)
-      : null;
+    return whitelistdDomainValidator()(control)
   }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { forbiddenNameValidator } from '../auth/whitelisted-domains.directive';
+import { whitelistdDomainValidator } from '../auth/whitelisted-domains.directive';
 
 import { AuthService } from '../auth/auth.service';
 
@@ -33,7 +33,7 @@ export class RegisterComponent implements OnInit {
         [
           Validators.required,
           Validators.email,
-          forbiddenNameValidator()
+          whitelistdDomainValidator()
         ])
     });
 

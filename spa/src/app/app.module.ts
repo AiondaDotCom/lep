@@ -14,7 +14,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { RegisterComponent } from './register/register.component';
 
 import { AuthService } from './auth/auth.service';
-import { ForbiddenValidatorDirective } from './auth/whitelisted-domains.directive';
+import { WhitelistdDomainValidatorDirective } from './auth/whitelisted-domains.directive';
 import { MessageService } from './message.service';
 import { HelpComponent } from './help/help.component';
 
@@ -25,7 +25,7 @@ import { HelpComponent } from './help/help.component';
     DashboardComponent,
     PageNotFoundComponent,
     RegisterComponent,
-    ForbiddenValidatorDirective,
+    WhitelistdDomainValidatorDirective,
     HelpComponent
   ],
   imports: [
