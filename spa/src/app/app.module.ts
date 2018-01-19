@@ -16,6 +16,7 @@ import { RegisterComponent } from './register/register.component';
 import { AuthService } from './auth/auth.service';
 import { ForbiddenValidatorDirective } from './auth/whitelisted-domains.directive';
 import { MessageService } from './message.service';
+import { HelpComponent } from './help/help.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { MessageService } from './message.service';
     DashboardComponent,
     PageNotFoundComponent,
     RegisterComponent,
-    ForbiddenValidatorDirective
+    ForbiddenValidatorDirective,
+    HelpComponent
   ],
   imports: [
     BrowserModule,
