@@ -1,32 +1,44 @@
 <div *ngIf="requestRegistrationMode">
-  <form (ngSubmit)="requestRegistration()" #requestRegistrationForm="ngForm" class="form-signin">
-    <h2 class="form-signin-heading">Create new account</h2>
-    If you already have an account you might want to <a routerLink="/login">Login</a>.
 
-    <label for="inputRegisterEmail" class="sr-only">Email address</label>
+    <form (ngSubmit)="requestRegistration()" [formGroup]="requestRegistrationForm" #formDir="ngForm" class="form-signin">
+      <h2 class="form-signin-heading">Create new account</h2>
+      If you already have an account you might want to <a routerLink="/login">Login</a>
+        <div class="form-group">
 
-    <input type="email" class="form-control" id="inputRegisterEmail" required email
-            [(ngModel)]="myEmail" name="inputRegisterEmail" placeholder="Email address"
-            #email="ngModel" autofocus>
+          <label for="requestRegistrationEmail">Name</label>
+          <input id="requestRegistrationEmail" class="form-control"
+                 formControlName="requestRegistrationEmail"
+                 placeholder="test@example.com" required>
 
-    <div [hidden]="email.valid || email.pristine" class="alert alert-danger">
-      Please input a valid mailadress
-    </div>
+          <div *ngIf="requestRegistrationEmail.invalid && (requestRegistrationEmail.dirty || requestRegistrationEmail.touched)"
+               class="alert alert-danger">
 
-    <div *ngIf="registerMessage" class="alert" [class.alert-danger]="error == true" [class.alert-success]="error == false" role="alert">
-      {{ registerMessage }}
-    </div>
+            <div *ngIf="requestRegistrationEmail.errors.required">
+              Email is required.
+            </div>
+            <div *ngIf="requestRegistrationEmail.errors.email">
+              Please enter a valid email
+            </div>
+            <div *ngIf="requestRegistrationEmail.errors.forbiddenName">
+              The domain you entered is not whitelisted.
+            </div>
+          </div>
+        </div>
 
-    <button [disabled]="!requestRegistrationForm.form.valid" class="btn btn-lg btn-primary btn-block ladda-button" data-style="expand-left" type="submit">
-          <span class="ladda-label">Register</span>
-    </button>
-  </form>
+        <div *ngIf="registerMessage" class="alert" [class.alert-danger]="error == true" [class.alert-success]="error == false" role="alert">
+          {{ registerMessage }}
+        </div>
+
+        <button type="submit" class="btn btn-lg btn-primary btn-block"
+               [disabled]="requestRegistrationForm.invalid">Submit</button>
+
+    </form>
 </div>
 
 <div *ngIf="!requestRegistrationMode">
   <h2>Complete your registration</h2>
 
-  <form (ngSubmit)="register()" #registerForm="ngForm" class="form-signin" autocomplete="off">
+  <form (ngSubmit)="register()" #registerForm="ngForm" class="form-signin form-signin-wide" autocomplete="off">
     <!--<label for="inputEmail" class="sr-only">Email address</label>
     <input type="email" class="form-control" id="inputEmail" required email [(ngModel)]="myEmail" name="inputEmail" placeholder="Email address" #email="ngModel" autofocus>
 

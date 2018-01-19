@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { forbiddenNameValidator } from '../auth/whitelisted-domains.directive';
 
 import { AuthService } from '../auth/auth.service';
 
@@ -12,40 +14,54 @@ import { User } from '../user';
 })
 export class RegisterComponent implements OnInit {
 
+  constructor(private route: ActivatedRoute, private authService: AuthService) { }
+
   requestRegistrationMode: boolean;
   error = false;
-  myEmail = '';
   registerMessage = '';
   token: string;
   newUser: User;
+  myEmail = '';
 
-  constructor(private route: ActivatedRoute, private authService: AuthService) { }
+  requestRegistrationForm: FormGroup;
 
-  ngOnInit() {
+  get requestRegistrationEmail() { return this.requestRegistrationForm.get('requestRegistrationEmail'); }
+
+  ngOnInit(): void {
+    this.requestRegistrationForm = new FormGroup({
+      'requestRegistrationEmail': new FormControl('', // Default value
+        [
+          Validators.required,
+          Validators.email,
+          forbiddenNameValidator()
+        ])
+    });
+
+
     // Check if parameter ?token=???? is supplied
     let queryParams = this.route.snapshot.queryParams;
-    if ('token' in queryParams){
+    if ('token' in queryParams) {
       console.log(`Token '${queryParams.token}' is supplied`);
       this.requestRegistrationMode = false;
       this.token = queryParams.token;
     }
-    else{
+    else {
       console.log('No Token supplied');
       this.requestRegistrationMode = true;
     }
-    if ('email' in queryParams){
+    if ('email' in queryParams) {
       console.log(`Email adress '${queryParams.email}' is supplied`);
       this.myEmail = queryParams.email;
       this.newUser = new User(this.myEmail);
     }
-    else{
+    else {
       console.log('No Email adress supplied');
     }
   }
 
   requestRegistration(): void {
     // TODO: check if email-domain is whitelisted
-    this.authService.requestRegistration(this.myEmail)
+    this.authService.requestRegistration(this.requestRegistrationForm.value.requestRegistrationEmail)
       .subscribe(
       result => {
         this.error = false;
@@ -60,7 +76,7 @@ export class RegisterComponent implements OnInit {
       );
   }
 
-  register(): void{
+  register(): void {
     console.log('REGISTER')
     this.authService.register(this.newUser, this.token)
       .subscribe(
