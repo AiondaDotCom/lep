@@ -14,6 +14,9 @@
       <li class="nav-item">
         <a *ngIf="authService.authenticated" class="nav-link" routerLink="/settings" (click)="navbarCollapsed = true">Settings</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/help" (click)="navbarCollapsed = true">Help</a>
+      </li>
     </ul>
 
     <a *ngIf="!authService.authenticated" class="btn btn-info" routerLink="/login" (click)="navbarCollapsed = true">Login</a>

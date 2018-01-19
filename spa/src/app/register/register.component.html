@@ -20,7 +20,7 @@
               Please enter a valid email
             </div>
             <div *ngIf="requestRegistrationEmail.errors.forbiddenName">
-              The domain you entered is not whitelisted.
+              The domain you entered is not <a routerLink="/help" fragment="whitelistedDomains">whitelisted</a>.
             </div>
           </div>
         </div>
