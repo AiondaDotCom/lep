@@ -7,6 +7,8 @@ var bcrypt = require('bcrypt'); // Hash passwords
 
 var mail = require('../helpers/mail');
 
+var domainWhitelist = require('../../../assets/police_domain_names.json').DE;
+
 var dbURL = process.env.JAWSDB_URL;
 if (!dbURL) {
   throw new Error('ENV VAR "JAWSDB_URL" missing');
@@ -87,7 +89,7 @@ function login(req, res) {
       });
     } else {
       // TODO: Check if accountstate=='active'
-      
+
       console.log(rows);
       if (rows.length > 0) {
         // An entry for the given username was fond in the DB
@@ -174,74 +176,82 @@ function requestRegistration(req, res) {
   // Sends an "invitiaion"-link to the provided mailadress
   // TODO: potentially protect this endpoint via captcha
   var email = req.swagger.params.email.value;
+  var domain = email.substring(email.lastIndexOf("@") + 1);
 
   console.log('registration for adress ' + email + ' was requested.');
-  console.log('Generating invitation link and sending mail...')
 
-  // TODO: check if registration was already requested previously
+  if (domainWhitelist.includes(domain)) {
+    // Domain is whitelisted
 
-  connection.query('INSERT INTO users SET ?', {
-    username: email,
-    password: '<placeholder>',
-    accounttype: 'user',
-    realname: '<placeholder>',
-    accountstate: 'registration_pending'
-  }, function(err, rows, fields) {
-    if (err) {
-      if (err.code == 'ER_DUP_ENTRY') {
-        // Username already exists in database
-        console.log(`ERR: Tried to create duplicate user: ${email}`)
-        res.status(400); // 400 Bad Request
-        res.json({
-          'message': 'User already exists'
-        });
+    console.log('Generating invitation link and sending mail...')
+
+    connection.query('INSERT INTO users SET ?', {
+      username: email,
+      password: '<placeholder>',
+      accounttype: 'user',
+      realname: '<placeholder>',
+      accountstate: 'registration_pending'
+    }, function(err, rows, fields) {
+      if (err) {
+        if (err.code == 'ER_DUP_ENTRY') {
+          // Username already exists in database
+          console.log(`ERR: Tried to create duplicate user: ${email}`)
+          res.status(400); // 400 Bad Request
+          res.json({
+            'message': 'User already exists'
+          });
+        } else {
+          // Something else went wrong
+          // Fail safely when error occurs
+          console.log(err);
+          res.status(500); // Internal Server error
+          res.json({
+            'message': 'Internal server error'
+          });
+        }
       } else {
-        // Something else went wrong
-        // Fail safely when error occurs
-        console.log(err);
-        res.status(500); // Internal Server error
-        res.json({
-          'message': 'Internal server error'
-        });
-      }
-    } else {
-      // Everything is ok
+        // Everything is ok, Generate TOKEN
+        var expiresInNSeconds = 24 * 60 * 60; // Expires in 24 hours
+        var expireTimestamp = Math.floor(Date.now() / 1000) + expiresInNSeconds;
+        jwt.sign({
+            type: 'user',
+            action: 'registration',
+            exp: expireTimestamp,
+            email: email
+          },
+          privateKey, {
+            algorithm: 'RS256'
+          },
+          function(err, token) {
+            if (err) {
+              // Something went wrong during signing
+              console.log(err);
+              res.status(500); // Internal Server error
+              res.json({
+                'message': 'Internal server error'
+              });
+            } else {
+              // Signing was successful
+              res.json('registration mail sent');
 
-      // Generate TOKEN
-      var expiresInNSeconds = 24 * 60 * 60; // Expires in 24 hours
-      var expireTimestamp = Math.floor(Date.now() / 1000) + expiresInNSeconds;
-      jwt.sign({
-          type: 'user',
-          action: 'registration',
-          exp: expireTimestamp,
-          email: email
-        },
-        privateKey, {
-          algorithm: 'RS256'
-        },
-        function(err, token) {
-          if (err) {
-            // Something went wrong during signing
-            console.log(err);
-            res.status(500); // Internal Server error
-            res.json({
-              'message': 'Internal server error'
-            });
-          } else {
-            // Signing was successful
-            res.json('registration mail sent');
-
-            let bodyText = `To complete your registration please visit:\nhttps://aionda-lep.herokuapp.com/register?email=${email}&token=${token}`;
-            let bodyHtml = `To complete your registration please visit:
+              let bodyText = `To complete your registration please visit:\nhttps://aionda-lep.herokuapp.com/register?email=${email}&token=${token}`;
+              let bodyHtml = `To complete your registration please visit:
           <a href="https://aionda-lep.herokuapp.com/register?email=${email}&token=${token}">Finish registration</a>`;
 
-            mail.send(email, 'register@aionda-lep.herokuapp.com', 'Confirm your registration', bodyText, bodyHtml)
+              mail.send(email, 'register@aionda-lep.herokuapp.com', 'Confirm your registration', bodyText, bodyHtml)
 
-          }
-        })
-    }
-
-  })
+            }
+          })
+      }
+    })
+  } else {
+    // Domain is not whitelisted
+    console.log(`ERR: Tried to register with not whitelisted email: ${email}`)
+    res.status(400); // 400 Bad Request
+    res.json({
+      'message': `Email adress '${email}' is not whitelisted`
+    });
+  }
 }
 
 function register(req, res) {
