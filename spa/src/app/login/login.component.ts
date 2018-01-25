@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import { AuthService } from '../auth/auth.service';
 import { MessageService } from '../message.service';
+import { LoadingIndicatorService } from '../loading-indicator/loading-indicator.service';
 
 import { User } from '../user';
 
@@ -20,7 +21,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   error: boolean;
   success: boolean;
 
-  constructor(private authService: AuthService, private router: Router, private messageService: MessageService) { }
+  constructor(private authService: AuthService, private router: Router, private messageService: MessageService, private spinnerService: LoadingIndicatorService) { }
 
   ngOnInit() { }
 
@@ -31,23 +32,31 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   signIn(): void {
     // TODO: check if email-domain is whitelisted
+    this.spinnerService.start('signIn')
 
     this.authService.login(this.model)
       .subscribe(
       result => {
+        this.spinnerService.stop('signIn')
+
         this.error = false;
         console.log(result.jwt);
         this.loginMessage = `Login successful\n(privileges: ${result.accountType})`;
 
-        this.messageService.message({type: 'info', message: 'Successful login'})
+        this.messageService.message({ type: 'info', message: 'Successful login' })
 
         // Redirect to /dashboard
         this.router.navigate(['/dashboard']);
       },
       err => {
+        this.spinnerService.stop('signIn')
+
+        if (err.status == 401){
+          // Unauthorized
+        }
         this.error = true;
-        this.loginMessage = `ERROR: ${err.message}`;
-        this.messageService.message({type: 'danger', message: 'Error logging in'})
+        this.loginMessage = `ERROR: ${err.error.message}`;
+        this.messageService.message({ type: 'danger', message: 'Error logging in' })
 
         console.log(err);
       }

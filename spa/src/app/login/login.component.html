@@ -29,9 +29,8 @@
   </div>
 
   <button [disabled]="!loginForm.form.valid"
-      class="btn btn-lg btn-primary btn-block ladda-button"
-      data-style="expand-left" type="submit">
-        <span class="ladda-label">Sign in</span>
+      class="btn btn-lg btn-primary btn-block"
+      type="submit">
+      <loading-indicator spinnerName="signIn"></loading-indicator>Sign in
   </button>
-  <!--<button id="signInButton" class="btn btn-lg btn-primary btn-block ladda-button" type="submit" data-style="expand-left" data-size="xs"><span class="ladda-label">Sign in</span></button>-->
 </form>

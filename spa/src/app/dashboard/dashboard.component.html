@@ -13,7 +13,10 @@
     <li>Your login expires {{authService.userProfile.expireTimestamp}}</li>
     <li>Your last successful login occured at {{authService.userProfile.lastLogin}}</li>
   </ul>
-  <button (click)="requestRestricted()" class="btn btn-danger">Request restricted content</button>
+  <button (click)="requestRestricted()" class="btn btn-danger">
+    <loading-indicator spinnerName="requestRestrictedContent"></loading-indicator>
+    Request restricted content
+  </button>
   <br>
   {{restrictedContent}}
 <div>

@@ -17,6 +17,8 @@ import { AuthService } from './auth/auth.service';
 import { WhitelistdDomainValidatorDirective } from './auth/whitelisted-domains.directive';
 import { MessageService } from './message.service';
 import { HelpComponent } from './help/help.component';
+import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
+import { LoadingIndicatorService } from './loading-indicator/loading-indicator.service';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,8 @@ import { HelpComponent } from './help/help.component';
     PageNotFoundComponent,
     RegisterComponent,
     WhitelistdDomainValidatorDirective,
-    HelpComponent
+    HelpComponent,
+    LoadingIndicatorComponent
   ],
   imports: [
     BrowserModule,
@@ -37,7 +40,7 @@ import { HelpComponent } from './help/help.component';
     SettingsModule,
     AppRoutingModule
   ],
-  providers: [AuthService, MessageService],
+  providers: [AuthService, MessageService, LoadingIndicatorService],
   bootstrap: [AppComponent]
 })
 
