@@ -9,6 +9,10 @@ var mail = require('../helpers/mail');
 
 var domainWhitelist = require('../../../assets/police_domain_names.json').DE;
 
+
+var loginLog = require('./loginLog');
+var auth = require('./auth');
+
 var dbURL = process.env.JAWSDB_URL;
 if (!dbURL) {
   throw new Error('ENV VAR "JAWSDB_URL" missing');
@@ -53,27 +57,7 @@ module.exports = {
   modifyAccount: modifyAccount
 };
 
-function logInteraction(username, action, error, description) {
-  // This function is used to create a protocol of user interactions
-  return new Promise(function(fulfill, reject) {
-    connection.query('INSERT INTO loginLog SET ?', {
-      'username': username,
-      'action': action,
-      'error': error,
-      'description': description
-    }, function(err, rows, fields) {
-      if (err) {
-        // Something went wrong
-        console.log(`Error inserting into table loginLog: ${err}`);
-        reject(err);
-      } else {
-        // Insertion into DB was successful
-        console.log(`Inserted interaction: ${username}, ${action}, ${description}`)
-        fulfill(true);
-      }
-    });
-  })
-}
+
 
 function login(req, res) {
   // variables defined in the Swagger document can be referenced using req.swagger.params.{parameter_name}
@@ -95,72 +79,56 @@ function login(req, res) {
         // An entry for the given username was fond in the DB
         var passwordHash = rows[0]['password'];
 
-        // Check if the password is correct
-        bcrypt.compare(userPassword, passwordHash, function(err, authRes) {
-          if (authRes) {
-            // User and password are in DB
-            // Generate JSON Token
-            console.log('Account type:', rows[0]['accounttype'])
-            console.log('signing...')
-            var expiresInNSeconds = 15 * 60; // Expires in 15 minutes
-            var expireTimestamp = Math.floor(Date.now() / 1000) + expiresInNSeconds;
-            var accountType = rows[0]['accounttype'];
-            jwt.sign({
-                type: accountType,
-                exp: expireTimestamp
-              },
-              privateKey, {
-                algorithm: 'RS256'
-              },
-              function(err, token) {
-                if (err) {
-                  // Something went wrong during signing
-                  console.log(err);
-                  res.status(500); // Internal Server error
-                  res.json({
-                    'message': 'Internal server error'
-                  });
-                } else {
-                  // Signing was successful, return the token
-                  console.log(token);
+        console.log('Account type:', rows[0]['accounttype'])
+        console.log('signing...')
+        var expiresInNSeconds = 15 * 60; // Expires in 15 minutes
+        var expireTimestamp = Math.floor(Date.now() / 1000) + expiresInNSeconds;
+        var accountType = rows[0]['accounttype'];
 
-                  connection.query('SELECT * FROM loginLog WHERE username=? AND action=? AND error=? ORDER BY timestamp DESC LIMIT ?', [userName, false, 'login', 1], function(err, rows, fields) {
-                    if (err) {
-                      console.log(err);
-                      res.json({
-                        'jwt': token,
-                        'userName': userName,
-                        'expireTimestamp': expireTimestamp,
-                        'accountType': accountType,
-                        'lastLogin': false
-                      });
-                    } else {
-                      logInteraction(userName, 'login', false, 'Successful login');
-                      console.log(rows);
-                      var lastLoginTimestamp = false;
-                      if (rows.length > 0) {
-                        var lastLoginTimestamp = rows[0].timestamp;
-                      }
-                      res.json({
-                        'jwt': token,
-                        'userName': userName,
-                        'expireTimestamp': expireTimestamp,
-                        'accountType': accountType,
-                        'lastLogin': lastLoginTimestamp
-                      });
-                    }
-                  })
-                }
+
+        // Check if the password is correct
+        auth.verifyPassword(userPassword, passwordHash)
+          .then(function(authResult) {
+            return auth.generateToken(privateKey, accountType, expireTimestamp)
+          })
+          .then(function(token) {
+            return loginLog.getLastLoginTimestamp(connection, userName)
+              .then(function(lastLoginTimestamp) {
+                res.json({
+                  'jwt': token,
+                  'userName': userName,
+                  'expireTimestamp': expireTimestamp,
+                  'accountType': accountType,
+                  'lastLogin': lastLoginTimestamp
+                });
+                return loginLog.logInteraction(connection, userName, 'login', false, 'Successful login');
               })
-          } else {
-            // Password is invalid
-            logInteraction(userName, 'login', true, 'Attempted login with wrong password')
-            res.status(401); // 401 Unauthorized
-            res.json({
-              'message': 'Wrong credentials. Access denied!'
-            });
-          }
-        });
+          })
+          .catch(function(err) {
+            console.log(err);
+            if (err.code && err.message) {
+              res.status(err.code); // 401 Unauthorized
+              res.json({
+                'message': err.message
+              });
+            } else {
+              res.status(500);
+              res.json({
+                'message': 'Internal Server Error'
+              });
+            }
+
+          })
+        /*
+                else {
+                    // Password is invalid
+                    loginLog.logInteraction(connection, userName, 'login', true, 'Attempted login with wrong password')
+                    res.status(401); // 401 Unauthorized
+                    res.json({
+                      'message': 'Wrong credentials. Access denied!'
+                    });
+                  }
+                });*/
       } else {
         // Username not found in database
         res.status(401); // 401 Unauthorized
