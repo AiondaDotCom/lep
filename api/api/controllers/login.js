@@ -60,85 +60,51 @@ module.exports = {
 
 
 function login(req, res) {
-  // variables defined in the Swagger document can be referenced using req.swagger.params.{parameter_name}
   var userName = req.swagger.params.name.value;
   var userPassword = req.swagger.params.password.value;
 
-  connection.query('SELECT * FROM users WHERE username=?', [userName], function(err, rows, fields) {
-    if (err) {
+  var expiresInNSeconds = 15 * 60; // Expires in 15 minutes
+  var expireTimestamp = Math.floor(Date.now() / 1000) + expiresInNSeconds;
+
+  auth.findUserInDB(connection, userName)
+    .then(function(user) {
+      var passwordHash = user.password;
+      var accountType = user.accounttype;
+
+      return auth.verifyPassword(userPassword, passwordHash)
+        .then(function(authResult) {
+          return auth.generateToken(privateKey, accountType, expireTimestamp)
+        })
+        .then(function(token) {
+          return loginLog.getLastLoginTimestamp(connection, userName)
+            .then(function(lastLoginTimestamp) {
+              res.json({
+                'jwt': token,
+                'userName': userName,
+                'expireTimestamp': expireTimestamp,
+                'accountType': accountType,
+                'lastLogin': lastLoginTimestamp
+              });
+              return loginLog.logInteraction(connection, userName, 'login', false, 'Successful login');
+            })
+        })
+    })
+    .catch(function(err) {
       console.log(err);
-      res.status(500); // Internal Server error
-      res.json({
-        'message': 'Internal server error'
-      });
-    } else {
-      // TODO: Check if accountstate=='active'
-
-      console.log(rows);
-      if (rows.length > 0) {
-        // An entry for the given username was fond in the DB
-        var passwordHash = rows[0]['password'];
-
-        console.log('Account type:', rows[0]['accounttype'])
-        console.log('signing...')
-        var expiresInNSeconds = 15 * 60; // Expires in 15 minutes
-        var expireTimestamp = Math.floor(Date.now() / 1000) + expiresInNSeconds;
-        var accountType = rows[0]['accounttype'];
-
-
-        // Check if the password is correct
-        auth.verifyPassword(userPassword, passwordHash)
-          .then(function(authResult) {
-            return auth.generateToken(privateKey, accountType, expireTimestamp)
-          })
-          .then(function(token) {
-            return loginLog.getLastLoginTimestamp(connection, userName)
-              .then(function(lastLoginTimestamp) {
-                res.json({
-                  'jwt': token,
-                  'userName': userName,
-                  'expireTimestamp': expireTimestamp,
-                  'accountType': accountType,
-                  'lastLogin': lastLoginTimestamp
-                });
-                return loginLog.logInteraction(connection, userName, 'login', false, 'Successful login');
-              })
-          })
-          .catch(function(err) {
-            console.log(err);
-            if (err.code && err.message) {
-              res.status(err.code); // 401 Unauthorized
-              res.json({
-                'message': err.message
-              });
-            } else {
-              res.status(500);
-              res.json({
-                'message': 'Internal Server Error'
-              });
-            }
-
-          })
-        /*
-                else {
-                    // Password is invalid
-                    loginLog.logInteraction(connection, userName, 'login', true, 'Attempted login with wrong password')
-                    res.status(401); // 401 Unauthorized
-                    res.json({
-                      'message': 'Wrong credentials. Access denied!'
-                    });
-                  }
-                });*/
-      } else {
-        // Username not found in database
-        res.status(401); // 401 Unauthorized
+      if (err.code && err.message) {
+        res.status(err.code); // 401 Unauthorized
         res.json({
-          'message': 'Wrong credentials. Access denied!'
+          'message': err.message
+        });
+      } else {
+        res.status(500);
+        res.json({
+          'message': 'Internal Server Error'
         });
       }
-    }
-  });
+    })
 }
+
 
 function requestRegistration(req, res) {
   // Sends an "invitiaion"-link to the provided mailadress

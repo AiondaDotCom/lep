@@ -1,9 +1,30 @@
 var jwt = require('jsonwebtoken'); // Generate and verify jwts
 var bcrypt = require('bcrypt'); // Hash passwords
 
+module.exports.findUserInDB = function(connection, username) {
+  // Query database for given username
+  return new Promise(function(fulfill, reject) {
+    connection.query('SELECT * FROM users WHERE username=?', [username], function(err, rows, fields) {
+      if (err) {
+        reject(err);
+      }
+      // TODO: Check if accountstate=='active'
+      console.log(rows);
+      if (rows.length > 0) {
+        // An entry for the given username was fond in the DB
+        fulfill(rows[0]);
+      } else {
+        // Username is not in DB
+        reject({
+          code: 401, // Unauthorized
+          message: 'Wrong username or password. Access denied!'
+        })
+      }
+    })
+  })
+}
 
 module.exports.generateToken = function(privateKey, accountType, expireTimestamp) {
-  console.log('HELL YEAY\n\n\n')
   return new Promise(function(fulfill, reject) {
     jwt.sign({
         type: accountType,
@@ -45,7 +66,7 @@ module.exports.verifyPassword = function(password, passwordHash) {
         // Password wrong
         reject({
           code: 401,
-          message: 'Wrong username or password'
+          message: 'Wrong username or password. Access denied!'
         });
       }
     })
