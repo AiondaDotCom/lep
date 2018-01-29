@@ -7,8 +7,6 @@ var bcrypt = require('bcrypt'); // Hash passwords
 
 var mail = require('../helpers/mail');
 
-var domainWhitelist = require('../../../assets/police_domain_names.json').DE;
-
 
 var loginLog = require('./loginLog');
 var auth = require('./auth');
@@ -59,6 +57,22 @@ module.exports = {
 
 
 
+function sendErrorMsg(res, err) {
+  console.log(err);
+  if (err && err.code && err.message) {
+    res.status(err.code);
+    res.json({
+      'message': err.message
+    });
+  } else {
+    res.status(500);
+    res.json({
+      'message': 'Internal Server Error'
+    });
+  }
+}
+
+
 function login(req, res) {
   var userName = req.swagger.params.name.value;
   var userPassword = req.swagger.params.password.value;
@@ -73,7 +87,10 @@ function login(req, res) {
 
       return auth.verifyPassword(userPassword, passwordHash)
         .then(function(authResult) {
-          return auth.generateToken(privateKey, accountType, expireTimestamp)
+          let payload = {
+            type: accountType
+          }
+          return auth.generateToken(privateKey, expireTimestamp, payload)
         })
         .then(function(token) {
           return loginLog.getLastLoginTimestamp(connection, userName)
@@ -90,18 +107,7 @@ function login(req, res) {
         })
     })
     .catch(function(err) {
-      console.log(err);
-      if (err.code && err.message) {
-        res.status(err.code); // 401 Unauthorized
-        res.json({
-          'message': err.message
-        });
-      } else {
-        res.status(500);
-        res.json({
-          'message': 'Internal Server Error'
-        });
-      }
+      sendErrorMsg(res, err);
     })
 }
 
@@ -110,83 +116,60 @@ function requestRegistration(req, res) {
   // Sends an "invitiaion"-link to the provided mailadress
   // TODO: potentially protect this endpoint via captcha
   var email = req.swagger.params.email.value;
-  var domain = email.substring(email.lastIndexOf("@") + 1);
 
-  console.log('registration for adress ' + email + ' was requested.');
+  auth.checkEmailWhitelist(email)
+    .then(function() {
+      console.log('Generating invitation link and sending mail...')
 
-  if (domainWhitelist.includes(domain)) {
-    // Domain is whitelisted
-
-    console.log('Generating invitation link and sending mail...')
-
-    connection.query('INSERT INTO users SET ?', {
-      username: email,
-      password: '<placeholder>',
-      accounttype: 'user',
-      realname: '<placeholder>',
-      accountstate: 'registration_pending'
-    }, function(err, rows, fields) {
-      if (err) {
-        if (err.code == 'ER_DUP_ENTRY') {
-          // Username already exists in database
-          console.log(`ERR: Tried to create duplicate user: ${email}`)
-          res.status(400); // 400 Bad Request
-          res.json({
-            'message': 'User already exists'
-          });
-        } else {
-          // Something else went wrong
-          // Fail safely when error occurs
-          console.log(err);
-          res.status(500); // Internal Server error
-          res.json({
-            'message': 'Internal server error'
-          });
-        }
-      } else {
-        // Everything is ok, Generate TOKEN
-        var expiresInNSeconds = 24 * 60 * 60; // Expires in 24 hours
-        var expireTimestamp = Math.floor(Date.now() / 1000) + expiresInNSeconds;
-        jwt.sign({
-            type: 'user',
-            action: 'registration',
-            exp: expireTimestamp,
-            email: email
-          },
-          privateKey, {
-            algorithm: 'RS256'
-          },
-          function(err, token) {
-            if (err) {
-              // Something went wrong during signing
-              console.log(err);
-              res.status(500); // Internal Server error
-              res.json({
-                'message': 'Internal server error'
+      return new Promise(function(fulfill, reject) {
+        connection.query('INSERT INTO users SET ?', {
+          username: email,
+          password: '<placeholder>',
+          accounttype: 'user',
+          realname: '<placeholder>',
+          accountstate: 'registration_pending'
+        }, function(err, rows, fields) {
+          if (err) {
+            if (err.code == 'ER_DUP_ENTRY') {
+              // Username already exists in database
+              reject({
+                code: 400,
+                message: `ERR: Tried to create duplicate user: ${email}`
               });
             } else {
-              // Signing was successful
-              res.json('registration mail sent');
-
-              let bodyText = `To complete your registration please visit:\nhttps://aionda-lep.herokuapp.com/register?email=${email}&token=${token}`;
-              let bodyHtml = `To complete your registration please visit:
-          <a href="https://aionda-lep.herokuapp.com/register?email=${email}&token=${token}">Finish registration</a>`;
-
-              mail.send(email, 'register@aionda-lep.herokuapp.com', 'Confirm your registration', bodyText, bodyHtml)
-
+              reject(err);
             }
-          })
-      }
+          }
+          // User doesnt exist, continue
+          fulfill();
+        })
+      })
     })
-  } else {
-    // Domain is not whitelisted
-    console.log(`ERR: Tried to register with not whitelisted email: ${email}`)
-    res.status(400); // 400 Bad Request
-    res.json({
-      'message': `Email adress '${email}' is not whitelisted`
-    });
-  }
+    .then(function() {
+      // Everything is ok, Generate TOKEN
+      var expiresInNSeconds = 24 * 60 * 60; // Expires in 24 hours
+      var expireTimestamp = Math.floor(Date.now() / 1000) + expiresInNSeconds;
+      let payload = {
+        type: 'user',
+        action: 'registration',
+        email: email
+      }
+      return auth.generateToken(privateKey, expireTimestamp, payload)
+    })
+    .then(function(token) {
+      res.json('registration mail sent');
+
+      let bodyText = `To complete your registration please visit:\nhttps://aionda-lep.herokuapp.com/register?email=${email}&token=${token}`;
+      let bodyHtml = `To complete your registration please visit:
+    <a href="https://aionda-lep.herokuapp.com/register?email=${email}&token=${token}">Finish registration</a>`;
+
+      mail.send(email, 'register@aionda-lep.herokuapp.com', 'Confirm your registration', bodyText, bodyHtml)
+    })
+    .catch(function(err) {
+      sendErrorMsg(res, err)
+    })
 }
+
 
 function register(req, res) {
   var fullName = req.swagger.params.fullName.value;

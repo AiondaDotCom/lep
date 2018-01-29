@@ -24,12 +24,28 @@ module.exports.findUserInDB = function(connection, username) {
   })
 }
 
-module.exports.generateToken = function(privateKey, accountType, expireTimestamp) {
+var domainWhitelist = require('../../../assets/police_domain_names.json').DE;
+
+
+module.exports.checkEmailWhitelist = function(emailadress) {
   return new Promise(function(fulfill, reject) {
-    jwt.sign({
-        type: accountType,
-        exp: expireTimestamp
-      },
+    var domain = emailadress.substring(emailadress.lastIndexOf("@") + 1);
+    if (domainWhitelist.includes(domain)) {
+      fulfill();
+    } else {
+      reject({
+        code: 400, // 400 Bad Request
+        message: `Email adress '${emailadress}' is not whitelisted`
+      });
+    }
+  })
+}
+
+module.exports.generateToken = function(privateKey, expireTimestamp, payload) {
+  return new Promise(function(fulfill, reject) {
+    payload['exp'] = expireTimestamp;
+
+    jwt.sign(payload,
       privateKey, {
         algorithm: 'RS256'
       },
