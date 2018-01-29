@@ -175,77 +175,64 @@ function register(req, res) {
   var fullName = req.swagger.params.fullName.value;
   var password = req.swagger.params.password.value;
   var token = req.swagger.params.token.value;
-  //var email = req.swagger.params.email.value;
-
-  //var userPassword = req.swagger.params.password.value;
 
   var accountType = 'user';
   // TODO: decide what accountType to use
-  // TODO: check if the username is valid
-  //        -> is a valid mailadress
-  //        -> domain is listed in police_domain_names.json
 
-
-  jwt.verify(token, publicKey, function(err, decoded) {
-    if (err) {
-      console.log(err)
-      res.status(401); // 401 Unauthorized
-      res.json('ERROR: Verification failed')
-    } else if (decoded.action == 'registration') {
-      // token is valid for registration
-      console.log(decoded)
-      bcrypt.hash(password, saltRounds, function(err, passwordHash) {
-        if (err) {
-          // Problems creating hash of password
-          console.log(err);
-          res.status(500); // Internal Server error
-          res.json({
-            'message': 'Internal server error'
-          });
-        } else {
+  auth.verifyToken(publicKey, token)
+    .then(function(payload) {
+      return new Promise(function(fulfill, reject) {
+          if (payload.action == 'registration') {
+            // token is valid for registration
+            console.log(payload)
+            fulfill()
+          } else {
+            // Token valid, but not assigned for registration
+            reject({
+              code: 401,
+              message: 'Verification failed'
+            })
+          }
+        })
+        .then(function() {
+          return auth.hashPassword(password, saltRounds)
+        })
+        .then(function(passwordHash) {
           // Password was hashed successfully, update user information
           // TODO: Prevent user from updating multiple times (verify if accountstate is 'registration_pending')
-          connection.query('UPDATE users SET ? WHERE username=?', [{
-            password: passwordHash,
-            accounttype: accountType,
-            realname: fullName,
-            accountstate: 'active'
-          }, decoded.email], function(err, rows, fields) {
-            if (err) {
-              if (err.code == 'ER_DUP_ENTRY') {
+          return new Promise(function(fulfill, reject) {
+            connection.query('UPDATE users SET ? WHERE username=?', [{
+              password: passwordHash,
+              accounttype: accountType,
+              realname: fullName,
+              accountstate: 'active'
+            }, payload.email], function(err, rows, fields) {
+              if (err) {
                 // Username already exists in database
-                console.log(`ERR: Tried to create duplicate user: ${decoded.email}`)
-                res.status(400); // 400 Bad Request
-                res.json({
-                  'message': 'User already exists'
-                });
-              } else {
-                // Something else went wrong
-                // Fail safely when error occurs
-                console.log(err);
-                res.status(500); // Internal Server error
-                res.json({
-                  'message': 'Internal server error'
-                });
+                if (err.code == 'ER_DUP_ENTRY') {
+                  reject({
+                    code: 400,
+                    message: `User ${payload.email} already exists`
+                  })
+                } else {
+                  reject(err)
+                }
               }
-            } else {
-              // Insertion into DB was successful
-              console.log(`Inserted ${decoded.email}`)
-              res.json({
-                'message': `User ${decoded.email} created`
-              });
-            }
-          });
-        }
-      });
-      //res.json('Access granted!')
-    } else {
-      // Token valid, but not assigned for registration
-      res.status(401); // 401 Unauthorized
-      res.json('ERROR: Verification failed')
-    }
-  });
 
+              // Insertion into DB was successful
+              console.log(`Inserted ${payload.email}`)
+              res.json({
+                'message': `User ${payload.email} created`
+              });
+              fulfill();
+            });
+          })
+        })
+
+    })
+    .catch(function(err) {
+      sendErrorMsg(res, err);
+    })
 }
 
 

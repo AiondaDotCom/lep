@@ -62,12 +62,30 @@ module.exports.generateToken = function(privateKey, expireTimestamp, payload) {
 }
 
 
-module.exports.verifyToken = function(token) {
+module.exports.verifyToken = function(publicKey, token) {
   return new Promise(function(fulfill, reject) {
-
+    jwt.verify(token, publicKey, function(err, decoded) {
+      if (err) {
+        reject({
+          code: 401,
+          message: 'Token invalid'
+        });
+      }
+      fulfill(decoded) // Return payload
+    })
   })
 }
 
+module.exports.hashPassword = function(password, saltRounds) {
+  return new Promise(function(fulfill, reject) {
+    bcrypt.hash(password, saltRounds, function(err, passwordHash) {
+      if (err) {
+        reject(err);
+      }
+      fulfill(passwordHash);
+    })
+  })
+}
 
 module.exports.verifyPassword = function(password, passwordHash) {
   return new Promise(function(fulfill, reject) {
