@@ -7,6 +7,7 @@ var bcrypt = require('bcrypt'); // Hash passwords
 
 var mail = require('../helpers/mail');
 
+var error = require('../helpers/error');
 
 var loginLog = require('./loginLog');
 var auth = require('./auth');
@@ -56,23 +57,6 @@ module.exports = {
 };
 
 
-
-function sendErrorMsg(res, err) {
-  console.log(err);
-  if (err && err.code && err.message) {
-    res.status(err.code);
-    res.json({
-      'message': err.message
-    });
-  } else {
-    res.status(500);
-    res.json({
-      'message': 'Internal Server Error'
-    });
-  }
-}
-
-
 function login(req, res) {
   var userName = req.swagger.params.name.value;
   var userPassword = req.swagger.params.password.value;
@@ -107,7 +91,7 @@ function login(req, res) {
         })
     })
     .catch(function(err) {
-      sendErrorMsg(res, err);
+      error.sendMsg(res, err);
     })
 }
 
@@ -166,7 +150,7 @@ function requestRegistration(req, res) {
       mail.send(email, 'register@aionda-lep.herokuapp.com', 'Confirm your registration', bodyText, bodyHtml)
     })
     .catch(function(err) {
-      sendErrorMsg(res, err)
+      error.sendMsg(res, err)
     })
 }
 
@@ -231,7 +215,7 @@ function register(req, res) {
 
     })
     .catch(function(err) {
-      sendErrorMsg(res, err);
+      error.sendMsg(res, err)
     })
 }
 
@@ -263,14 +247,13 @@ function deleteAccount(req, res) {
       })
     })
     .catch(function(err) {
-      sendErrorMsg(res, err);
+      error.sendMsg(res, err)
     })
 }
 
 
 
 function modifyAccount(req, res) {
-  // variables defined in the Swagger document can be referenced using req.swagger.params.{parameter_name}
   var userName = req.swagger.params.name.value;
   var userPassword = req.swagger.params.password.value;
   var newPassword = req.swagger.params.newpassword.value;
