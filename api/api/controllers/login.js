@@ -2,15 +2,11 @@
 
 var util = require('util');
 var mysql = require('mysql'); // Database connection
-var jwt = require('jsonwebtoken'); // Generate and verify jwts
-var bcrypt = require('bcrypt'); // Hash passwords
 
 var mail = require('../helpers/mail');
-
 var error = require('../helpers/error');
-
-var loginLog = require('./loginLog');
-var auth = require('./auth');
+var loginLog = require('../helpers/loginLog');
+var auth = require('../helpers/auth');
 
 var dbURL = process.env.JAWSDB_URL;
 if (!dbURL) {

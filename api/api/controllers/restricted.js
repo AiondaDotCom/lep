@@ -1,9 +1,8 @@
 'use strict';
 
 var util = require('util');
-var jwt = require('jsonwebtoken');
 
-var auth = require('./auth');
+var auth = require('../helpers/auth');
 var error = require('../helpers/error');
 
 var dbURL = process.env.JAWSDB_URL;
