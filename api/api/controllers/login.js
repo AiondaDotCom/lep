@@ -238,59 +238,33 @@ function register(req, res) {
 
 
 function deleteAccount(req, res) {
-  // variables defined in the Swagger document can be referenced using req.swagger.params.{parameter_name}
-  var userName = req.swagger.params.name.value;
-  var userPassword = req.swagger.params.password.value;
+  var username = req.swagger.params.name.value;
+  var password = req.swagger.params.password.value;
 
-  connection.query('SELECT * FROM users WHERE username=?', [userName], function(err, rows, fields) {
-    if (err) {
-      console.log(err);
-      res.status(500); // Internal Server error
-      res.json({
-        'message': 'Internal server error'
-      });
-    } else {
-      console.log(rows);
-      if (rows.length > 0) {
-        // An entry for the given username was fond in the DB
-        var passwordHash = rows[0]['password'];
+  auth.findUserInDB(connection, username)
+    .then(function(user) {
+      var passwordHash = user.password;
 
-        // Check if the password is correct
-        bcrypt.compare(userPassword, passwordHash, function(err, authRes) {
-          if (authRes) {
-            // User and password are in DB
-            // Delete requested account
-            connection.query('DELETE FROM users WHERE username = ?', [userName], function(err, rows, fields) {
-              if (err) {
-                console.log(err);
-                res.status(500); // Internal Server error
-                res.json({
-                  'message': 'Internal server error'
-                });
-              } else {
-                res.json({
-                  'message': 'User deleted'
-                });
-              }
-            });
-
-          } else {
-            // Password is invalid
-            res.status(401); // 401 Unauthorized
-            res.json({
-              'message': 'Wrong credentials. Access denied!'
-            });
+      return auth.verifyPassword(password, passwordHash)
+    })
+    .then(function() {
+      // Delete requested account
+      return new Promise(function(fulfill, reject) {
+        connection.query('DELETE FROM users WHERE username = ?', [username], function(err, rows, fields) {
+          if (err) {
+            reject(err);
           }
-        });
-      } else {
-        // Username not found in database
-        res.status(401); // 401 Unauthorized
-        res.json({
-          'message': 'Wrong credentials. Access denied!'
-        });
-      }
-    }
-  });
+
+          res.json({
+            'message': `User ${username} deleted`
+          })
+          fulfill();
+        })
+      })
+    })
+    .catch(function(err) {
+      sendErrorMsg(res, err);
+    })
 }
 
 
