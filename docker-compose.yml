@@ -13,46 +13,11 @@ api:
   links:
     - mysql
   environment:
-    DEVELOPMENT: 1
-    JAWSDB_URL: "mysql://root:superSecure@mysql:3306/qgx4mamkob3zgpg7"
-    DEVEL_PRIVATE_KEY: |
-      -----BEGIN RSA PRIVATE KEY-----
-      MIIEowIBAAKCAQEAwuSQXqsravsXGRTp10t/GrhjSKQUa4unXrCIc2hVTZghTcZC
-      UI652Kea7Kz1JhuOXDCedEfsWUSA+M0faUckEYkbV8IeETRKxo6wykKmvL9KxzIK
-      j3MXkurGaQBjRKrS/3g2YcQe+BT6wwPPI4P96s2K6Z4Me6EPVqwN0TObvB5SlZ6w
-      v+rWlJsL9N2j7A+IGhjXkyDnewr3gojTe1X3zutF9+wvaXi6orocSpBRg1MVWSp0
-      nNZw+tnMQtx2T48vFoFzpnGSbUEte8Ux/pIToXPOjOYvmAbbmqRv1RAD1cHEgJiF
-      vPMXVvWoymM7qhwA4/ToxFb5ceuq4QaVvDshDwIDAQABAoIBAQCnQSYQyI8LUY8C
-      DGueQ4FCOimiZoXLwd8SKSgA+vHyFHPIXjP9FG+z2irfoJMGcDGdNnBV1H+mIF8a
-      plalr9LpZaPcjY/mLd1aR4y7F7YmV3hiOLTNZPU/NVKvPBD1FjDb45uwDXKSbtbB
-      U9yJWzYnMtxbHzMRSihytldpSQQGzPMnSdWZjKr7A82ccntMwIa+V+9aI/tqrcpV
-      Z5oIyVtRay7ANCGhO9C050Wehp1Y8K5hmGr5lE1N6oMGgZdNsfa3GnYSeBtgTQ+F
-      2R3gOB+6FBOy7NYMRCblWShl8b5OX5K3hubS13Addqrl0hB+W9cI+vsoHCvj9xbH
-      VD5XGo2JAoGBAOsxPOogR2mcyjMejWhx+F46tTf1zFUqvMZKFXl3LSxD/jMvw9WL
-      dKBczFW9LqKwqSu6MHhhYXRiVsoDSp7MzCTniAC1GBU4vPqMkeVcFZhV4KW3pNt7
-      vqbXoYQwHOtqSThtp17IyUb9pplbg436CUVDYQYJVjJ1IqaHDhhQ5RRdAoGBANQi
-      meTeJAtnfgDuhyUZjNl3wzgeQU5pzrtJINPlDlOcjpbAXsfgBXNAKXRujCVlaOBy
-      t4c3vdY6ieVPBRPYtcGQ01iaP3Mbj+bxzRC81ykPI3ixNBZ9SVfhVsggi5ImOzeq
-      z3othJC+gdwjVZMYT0OOCLjYdJhADM0/Nz7SsjRbAoGADqJ7td3YU7wL4O5vwiYF
-      XGeuyxKialJEeNo3R92gk/aPJMQ+HVWWJjxgAp3I/xqbDDuDtJnqpIFSATP/Oq5n
-      rYwyrEiYfQmQyM5ibbEzLs15MxagTX//twYH6N/NjOCKOdao6X7490/lQ/mrz/PV
-      C9hLe0KteGpNg6s3t0+hUYkCgYB2tzZwgnChgTVeyB4RgQ711LQHf8cEXuo2nWIl
-      sxYlbIPPkbB5IsFqEgohAoyjkPD0Sr6yiVtPvErXbTVmOezdenMMLqY7gL0zfTZJ
-      m6S9cZ9kN6byvwKAj7bFIJF7JLIXIRwjP73kUvjRfWSygPQ61g3DhD8bxRxk8G+2
-      VKst6QKBgA2+xAGf6KVWEAAkisDbebrzNNg1trQWHC7Lk3h83nSyVTG1kA58LNQE
-      EbPss08Ups7m557kxVhLnJ/osIv5ycNEGMxsYbNqgOBj4i4myeXsv4VMhY4mh+kG
-      +1/WU3z7rm5ZVWZos23xS8UOG/Po2LJ0UTlkusd/f7AYmwkUIzCL
-      -----END RSA PRIVATE KEY-----
-    DEVEL_PUBLIC_KEY: |
-      -----BEGIN PUBLIC KEY-----
-      MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwuSQXqsravsXGRTp10t/
-      GrhjSKQUa4unXrCIc2hVTZghTcZCUI652Kea7Kz1JhuOXDCedEfsWUSA+M0faUck
-      EYkbV8IeETRKxo6wykKmvL9KxzIKj3MXkurGaQBjRKrS/3g2YcQe+BT6wwPPI4P9
-      6s2K6Z4Me6EPVqwN0TObvB5SlZ6wv+rWlJsL9N2j7A+IGhjXkyDnewr3gojTe1X3
-      zutF9+wvaXi6orocSpBRg1MVWSp0nNZw+tnMQtx2T48vFoFzpnGSbUEte8Ux/pIT
-      oXPOjOYvmAbbmqRv1RAD1cHEgJiFvPMXVvWoymM7qhwA4/ToxFb5ceuq4QaVvDsh
-      DwIDAQAB
-      -----END PUBLIC KEY-----
+    DEVELOPMENT:       ${DEVELOPMENT}
+    SENDGRID_API_KEY:  ${SENDGRID_API_KEY}
+    JAWSDB_URL:        ${JAWSDB_URL}
+    DEVEL_PRIVATE_KEY: ${DEVEL_PRIVATE_KEY}
+    DEVEL_PUBLIC_KEY:  ${DEVEL_PUBLIC_KEY}
   volumes:
     # Static files are mounted as a volume.
     - ./:/srv

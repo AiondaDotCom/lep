@@ -3,9 +3,21 @@ installDependencies:
 	# Fetch node_modules #
 	######################
 	docker-compose build helper
-	docker run --rm -v $(CURDIR):/src lep_helper yarn install
+	docker run --rm -v $(CURDIR):/src lep_helper yarn install --ignore-scripts
 
-dev: installDependencies
+buildAngular:
+	#####################
+	# Build Angular SPA #
+	#####################
+	docker run --rm -v $(CURDIR):/src lep_helper yarn postinstall
+
+test: installDependencies
+	############
+	# Test API #
+	############
+	docker-compose run api npm test /srv/api
+
+dev: installDependencies buildAngular
 	#################################
 	# Build and start docker images #
 	#################################

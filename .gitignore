@@ -1,3 +1,12 @@
+# Ignore lockfiles of the modules
+# The lep/yarn.lock contains the relevant information
+spa/yarn.lock
+api/yarn.lock
+
+api.dev.env
+api.prod.env
+
+
 # Logs
 logs
 *.log

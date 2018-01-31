@@ -1,8 +1,25 @@
 For local development with docker and docker-compose
 
+# Preparations
+Copy the file `api.env` and adapt it to fit your setup.
+Please use the keypair only for testing.
+Generate your own for production.
+```sh
+cp api.env api.dev.env # Configuration for development setup
+cp api.env api.prod.env # Configuration for production
+```
+
+
 # Build and deploy
 ```sh
+source api.dev.env # Export the environment variables
 make dev
+```
+
+# Test the project
+```sh
+source api.dev.env
+make test
 ```
 
 # Setup MySQL database

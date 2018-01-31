@@ -13,9 +13,7 @@
     "express": "^4.12.3",
     "jsonwebtoken": "^8.1.0",
     "node-mysql": "^0.4.2",
-    "swagger-express-mw": "^0.1.0"
-  },
-  "devDependencies": {
+    "swagger-express-mw": "^0.1.0",
     "swagger": "^0.7.5",
     "should": "^7.1.0",
     "supertest": "^1.0.0"
