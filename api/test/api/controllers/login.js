@@ -6,6 +6,8 @@ describe('controllers', function() {
 
   describe('login', function() {
 
+    var token = '';
+
     describe('GET /user/login', function() {
 
       it('should return a token with correct credentials', function(done) {
@@ -26,6 +28,10 @@ describe('controllers', function() {
             res.body.should.have.property('expireTimestamp').which.is.a.Number()
             res.body.should.have.property('lastLogin')
             res.body.should.have.property('userName')
+            res.body.should.have.property('jwt')
+
+
+            token = res.body.jwt;
 
             done();
           });
@@ -51,8 +57,85 @@ describe('controllers', function() {
           });
       });
 
+      it('should return a error without credentials', function(done) {
+
+        request(server)
+          .get('/user/login')
+          .set('Accept', 'application/json')
+          .expect('Content-Type', /json/)
+          .expect(400)
+          .end(function(err, res) {
+            should.not.exist(err);
+
+            done();
+          });
+      });
 
     });
+
+
+    describe('GET /restricted', function() {
+
+      it('should return a error without a token', function(done) {
+
+        request(server)
+          .get('/restricted')
+          .set('Accept', 'application/json')
+          .expect('Content-Type', /json/)
+          .expect(400)
+          .end(function(err, res) {
+            should.not.exist(err);
+
+            //res.body.should.have.property('message')
+            //res.body.message.should.be.eql('Wrong username or password. Access denied!')
+            done();
+          });
+      });
+
+      it('should return a error with a  wrong token', function(done) {
+
+        request(server)
+          .get('/restricted')
+          .query({
+            jwt: 'wrongToken'
+          })
+          .set('Accept', 'application/json')
+          .expect('Content-Type', /json/)
+          .expect(401)
+          .end(function(err, res) {
+            should.not.exist(err);
+
+            res.body.should.have.property('message')
+            res.body.message.should.be.eql('Token invalid')
+            done();
+          });
+      });
+
+
+      it('should grant access with correct token', function(done) {
+
+        request(server)
+          .get('/restricted')
+          .query({
+            // Use token from former successful login
+            jwt: token
+          })
+          .set('Accept', 'application/json')
+          .expect('Content-Type', /json/)
+          .expect(200)
+          .end(function(err, res) {
+            should.not.exist(err);
+
+            res.body.should.be.eql('Access granted!')
+
+            done();
+          });
+      });
+
+
+    });
+
+
 
   });
 
