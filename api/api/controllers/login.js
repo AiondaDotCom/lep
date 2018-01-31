@@ -248,51 +248,23 @@ function deleteAccount(req, res) {
 }
 
 
-
 function modifyAccount(req, res) {
-  var userName = req.swagger.params.name.value;
-  var userPassword = req.swagger.params.password.value;
+  var username = req.swagger.params.name.value;
+  var password = req.swagger.params.password.value;
   var newPassword = req.swagger.params.newpassword.value;
 
-  connection.query('SELECT * FROM users WHERE username=?', [userName], function(err, rows, fields) {
-    if (err) {
-      console.log(err);
-      res.status(500); // Internal Server error
+  auth.findUserInDB(connection, username)
+    .then(function(user) {
+      var passwordHash = user.password;
+      return auth.verifyPassword(password, passwordHash)
+    })
+    .then(function(){
+      // TODO: Iplement
       res.json({
-        'message': 'Internal server error'
+        'message': 'Not implemented yet'
       });
-    } else {
-      console.log(rows);
-      if (rows.length > 0) {
-        // An entry for the given username was fond in the DB
-        var passwordHash = rows[0]['password'];
-
-        // Check if the password is correct
-        bcrypt.compare(userPassword, passwordHash, function(err, authRes) {
-          if (authRes) {
-            // User and password are in DB
-            // Modify password
-            res.status(404);
-            res.json({
-              'message': 'Not implemented yet'
-            });
-            // TODO: IMPLEMENT ME
-
-          } else {
-            // Password is invalid
-            res.status(401); // 401 Unauthorized
-            res.json({
-              'message': 'Wrong credentials. Access denied!'
-            });
-          }
-        });
-      } else {
-        // Username not found in database
-        res.status(401); // 401 Unauthorized
-        res.json({
-          'message': 'Wrong credentials. Access denied!'
-        });
-      }
-    }
-  });
+    })
+    .catch(function(err) {
+      error.sendMsg(res, err);
+    })
 }
