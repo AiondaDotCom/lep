@@ -8,20 +8,10 @@ var error = require('../helpers/error');
 var loginLog = require('../helpers/loginLog');
 var auth = require('../helpers/auth');
 
-var dbURL = process.env.JAWSDB_URL;
-if (!dbURL) {
-  throw new Error('ENV VAR "JAWSDB_URL" missing');
-}
 
-var privateKey = process.env.DEVEL_PRIVATE_KEY;
-var publicKey = process.env.DEVEL_PUBLIC_KEY;
+var [dbURL, privateKey, publicKey] = require('../helpers/setupEnv').init()
 
-if (!privateKey) {
-  throw new Error('ENV VAR "DEVEL_PRIVATE_KEY" missing');
-}
-if (!publicKey) {
-  throw new Error('ENV VAR "DEVEL_PUBLIC_KEY" missing');
-}
+
 console.log('PRIVATE_KEY ', privateKey);
 console.log('PUBLIC_KEY ', publicKey);
 
