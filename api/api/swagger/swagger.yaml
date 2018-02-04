@@ -23,7 +23,8 @@ paths:
     # /user/login
     # /user/requestRegistration
     # /user/modify
-    #  -X DELETE
+    # /user/delete
+    # /user/resetPassword
     #
   /user/login:
     x-swagger-router-controller: login
@@ -169,6 +170,26 @@ paths:
             # a pointer to a definition
             $ref: "#/definitions/HelloWorldResponse"
         # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /user/resetPassword:
+    x-swagger-router-controller: login
+    get:
+      description: Reset password
+      operationId: resetPassword
+      parameters:
+        - name: email
+          in: query
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/HelloWorldResponse"
         default:
           description: Error
           schema:

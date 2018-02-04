@@ -49,7 +49,8 @@ module.exports = {
   register: register,
   requestRegistration: requestRegistration,
   deleteAccount: deleteAccount,
-  modifyAccount: modifyAccount
+  modifyAccount: modifyAccount,
+  resetPassword: resetPassword
 };
 
 
@@ -258,11 +259,38 @@ function modifyAccount(req, res) {
       var passwordHash = user.password;
       return auth.verifyPassword(password, passwordHash)
     })
-    .then(function(){
-      // TODO: Iplement
+    .then(function() {
+      // TODO: Implement
       res.json({
         'message': 'Not implemented yet'
       });
+    })
+    .catch(function(err) {
+      error.sendMsg(res, err);
+    })
+}
+
+function resetPassword(req, res) {
+  var email = req.swagger.params.email.value;
+
+  auth.findUserInDB(connection, email)
+    .then(function(user) {
+      // Generate token that allows the user to reset the password
+      var expireTimestamp = Math.floor(Date.now() / 1000) + 15 * 60; // Expires in 15 minutes
+      let payload = {
+        action: 'resetPassword',
+        email: email
+      }
+      return auth.generateToken(privateKey, expireTimestamp, payload)
+    })
+    .then(function(token){
+      // Send link to reset Password via mail
+
+      let bodyText = `To reset your password please visit:
+https://aionda-lep.herokuapp.com/register?email=${email}&token=${token}`;
+
+      mail.send(email, 'resetPassword@aionda-lep.herokuapp.com', 'Reset password', bodyText, bodyText)
+      res.json({'message': `Email with password reset link was sent to ${email}`})
     })
     .catch(function(err) {
       error.sendMsg(res, err);
