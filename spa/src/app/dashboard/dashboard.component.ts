@@ -42,4 +42,9 @@ export class DashboardComponent implements OnInit {
     );
   }
 
+    handleFileInput(files: FileList) {
+      this.uploadFileList = files;
+      console.log(files);
+    }
+
 }
