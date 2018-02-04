@@ -66,16 +66,6 @@ export class AuthService {
     })
   }
 
-  restricted(): Observable<any> {
-    // Demo metod to test jwt token on restricted content
-    // TODO: Move this into own apiService
-    return this.http.get(`${this.apiUrl}/restricted`, {
-      params: {
-        'jwt': localStorage.getItem('jwt')
-      }
-    })
-  }
-
   setLoggedIn(value: boolean) {
     // Update login status subject
     this.loggedIn$.next(value);

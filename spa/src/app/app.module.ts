@@ -19,6 +19,7 @@ import { MessageService } from './message.service';
 import { HelpComponent } from './help/help.component';
 import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 import { LoadingIndicatorService } from './loading-indicator/loading-indicator.service';
+import { ApiService } from './api/api.service';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,7 @@ import { LoadingIndicatorService } from './loading-indicator/loading-indicator.s
     SettingsModule,
     AppRoutingModule
   ],
-  providers: [AuthService, MessageService, LoadingIndicatorService],
+  providers: [AuthService, MessageService, LoadingIndicatorService, ApiService],
   bootstrap: [AppComponent]
 })
 

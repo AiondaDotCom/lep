@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { AuthService } from '../auth/auth.service';
+import { ApiService } from '../api/api.service';
 import { LoadingIndicatorService } from '../loading-indicator/loading-indicator.service';
 
 @Component({
@@ -11,8 +12,13 @@ import { LoadingIndicatorService } from '../loading-indicator/loading-indicator.
 export class DashboardComponent implements OnInit {
 
   restrictedContent: string;
+  uploadFileList: FileList;
 
-  constructor(public authService: AuthService, private spinnerService: LoadingIndicatorService) { }
+  constructor(
+    public authService: AuthService,
+    private api: ApiService,
+    private spinnerService: LoadingIndicatorService
+  ) { }
 
   ngOnInit() {
   }
@@ -20,8 +26,7 @@ export class DashboardComponent implements OnInit {
   requestRestricted() {
     console.log("request restricted content...");
     this.spinnerService.start('requestRestrictedContent');
-    console.log(this.authService.userProfile)
-    this.authService.restricted().subscribe(
+    this.api.restricted().subscribe(
       result => {
         console.log(result);
         this.restrictedContent = result;
