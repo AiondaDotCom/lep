@@ -30,11 +30,19 @@ function downloadDocument(req, res) {
     })
 }
 
-function uploadDocument(req, res){
+function uploadDocument(req, res) {
   var token = req.swagger.params.token.value;
   var file = req.swagger.params.file.value;
 
-  console.log(`Filename: ${file.originalname}`)
-  console.log(file.buffer.toString('utf8'))
-  res.send('ready')
+  auth.verifyToken(publicKey, token)
+    .then(function() {
+      console.log(`Filename: ${file.originalname}`)
+      console.log(file.buffer.toString('utf8'))
+      res.send({
+        message: 'successful upload'
+      })
+    })
+    .catch(function(err) {
+      error.sendMsg(res, err)
+    })
 }
