@@ -13,28 +13,45 @@
     <li>Your login expires {{authService.userProfile.expireTimestamp}}</li>
     <li>Your last successful login occured at {{authService.userProfile.lastLogin}}</li>
   </ul>
-  <button (click)="requestRestricted()" class="btn btn-danger">
-    <loading-indicator spinnerName="requestRestrictedContent"></loading-indicator>
-    Request restricted content
-  </button>
-  <br>
-  {{restrictedContent}}
 
+  <div class="row">
+    <div class="col">
+      <h2>Test token</h2>
 
-  <div class="form-group">
-    <!--<label for="file">Choose File</label>-->
-    <label class="btn btn-success">
-      Choose File
-      <input type="file" id="file"
-             (change)="handleFileInput($event.target.files)" hidden>
-     </label>
-     <button (click)="triggerUpload()" class="btn">Upload</button>
+      <button (click)="requestRestricted()" class="btn btn-danger">
+        <loading-indicator spinnerName="requestRestrictedContent"></loading-indicator>
+        Request restricted content
+      </button>
+      <br>
+      {{restrictedContent}}
+    </div>
+
+    <div class="col">
+      <h2>Upload file</h2>
+
+      <div class="form-group">
+        <!--<label for="file">Choose File</label>-->
+        <label class="btn btn-success">
+          Choose File
+          <input type="file" id="file"
+                 (change)="handleFileInput($event.target.files)" hidden>
+         </label>
+         <button *ngIf="uploadFileList && uploadFileList.length > 0" (click)="triggerUpload()" class="btn">Upload</button>
+       </div>
+
+       <ul>
+         <li *ngFor="let file of uploadFileList">{{file.name}}</li>
+       </ul>
+       <div *ngIf="uploadMessage" class="alert" [class.alert-danger]="uploadError == true" [class.alert-success]="uploadError == false" role="alert">
+         {{ uploadMessage }}
+       </div>
+     </div>
+
+     <div class="col">
+       <h2>Download file</h2>
+       <button (click)="downloadDocument()" class="btn btn-default">
+         Download file
+       </button>
+     </div>
    </div>
-   <ul>
-     <li *ngFor="let file of uploadFileList">{{file.name}}</li>
-   </ul>
-
-   <button (click)="downloadDocument()" class="btn btn-default">
-     Download file
-   </button>
 <div>

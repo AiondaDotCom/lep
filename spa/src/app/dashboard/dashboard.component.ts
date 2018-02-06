@@ -14,6 +14,9 @@ export class DashboardComponent implements OnInit {
   restrictedContent: string;
   uploadFileList: FileList;
 
+  uploadError: boolean;
+  uploadMessage: string;
+
   constructor(
     public authService: AuthService,
     private api: ApiService,
@@ -37,7 +40,6 @@ export class DashboardComponent implements OnInit {
         console.log(err);
         this.restrictedContent = err;
         this.spinnerService.stop('requestRestrictedContent');
-
       }
     );
   }
@@ -53,10 +55,15 @@ export class DashboardComponent implements OnInit {
 
   triggerUpload() {
     console.log('Uploading...');
-    this.api.postFile(this.uploadFileList[0]).subscribe(data => {
+    let file = this.uploadFileList[0];
+    this.api.postFile(file).subscribe(data => {
       // do something, if upload success
-    }, error => {
-      console.log(error);
+      this.uploadError = false;
+      this.uploadMessage = `Successful upload`;
+    }, err => {
+      this.uploadError = true;
+      this.uploadMessage = err.error.message;
+      console.log(err);
     });
   }
 
