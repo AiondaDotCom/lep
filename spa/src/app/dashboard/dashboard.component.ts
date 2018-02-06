@@ -42,9 +42,22 @@ export class DashboardComponent implements OnInit {
     );
   }
 
-    handleFileInput(files: FileList) {
-      this.uploadFileList = files;
-      console.log(files);
-    }
+  downloadDocument() {
+    this.api.downloadDocument();
+  }
+
+  handleFileInput(files: FileList) {
+    this.uploadFileList = files;
+    console.log(files);
+  }
+
+  triggerUpload() {
+    console.log('Uploading...');
+    this.api.postFile(this.uploadFileList[0]).subscribe(data => {
+      // do something, if upload success
+    }, error => {
+      console.log(error);
+    });
+  }
 
 }

@@ -28,10 +28,13 @@
       <input type="file" id="file"
              (change)="handleFileInput($event.target.files)" hidden>
      </label>
-     <button class="btn">Upload</button>
+     <button (click)="triggerUpload()" class="btn">Upload</button>
    </div>
    <ul>
      <li *ngFor="let file of uploadFileList">{{file.name}}</li>
    </ul>
 
+   <button (click)="downloadDocument()" class="btn btn-default">
+     Download file
+   </button>
 <div>

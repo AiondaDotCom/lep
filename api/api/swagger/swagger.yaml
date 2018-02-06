@@ -14,6 +14,7 @@ schemes:
 # format of bodies a client can send (Content-Type)
 consumes:
   - application/json
+  - multipart/form-data
 # format of the responses to the client (Accepts)
 produces:
   - application/json
@@ -207,6 +208,60 @@ paths:
           description: JSON Web token
           required: true
           type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+
+
+  /doc/download:
+    x-swagger-router-controller: document
+    get:
+      description: Allows user to download specific files
+      # used as the method name of the controller
+      operationId: downloadDocument
+      parameters:
+        - name: token
+          in: query
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+
+  /doc/upload:
+    x-swagger-router-controller: document
+    post:
+      description: Allows user to download specific files
+      # used as the method name of the controller
+      operationId: uploadDocument
+      parameters:
+        - name: token
+          in: query
+          required: true
+          type: string
+        - name: file
+          in: formData
+          description: file to upload
+          required: true
+          type: file
       responses:
         "200":
           description: Success
