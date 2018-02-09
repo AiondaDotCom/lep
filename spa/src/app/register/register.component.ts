@@ -90,7 +90,7 @@ export class RegisterComponent implements OnInit {
       },
       err => {
         this.error = true;
-        this.registerMessage = `ERROR: ${err.message}`;
+        this.registerMessage = `ERROR: ${err.error.message}`;
         console.log(err);
       }
       );
@@ -109,7 +109,7 @@ export class RegisterComponent implements OnInit {
       },
       err => {
         this.error = true;
-        this.registerMessage = `ERROR: ${err.message}`;
+        this.registerMessage = `ERROR: ${err.error.message}`;
         console.log(err);
       }
       );

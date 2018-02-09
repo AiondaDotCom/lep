@@ -11,7 +11,7 @@ export class MessageService {
   messages: Message[];
 
   constructor() {
-    this.messages = [];
+    this.clear();
   }
 
   message(msg: Message): void {
@@ -26,6 +26,10 @@ export class MessageService {
       return (object === msg);
     })
     this.messages.splice(msgID, 1);
+  }
+
+  clear(): void{
+    this.messages = [];
   }
 
   get lastMessage(): Message {

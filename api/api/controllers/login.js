@@ -1,6 +1,5 @@
 'use strict';
 
-var util = require('util');
 var mysql = require('mysql'); // Database connection
 
 var mail = require('../helpers/mail');
@@ -8,9 +7,7 @@ var error = require('../helpers/error');
 var loginLog = require('../helpers/loginLog');
 var auth = require('../helpers/auth');
 
-
 var [dbURL, privateKey, publicKey] = require('../helpers/setupEnv').init()
-
 
 console.log('PRIVATE_KEY ', privateKey);
 console.log('PUBLIC_KEY ', publicKey);

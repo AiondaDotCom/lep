@@ -22,4 +22,24 @@ export class ApiService {
     })
   }
 
+  downloadDocument(): void {
+    let url = `${this.apiUrl}/doc/download?token=${localStorage.getItem('jwt')}`;
+    window.location.href = url;
+  }
+
+  postFile(fileToUpload: File): Observable<any> {
+    const endpoint = `${this.apiUrl}/doc/upload`;
+    
+    const formData: FormData = new FormData();
+    formData.append('file', fileToUpload, fileToUpload.name);
+
+    return this.http.post(endpoint, formData, {
+      params: {
+        'token': localStorage.getItem('jwt')
+      }
+    })
+    //  .map(() => { return true; })
+    //  .catch((e) => this.handleError(e));
+  }
+
 }
