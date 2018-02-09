@@ -55,15 +55,20 @@ export class DashboardComponent implements OnInit {
 
   triggerUpload() {
     console.log('Uploading...');
+    this.spinnerService.start('uploadFile');
+
     let file = this.uploadFileList[0];
     this.api.postFile(file).subscribe(data => {
       // do something, if upload success
       this.uploadError = false;
       this.uploadMessage = `Successful upload`;
+      this.spinnerService.stop('uploadFile');
     }, err => {
       this.uploadError = true;
-      this.uploadMessage = err.error.message;
+      let message = err.error.message ? err.error.message : 'error uploading file';
+      this.uploadMessage = message;
       console.log(err);
+      this.spinnerService.stop('uploadFile');
     });
   }
 

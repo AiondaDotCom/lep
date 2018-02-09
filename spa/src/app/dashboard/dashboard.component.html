@@ -32,6 +32,7 @@
       <div class="form-group">
         <!--<label for="file">Choose File</label>-->
         <label class="btn btn-success">
+          <loading-indicator spinnerName="uploadFile"></loading-indicator>
           Choose File
           <input type="file" id="file"
                  (change)="handleFileInput($event.target.files)" hidden>
