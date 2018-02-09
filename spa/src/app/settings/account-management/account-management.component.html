@@ -1,3 +1,14 @@
-<p>
-  account-management works!
-</p>
+<h2>Account management</h2>
+
+<h3>Change password</h3>
+
+
+<h3>Login log</h3>
+  <ul class="list-group">
+    <li class="list-group-item"
+        *ngFor="let entry of loginLogList"
+        [class.list-group-item-danger]="entry.error == true"
+        [class.list-group-item-success]="entry.error == false">
+        {{entry.message}}
+    </li>
+  </ul>
