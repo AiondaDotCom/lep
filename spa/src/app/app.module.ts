@@ -7,6 +7,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppRoutingModule } from './app-routing.module';
 import { SettingsModule }      from './settings/settings.module';
 import { Router } from '@angular/router';
+import { MomentModule } from 'angular2-moment';
 
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -39,7 +40,8 @@ import { ApiService } from './api/api.service';
     ReactiveFormsModule,
     NgbModule.forRoot(),
     SettingsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    MomentModule
   ],
   providers: [AuthService, MessageService, LoadingIndicatorService, ApiService],
   bootstrap: [AppComponent]

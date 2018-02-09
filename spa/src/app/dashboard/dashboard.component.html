@@ -10,8 +10,8 @@
 
   <ul>
     <li>Your account has <strong>{{authService.userProfile.accountType}}</strong> privileges</li>
-    <li>Your login expires {{authService.userProfile.expireTimestamp}}</li>
-    <li>Your last successful login occured at {{authService.userProfile.lastLogin}}</li>
+    <li>Your login expires {{authService.userProfile.expireTimestamp  | amFromUnix | amTimeAgo}}</li>
+    <li>Your last successful login occured {{authService.userProfile.lastLogin | amTimeAgo}}</li>
   </ul>
 
   <div class="row">
