@@ -9,13 +9,29 @@
   <div [ngbCollapse]="navbarCollapsed" class="collapse navbar-collapse" id="navbarCollapse">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a *ngIf="authService.authenticated" class="nav-link" routerLink="/dashboard" (click)="navbarCollapsed = true">Dashboard</a>
+        <a *ngIf="authService.authenticated"
+            class="nav-link"
+            routerLink="/dashboard"
+            (click)="navbarCollapsed = true"
+            [routerLinkActive]="['active']">
+            Dashboard
+        </a>
       </li>
       <li class="nav-item">
-        <a *ngIf="authService.authenticated" class="nav-link" routerLink="/settings" (click)="navbarCollapsed = true">Settings</a>
+        <a *ngIf="authService.authenticated"
+            class="nav-link"
+            routerLink="/settings"
+            (click)="navbarCollapsed = true"
+            [routerLinkActive]="['active']">
+            Settings
+          </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/help" (click)="navbarCollapsed = true">Help</a>
+        <a class="nav-link" routerLink="/help"
+            (click)="navbarCollapsed = true"
+            [routerLinkActive]="['active']">
+            Help
+          </a>
       </li>
     </ul>
 
