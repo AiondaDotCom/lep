@@ -3,7 +3,6 @@
 var path = require('path');
 var auth = require('../helpers/auth');
 var error = require('../helpers/error');
-var [dbURL, privateKey, publicKey] = require('../helpers/setupEnv').init()
 
 module.exports = {
   downloadDocument: downloadDocument,
@@ -14,7 +13,7 @@ function downloadDocument(req, res) {
   var token = req.swagger.params.token.value;
 
   // Send file
-  auth.verifyToken(publicKey, token)
+  auth.verifyToken(token)
     .then(function() {
       // To demonstrate send this script itself
       // TODO: Send useful stuff
@@ -34,7 +33,7 @@ function uploadDocument(req, res) {
   var token = req.swagger.params.token.value;
   var file = req.swagger.params.file.value;
 
-  auth.verifyToken(publicKey, token)
+  auth.verifyToken(token)
     .then(function() {
       console.log(`Filename: ${file.originalname}`)
       console.log(file.buffer.toString('utf8'))

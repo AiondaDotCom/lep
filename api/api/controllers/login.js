@@ -1,35 +1,14 @@
 'use strict';
 
-var mysql = require('mysql'); // Database connection
-
 var mail = require('../helpers/mail');
 var error = require('../helpers/error');
 var loginLog = require('../helpers/loginLog');
 var auth = require('../helpers/auth');
+var connection = require('../helpers/db')
 
 var [dbURL, privateKey, publicKey] = require('../helpers/setupEnv').init()
 
-console.log('PRIVATE_KEY ', privateKey);
-console.log('PUBLIC_KEY ', publicKey);
-
 const saltRounds = 10;
-
-console.log('CONNECTING TO MYSQL ', dbURL);
-if (process.env.DEVELOPMENT) {
-  // Connect without SSL enabled
-  console.log('DEVEL CONFIG');
-  var connection = mysql.createConnection(dbURL);
-} else {
-  // Use SSL in production environment
-  // As the mysql database runs on Amazon servers, using the profile "Amazon RDS"
-  // enables the correct certificate
-  // https://rds.amazonaws.com/doc/rds-ssl-ca-cert.pem
-  // https://s3.amazonaws.com/rds-downloads/rds-combined-ca-bundle.pem
-  console.log('PRODUCTION CONFIG');
-  var connection = mysql.createConnection(dbURL + "?ssl=Amazon RDS");
-}
-
-connection.connect();
 
 module.exports = {
   login: login,
@@ -41,7 +20,6 @@ module.exports = {
   getLoginLog: getLoginLog
 };
 
-
 function login(req, res) {
   var userName = req.swagger.params.name.value;
   var userPassword = req.swagger.params.password.value;
@@ -49,7 +27,7 @@ function login(req, res) {
   var expiresInNSeconds = 15 * 60; // Expires in 15 minutes
   var expireTimestamp = Math.floor(Date.now() / 1000) + expiresInNSeconds;
 
-  auth.findUserInDB(connection, userName)
+  auth.findUserInDB(userName)
     .then(function(user) {
       var passwordHash = user.password;
       var accountType = user.accounttype;
@@ -60,10 +38,10 @@ function login(req, res) {
             type: accountType,
             username: userName
           }
-          return auth.generateToken(privateKey, expireTimestamp, payload)
+          return auth.generateToken(expireTimestamp, payload)
         })
         .then(function(token) {
-          return loginLog.getLastLoginTimestamp(connection, userName)
+          return loginLog.getLastLoginTimestamp(userName)
             .then(function(lastLoginTimestamp) {
               res.json({
                 'jwt': token,
@@ -72,13 +50,13 @@ function login(req, res) {
                 'accountType': accountType,
                 'lastLogin': lastLoginTimestamp
               });
-              return loginLog.logInteraction(connection, userName, 'login', false, 'Successful login');
+              return loginLog.logInteraction(userName, 'login', false, 'Successful login');
             })
         })
     })
     .catch(function(err) {
       if (err && err.code == 401 ){
-        loginLog.logInteraction(connection, userName, 'login', true, 'Attempted login with wrong password');
+        loginLog.logInteraction(userName, 'login', true, 'Attempted login with wrong password');
       }
       error.sendMsg(res, err);
     })
@@ -127,7 +105,7 @@ function requestRegistration(req, res) {
         action: 'registration',
         email: email
       }
-      return auth.generateToken(privateKey, expireTimestamp, payload)
+      return auth.generateToken(expireTimestamp, payload)
     })
     .then(function(token) {
       res.json('registration mail sent');
@@ -152,7 +130,7 @@ function register(req, res) {
   var accountType = 'user';
   // TODO: decide what accountType to use
 
-  auth.verifyToken(publicKey, token)
+  auth.verifyToken(token)
     .then(function(payload) {
       return new Promise(function(fulfill, reject) {
           if (payload.action == 'registration') {
@@ -214,7 +192,7 @@ function deleteAccount(req, res) {
   var username = req.swagger.params.name.value;
   var password = req.swagger.params.password.value;
 
-  auth.findUserInDB(connection, username)
+  auth.findUserInDB(username)
     .then(function(user) {
       var passwordHash = user.password;
 
@@ -246,7 +224,7 @@ function modifyAccount(req, res) {
   var password = req.swagger.params.password.value;
   var newPassword = req.swagger.params.newpassword.value;
 
-  auth.findUserInDB(connection, username)
+  auth.findUserInDB(username)
     .then(function(user) {
       var passwordHash = user.password;
       return auth.verifyPassword(password, passwordHash)
@@ -265,7 +243,7 @@ function modifyAccount(req, res) {
 function resetPassword(req, res) {
   var email = req.swagger.params.email.value;
 
-  auth.findUserInDB(connection, email)
+  auth.findUserInDB(email)
     .then(function(user) {
       // Generate token that allows the user to reset the password
       var expireTimestamp = Math.floor(Date.now() / 1000) + 15 * 60; // Expires in 15 minutes
@@ -273,7 +251,7 @@ function resetPassword(req, res) {
         action: 'resetPassword',
         email: email
       }
-      return auth.generateToken(privateKey, expireTimestamp, payload)
+      return auth.generateToken(expireTimestamp, payload)
     })
     .then(function(token){
       // Send link to reset Password via mail
@@ -292,10 +270,10 @@ https://aionda-lep.herokuapp.com/register?email=${email}&token=${token}`;
 function getLoginLog(req, res){
   var token = req.swagger.params.token.value;
 
-  auth.verifyToken(publicKey, token)
+  auth.verifyToken(token)
     .then(function(payload){
       var username = payload.username;
-      return loginLog.getLastNLoginTimestamps(connection, username, 50)
+      return loginLog.getLastNLoginTimestamps(username, 50)
     })
     .then(function(logEntries){
       res.send(logEntries)

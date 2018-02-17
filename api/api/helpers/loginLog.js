@@ -1,4 +1,7 @@
-module.exports.logInteraction = function(connection, username, action, error, description) {
+var connection = require('../helpers/db');
+
+
+module.exports.logInteraction = function(username, action, error, description) {
   // This function is used to create a protocol of user interactions
   return new Promise(function(fulfill, reject) {
     connection.query('INSERT INTO loginLog SET ?', {
@@ -21,7 +24,7 @@ module.exports.logInteraction = function(connection, username, action, error, de
 }
 
 
-module.exports.getLastLoginTimestamp = function(connection, username) {
+module.exports.getLastLoginTimestamp = function(username) {
   // Returns the last successful login timestamp
   return new Promise(function(fulfill, reject) {
     connection.query('SELECT * FROM loginLog WHERE username=? AND action=? AND error=? ORDER BY timestamp DESC LIMIT ?', [username, 'login', false, 1], function(err, rows, fields) {
@@ -40,7 +43,7 @@ module.exports.getLastLoginTimestamp = function(connection, username) {
 }
 
 
-module.exports.getLastNLoginTimestamps = function(connection, username, n) {
+module.exports.getLastNLoginTimestamps = function(username, n) {
   // Returns the last successful login timestamp
   return new Promise(function(fulfill, reject) {
     connection.query('SELECT * FROM loginLog WHERE username=? AND action=? ORDER BY timestamp DESC LIMIT ?', [username, 'login', n], function(err, rows, fields) {

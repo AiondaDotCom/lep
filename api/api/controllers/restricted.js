@@ -2,8 +2,7 @@
 
 var auth = require('../helpers/auth');
 var error = require('../helpers/error');
-
-var [dbURL, privateKey, publicKey] = require('../helpers/setupEnv').init()
+var connection = require('../helpers/db')
 
 module.exports = {
   restricted: restricted
@@ -13,7 +12,7 @@ function restricted(req, res) {
   var token = req.swagger.params.jwt.value;
   console.log("Verifying token: ", token)
 
-  auth.verifyToken(publicKey, token)
+  auth.verifyToken(token)
     .then(function(){
       res.json('Access granted!')
     })

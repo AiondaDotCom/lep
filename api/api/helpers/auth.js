@@ -1,7 +1,9 @@
 var jwt = require('jsonwebtoken'); // Generate and verify jwts
 var bcrypt = require('bcrypt'); // Hash passwords
+var connection = require('../helpers/db');
+var [dbURL, privateKey, publicKey] = require('../helpers/setupEnv').init()
 
-module.exports.findUserInDB = function(connection, username) {
+module.exports.findUserInDB = function(username) {
   // Query database for given username
   return new Promise(function(fulfill, reject) {
     connection.query('SELECT * FROM users WHERE username=?', [username], function(err, rows, fields) {
@@ -24,9 +26,6 @@ module.exports.findUserInDB = function(connection, username) {
   })
 }
 
-var domainWhitelist = require('../../../assets/police_domain_names.json').DE;
-
-
 module.exports.checkEmailWhitelist = function(emailadress) {
   return new Promise(function(fulfill, reject) {
     var domain = emailadress.substring(emailadress.lastIndexOf("@") + 1);
@@ -41,7 +40,7 @@ module.exports.checkEmailWhitelist = function(emailadress) {
   })
 }
 
-module.exports.generateToken = function(privateKey, expireTimestamp, payload) {
+module.exports.generateToken = function(expireTimestamp, payload) {
   return new Promise(function(fulfill, reject) {
     payload['exp'] = expireTimestamp;
 
@@ -62,7 +61,7 @@ module.exports.generateToken = function(privateKey, expireTimestamp, payload) {
 }
 
 
-module.exports.verifyToken = function(publicKey, token) {
+module.exports.verifyToken = function(token) {
   return new Promise(function(fulfill, reject) {
     jwt.verify(token, publicKey, function(err, decoded) {
       if (err) {
