@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiService } from '../../api/api.service';
 
 @Component({
   selector: 'app-account-management',
@@ -7,20 +8,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AccountManagementComponent implements OnInit {
 
-  loginLogList = [
-    {
-      error: true,
-      message: 'entry 1'
-    },
-    {
-      error: false,
-      message: 'entry 2'
-    }
-  ];
+  loginLogList = [];
 
-  constructor() { }
+  constructor(private api: ApiService) { }
 
   ngOnInit() {
+    this.requestLoginLog()
+  }
+
+  requestLoginLog() {
+    this.api.getLoginLog().subscribe(
+      result => {
+        console.log(result);
+        this.loginLogList = result;
+      },
+      err => {
+        console.log(err);
+        //this.restrictedContent = err;
+      }
+    );
   }
 
 }

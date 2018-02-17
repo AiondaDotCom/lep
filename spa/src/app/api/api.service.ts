@@ -29,7 +29,7 @@ export class ApiService {
 
   postFile(fileToUpload: File): Observable<any> {
     const endpoint = `${this.apiUrl}/doc/upload`;
-    
+
     const formData: FormData = new FormData();
     formData.append('file', fileToUpload, fileToUpload.name);
 
@@ -40,6 +40,15 @@ export class ApiService {
     })
     //  .map(() => { return true; })
     //  .catch((e) => this.handleError(e));
+  }
+
+  getLoginLog(): Observable<any> {
+    // Demo metod to test jwt token on restricted content
+    return this.http.get(`${this.apiUrl}/user/getLoginLog`, {
+      params: {
+        'token': localStorage.getItem('jwt')
+      }
+    })
   }
 
 }

@@ -26,6 +26,7 @@ paths:
     # /user/modify
     # /user/delete
     # /user/resetPassword
+    # /user/getLoginLog
     #
   /user/login:
     x-swagger-router-controller: login
@@ -183,6 +184,26 @@ paths:
       operationId: resetPassword
       parameters:
         - name: email
+          in: query
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/HelloWorldResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /user/getLoginLog:
+    x-swagger-router-controller: login
+    get:
+      description: Get login log
+      operationId: getLoginLog
+      parameters:
+        - name: token
           in: query
           required: true
           type: string

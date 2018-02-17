@@ -37,7 +37,8 @@ module.exports = {
   requestRegistration: requestRegistration,
   deleteAccount: deleteAccount,
   modifyAccount: modifyAccount,
-  resetPassword: resetPassword
+  resetPassword: resetPassword,
+  getLoginLog: getLoginLog
 };
 
 
@@ -56,7 +57,8 @@ function login(req, res) {
       return auth.verifyPassword(userPassword, passwordHash)
         .then(function(authResult) {
           let payload = {
-            type: accountType
+            type: accountType,
+            username: userName
           }
           return auth.generateToken(privateKey, expireTimestamp, payload)
         })
@@ -75,6 +77,9 @@ function login(req, res) {
         })
     })
     .catch(function(err) {
+      if (err && err.code == 401 ){
+        loginLog.logInteraction(connection, userName, 'login', true, 'Attempted login with wrong password');
+      }
       error.sendMsg(res, err);
     })
 }
@@ -280,6 +285,22 @@ https://aionda-lep.herokuapp.com/register?email=${email}&token=${token}`;
       res.json({'message': `Email with password reset link was sent to ${email}`})
     })
     .catch(function(err) {
+      error.sendMsg(res, err);
+    })
+}
+
+function getLoginLog(req, res){
+  var token = req.swagger.params.token.value;
+
+  auth.verifyToken(publicKey, token)
+    .then(function(payload){
+      var username = payload.username;
+      return loginLog.getLastNLoginTimestamps(connection, username, 50)
+    })
+    .then(function(logEntries){
+      res.send(logEntries)
+    })
+    .catch(function(err){
       error.sendMsg(res, err);
     })
 }

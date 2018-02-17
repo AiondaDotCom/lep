@@ -9,6 +9,7 @@
         *ngFor="let entry of loginLogList"
         [class.list-group-item-danger]="entry.error == true"
         [class.list-group-item-success]="entry.error == false">
-        {{entry.message}}
+        {{entry.description}}
+        <span class="badge badge-primary float-right">{{entry.timestamp | amTimeAgo}}</span>
     </li>
   </ul>

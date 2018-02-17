@@ -38,3 +38,30 @@ module.exports.getLastLoginTimestamp = function(connection, username) {
     })
   })
 }
+
+
+module.exports.getLastNLoginTimestamps = function(connection, username, n) {
+  // Returns the last successful login timestamp
+  return new Promise(function(fulfill, reject) {
+    connection.query('SELECT * FROM loginLog WHERE username=? AND action=? ORDER BY timestamp DESC LIMIT ?', [username, 'login', n], function(err, rows, fields) {
+      if (err) {
+        reject(err);
+      } else {
+        if (rows.length > 0) {
+          var newRows = [];
+          for (row of rows) {
+            var error = !row.error.equals(new Buffer(1)); // TODO: Better solution
+            newRows.push({
+              error: error,
+              timestamp: row.timestamp,
+              description: row.description
+            });
+          }
+          fulfill(newRows);
+        } else {
+          fulfill([]);
+        }
+      }
+    })
+  })
+}
