@@ -2,6 +2,7 @@ var jwt = require('jsonwebtoken'); // Generate and verify jwts
 var bcrypt = require('bcrypt'); // Hash passwords
 var connection = require('../helpers/db');
 var [dbURL, privateKey, publicKey] = require('../helpers/setupEnv').init()
+var domainWhitelist = require('../../../assets/police_domain_names.json').DE;
 
 module.exports.findUserInDB = function(username) {
   // Query database for given username
