@@ -51,4 +51,12 @@ export class ApiService {
     })
   }
 
+  deleteAccount(username: string, password: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/user/delete`, {
+      params: {
+        'name': username,
+        'password': password
+      }
+    })
+  }
 }
