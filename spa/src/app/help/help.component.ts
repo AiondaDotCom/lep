@@ -19,7 +19,7 @@ export class HelpComponent implements OnInit {
 
   constructor(private route: ActivatedRoute) {
     // TODO: Select correct list, depending on locale
-    this.domainWhitelist = require('../../../../assets/police_domain_names.json')['DE']
+    this.domainWhitelist = require('../../../../assets/police_domain_names.json')['DE'].sort()
   }
 
   ngOnInit() {
