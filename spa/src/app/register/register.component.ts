@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { whitelistdDomainValidator } from '../auth/whitelisted-domains.directive';
+import { Router } from '@angular/router';
 
 import { matchingPasswords } from './repeat-password-validator';
 
-
 import { AuthService } from '../auth/auth.service';
+import { MessageService } from '../message.service';
 
 import { User } from '../user';
 
@@ -29,7 +30,13 @@ export class RegisterComponent implements OnInit {
   registrationForm: FormGroup;
 
 
-  constructor(public fb: FormBuilder, private route: ActivatedRoute, private authService: AuthService) {  }
+  constructor(
+    public fb: FormBuilder,
+    private route: ActivatedRoute,
+    private authService: AuthService,
+    private router: Router,
+    private messageService: MessageService
+  ) { }
 
 
   // shortcuts
@@ -76,8 +83,8 @@ export class RegisterComponent implements OnInit {
       'password': ['', Validators.required],
       'passwordConfirm': ['', Validators.required]
     }, {
-      validator: matchingPasswords('password', 'passwordConfirm')
-    });
+        validator: matchingPasswords('password', 'passwordConfirm')
+      });
   }
 
   requestRegistration(): void {
@@ -106,6 +113,11 @@ export class RegisterComponent implements OnInit {
         this.error = false;
         console.log(result);
         this.registerMessage = result.message;
+        this.messageService.message({
+          type: 'success',
+          message: 'Registration was successful'
+        })
+        this.router.navigate(['/login']);
       },
       err => {
         this.error = true;
