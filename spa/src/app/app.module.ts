@@ -5,9 +5,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppRoutingModule } from './app-routing.module';
-import { SettingsModule }      from './settings/settings.module';
 import { Router } from '@angular/router';
 import { MomentModule } from 'angular2-moment';
+
+import { SettingsModule } from './settings/settings.module';
+import { AdminModule } from './admin/admin.module';
+import { UserModule } from './user/user.module';
 
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -21,6 +24,7 @@ import { HelpComponent } from './help/help.component';
 import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 import { LoadingIndicatorService } from './loading-indicator/loading-indicator.service';
 import { ApiService } from './api/api.service';
+import { LoginFormComponent } from './login/login-form/login-form.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +44,8 @@ import { ApiService } from './api/api.service';
     ReactiveFormsModule,
     NgbModule.forRoot(),
     SettingsModule,
+    AdminModule,
+    UserModule,
     AppRoutingModule,
     MomentModule
   ],
