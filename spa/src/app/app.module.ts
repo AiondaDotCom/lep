@@ -10,7 +10,7 @@ import { MomentModule } from 'angular2-moment';
 
 import { SettingsModule } from './settings/settings.module';
 import { AdminModule } from './admin/admin.module';
-import { UserModule } from './user/user.module';
+//import { UserModule } from './user/user.module';
 
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -45,7 +45,7 @@ import { LoginFormComponent } from './login/login-form/login-form.component';
     NgbModule.forRoot(),
     SettingsModule,
     AdminModule,
-    UserModule,
+  //  UserModule,
     AppRoutingModule,
     MomentModule
   ],
