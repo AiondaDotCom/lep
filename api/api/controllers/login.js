@@ -24,6 +24,14 @@ function login(req, res) {
   var userName = req.swagger.params.name.value;
   var userPassword = req.swagger.params.password.value;
 
+  // Try to get the ip adress
+  var ip = req.headers['x-forwarded-for'];
+  console.log('HEADERS: >>>>', req.headers);
+  console.log('IP: >>>>',ip);
+  //res.json(ip);
+
+
+
   var expiresInNSeconds = 15 * 60; // Expires in 15 minutes
   var expireTimestamp = Math.floor(Date.now() / 1000) + expiresInNSeconds;
 
