@@ -10,11 +10,13 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { HelpComponent } from './help/help.component';
 
 import { UserComponent } from './user/user.component';
-
 import { DashboardComponent } from './user/dashboard/dashboard.component';
 import { SettingsComponent } from './user/settings/settings.component';
 import { AccountManagementComponent } from './user/settings/account-management/account-management.component';
 import { MiscellaneousComponent } from './user/settings/miscellaneous/miscellaneous.component';
+
+import { AdminComponent } from './admin/admin.component';
+import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
 
 const routes: Routes = [
   {
@@ -29,6 +31,24 @@ const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent
+  },
+  {
+    path: 'admin',
+    component: AdminComponent,
+    canActivate: [
+      AuthGuard
+    ],
+    children: [
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
+      },
+      {
+        path: 'dashboard',
+        component: AdminDashboardComponent
+      }
+    ]
   },
   {
     path: 'user',

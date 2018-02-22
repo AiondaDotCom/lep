@@ -31,22 +31,29 @@ import { SettingsComponent } from './user/settings/settings.component';
 import { AccountManagementComponent } from './user/settings/account-management/account-management.component';
 import { MiscellaneousComponent } from './user/settings/miscellaneous/miscellaneous.component';
 
-//import { LoginFormComponent } from './login/login-form/login-form.component';
+// Admin Components
+import { AdminComponent } from './admin/admin.component';
+import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    WhitelistdDomainValidatorDirective,
+    // General
     LoginComponent,
     DashboardComponent,
     PageNotFoundComponent,
     RegisterComponent,
-    WhitelistdDomainValidatorDirective,
     HelpComponent,
     LoadingIndicatorComponent,
+    // User
     UserComponent,
     SettingsComponent,
     AccountManagementComponent,
-    MiscellaneousComponent
+    MiscellaneousComponent,
+    // Admin
+    AdminComponent,
+    AdminDashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -54,9 +61,9 @@ import { MiscellaneousComponent } from './user/settings/miscellaneous/miscellane
     FormsModule,
     ReactiveFormsModule,
     NgbModule.forRoot(),
-  //  SettingsModule,
+    //  SettingsModule,
     //AdminModule,
-  //  UserModule,
+    //  UserModule,
     AppRoutingModule,
     MomentModule
   ],
