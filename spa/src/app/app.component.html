@@ -11,7 +11,7 @@
       <li class="nav-item">
         <a *ngIf="authService.authenticated"
             class="nav-link"
-            routerLink="/dashboard"
+            [routerLink]="'/' + authService.accountType + '/dashboard'"
             (click)="navbarCollapsed = true"
             [routerLinkActive]="['active']">
             Dashboard
@@ -20,7 +20,7 @@
       <li class="nav-item">
         <a *ngIf="authService.authenticated"
             class="nav-link"
-            routerLink="/settings"
+            [routerLink]="'/' + authService.accountType + '/settings'"
             (click)="navbarCollapsed = true"
             [routerLinkActive]="['active']">
             Settings

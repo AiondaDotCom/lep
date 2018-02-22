@@ -3,15 +3,16 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes, CanActivate } from '@angular/router';
 
 import { AuthGuard } from './auth/auth.guard';
+import { UserComponent } from './user/user.component';
 
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SettingsComponent } from './settings/settings.component';
+import { AccountManagementComponent } from './settings/account-management/account-management.component';
+import { MiscellaneousComponent } from './settings/miscellaneous/miscellaneous.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { HelpComponent } from './help/help.component';
-
-import { UserComponent } from './user/user.component';
 
 const routes: Routes = [
   {
@@ -42,6 +43,25 @@ const routes: Routes = [
       {
         path: 'dashboard',
         component: DashboardComponent
+      },
+      {
+        path: 'settings',
+        component: SettingsComponent,
+        children: [
+          {
+            path: '',
+            redirectTo: 'account',
+            pathMatch: 'full'
+          },
+          {
+            path: 'account',
+            component: AccountManagementComponent
+          },
+          {
+            path: 'misc',
+            component: MiscellaneousComponent
+          }
+        ]
       }
     ]
   },

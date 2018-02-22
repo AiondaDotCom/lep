@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.messageService.message({ type: 'info', message: 'Successful login' })
 
         // Redirect to /dashboard
-        this.router.navigate(['/dashboard']);
+        this.router.navigate([`/${this.authService.accountType}/dashboard`]);
       },
       err => {
         this.spinnerService.stop('signIn')

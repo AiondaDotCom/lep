@@ -98,4 +98,9 @@ export class AuthService {
     return Date.now() < expiresAt;
   }
 
+  get accountType(): string {
+    let accountType = localStorage.getItem('accountType')
+    return accountType ? accountType: 'user';
+  }
+
 }

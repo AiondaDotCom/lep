@@ -14,7 +14,7 @@ import { MessageService } from './message.service';
 export class AppComponent {
   title = 'Aionda LEP';
   navbarCollapsed = true; // Initially the navbar is collapsed (Mobile only)
-
+  accountType = 'user';
   constructor(public authService: AuthService, public messageService: MessageService, private router: Router) {  }
 
   logout(): void {
