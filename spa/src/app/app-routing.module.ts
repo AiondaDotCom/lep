@@ -11,11 +11,12 @@ import { SettingsComponent } from './settings/settings.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { HelpComponent } from './help/help.component';
 
+import { UserComponent } from './user/user.component';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '/dashboard',
+    redirectTo: 'login',
     pathMatch: 'full'
   },
   {
@@ -27,10 +28,21 @@ const routes: Routes = [
     component: RegisterComponent
   },
   {
-    path: 'dashboard',
-    component: DashboardComponent,
+    path: 'user',
+    component: UserComponent,
     canActivate: [
       AuthGuard
+    ],
+    children: [
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
+      },
+      {
+        path: 'dashboard',
+        component: DashboardComponent
+      }
     ]
   },
   {
