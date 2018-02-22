@@ -38,7 +38,7 @@ function login(req, res) {
       return auth.verifyPassword(userPassword, passwordHash)
         .then(function(authResult) {
           let payload = {
-            type: accountType,
+            accountType: accountType,
             username: userName
           }
           return auth.generateToken(expireTimestamp, payload)
@@ -104,7 +104,7 @@ function requestRegistration(req, res) {
       var expiresInNSeconds = 24 * 60 * 60; // Expires in 24 hours
       var expireTimestamp = Math.floor(Date.now() / 1000) + expiresInNSeconds;
       let payload = {
-        type: 'user',
+        accountType: 'user',
         action: 'registration',
         email: email
       }

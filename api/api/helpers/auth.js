@@ -76,6 +76,18 @@ module.exports.verifyToken = function(token) {
   })
 }
 
+module.exports.isAdmin = function(tokenPayload) {
+  return new Promise(function(fulfill, reject) {
+    if (tokenPayload.accountType == 'admin') {
+      fulfill(true)
+    }
+    reject({
+      code: 401, // Unauthorized
+      message: 'Account is not admin'
+    });
+  })
+}
+
 module.exports.hashPassword = function(password, saltRounds) {
   return new Promise(function(fulfill, reject) {
     bcrypt.hash(password, saltRounds, function(err, passwordHash) {

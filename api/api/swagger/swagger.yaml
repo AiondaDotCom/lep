@@ -242,6 +242,30 @@ paths:
             $ref: "#/definitions/ErrorResponse"
 
 
+  /admin/getConfig:
+    x-swagger-router-controller: admin
+    get:
+      description: Returns the configuration (environment variables,...)
+      # used as the method name of the controller
+      operationId: getConfig
+      parameters:
+        - name: token
+          in: query
+          description: JSON Web token
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
 
   /doc/download:
     x-swagger-router-controller: document
