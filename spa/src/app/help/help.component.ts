@@ -16,7 +16,7 @@ export class HelpComponent implements OnInit {
 
   fragment: string;
 
-  constructor(private authService: AuthService, private route: ActivatedRoute) { }
+  constructor(public authService: AuthService, private route: ActivatedRoute) { }
 
   ngOnInit() {
 
