@@ -6,6 +6,8 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { catchError, map, tap } from 'rxjs/operators';
 
+import { ApiService } from '../api/api.service';
+
 import { User } from '../user';
 
 @Injectable()
@@ -18,15 +20,32 @@ export class AuthService {
 
   userProfile: User;
 
-  constructor(private http: HttpClient) {
+  whitelist = [];
+
+  constructor(private http: HttpClient, private api: ApiService) {
     // If authenticated, set local profile property and update login status subject
     // If token is expired, log out to clear any data from localStorage
     if (this.authenticated) {
-      this.userProfile = JSON.parse(localStorage.getItem('profile'))
+      this.userProfile = JSON.parse(localStorage.getItem('profile'));
       this.setLoggedIn(true);
     } else {
       this.logout();
     }
+
+    api.getDomainWhitelist()
+      .subscribe(data => {
+        console.log('Domainwhitelist successfully fetched');
+        this.whitelist = data;
+        localStorage.setItem('domainWhitelist', JSON.stringify(this.whitelist));
+      },
+      err => {
+        console.log('Error fetching domainWhitelist')
+        this.whitelist = ['Error: could not load domainwhitelist']
+      })
+  }
+
+  get domainWhitelist() {
+    return this.whitelist;
   }
 
   login(user: User): Observable<any> {
@@ -102,7 +121,7 @@ export class AuthService {
 
   get accountType(): string {
     let accountType = localStorage.getItem('accountType')
-    return accountType ? accountType: 'user';
+    return accountType ? accountType : 'user';
   }
 
 }

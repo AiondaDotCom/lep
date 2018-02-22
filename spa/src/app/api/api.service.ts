@@ -59,4 +59,8 @@ export class ApiService {
       }
     })
   }
+
+  getDomainWhitelist(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/getDomainWhitelist`)
+  }
 }

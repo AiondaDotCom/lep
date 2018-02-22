@@ -9,8 +9,8 @@ declare var require: any;
 export function whitelistdDomainValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } => {
     // Load the domain whitelist via webpack
-    let domainWhitelist = require('../../../../assets/police_domain_names.json')
-
+    let domainWhitelist = JSON.parse(localStorage.getItem('domainWhitelist'));//require('../../../../assets/police_domain_names.json')
+    //let domainWhitelist = this.auth
     let email = control.value;
 
     // Source: https://stackoverflow.com/questions/18371339/how-to-retrieve-name-from-email-address#18371348
@@ -18,7 +18,7 @@ export function whitelistdDomainValidator(): ValidatorFn {
     let domain = email.substring(email.lastIndexOf("@") + 1);
 
     // TODO: search complete object (Depending on locale?)
-    let whitelisted = domainWhitelist['DE'].includes(domain);
+    let whitelisted = domainWhitelist.includes(domain);
 
     // The domain is forbidden, if it is not whitelisted
     const forbidden = !whitelisted;

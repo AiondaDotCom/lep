@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { AuthService } from '../auth/auth.service';
 
 // Workaround (ERROR: Cannot find name 'require')
 // Source: https://stackoverflow.com/questions/43476135/angular-4-cannot-find-name-require
@@ -15,14 +16,10 @@ export class HelpComponent implements OnInit {
 
   fragment: string;
 
-  domainWhitelist: string[];
-
-  constructor(private route: ActivatedRoute) {
-    // TODO: Select correct list, depending on locale
-    this.domainWhitelist = require('../../../../assets/police_domain_names.json')['DE'].sort()
-  }
+  constructor(private authService: AuthService, private route: ActivatedRoute) { }
 
   ngOnInit() {
+
     this.route.fragment.subscribe(fragment => { this.fragment = fragment; });
   }
 
