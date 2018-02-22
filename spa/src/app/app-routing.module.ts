@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 
 import { RouterModule, Routes, CanActivate } from '@angular/router';
 
-import { AuthGuard } from './auth/auth.guard';
+import { AuthGuardUser, AuthGuardAdmin } from './auth/auth.guard';
 
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
@@ -36,7 +36,7 @@ const routes: Routes = [
     path: 'admin',
     component: AdminComponent,
     canActivate: [
-      AuthGuard
+      AuthGuardAdmin
     ],
     children: [
       {
@@ -54,7 +54,7 @@ const routes: Routes = [
     path: 'user',
     component: UserComponent,
     canActivate: [
-      AuthGuard
+      AuthGuardUser
     ],
     children: [
       {
@@ -103,6 +103,6 @@ const routes: Routes = [
   ],
   exports: [RouterModule],
   declarations: [],
-  providers: [AuthGuard]
+  providers: [AuthGuardAdmin, AuthGuardUser]
 })
 export class AppRoutingModule { }

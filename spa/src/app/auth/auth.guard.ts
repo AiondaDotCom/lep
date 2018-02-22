@@ -6,17 +6,41 @@ import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+
+export class AuthGuardUser implements CanActivate {
 
   constructor(private authService: AuthService, private router: Router) { }
 
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    if (!this.authService.authenticated) {
+    if (this.authService.authenticated && this.authService.accountType == 'user') {
+      return true;
+    }
+    else {
+      this.authService.logout();
       this.router.navigate(['/login']);
       return false;
     }
-    return true;
+  }
+}
+
+@Injectable()
+
+export class AuthGuardAdmin implements CanActivate {
+
+  constructor(private authService: AuthService, private router: Router) { }
+
+  canActivate(
+    next: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+    if (this.authService.authenticated && this.authService.accountType == 'admin') {
+      return true;
+    }
+    else {
+      this.authService.logout();
+      this.router.navigate(['/login']);
+      return false;
+    }
   }
 }
