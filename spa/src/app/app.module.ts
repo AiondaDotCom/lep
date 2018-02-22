@@ -38,6 +38,7 @@ import { AdminComponent } from './admin/admin.component';
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
 import { AdminAccountManagerComponent } from './admin/admin-account-manager/admin-account-manager.component';
 import { UserDashboardComponent } from './user/user-dashboard/user-dashboard.component';
+import { LegalNoticeComponent } from './shared/legal-notice/legal-notice.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +60,8 @@ import { UserDashboardComponent } from './user/user-dashboard/user-dashboard.com
     AdminComponent,
     AdminDashboardComponent,
     AdminAccountManagerComponent,
-    UserDashboardComponent
+    UserDashboardComponent,
+    LegalNoticeComponent
   ],
   imports: [
     BrowserModule,

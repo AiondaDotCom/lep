@@ -33,6 +33,13 @@
             Help
           </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/legal-notice"
+            (click)="navbarCollapsed = true"
+            [routerLinkActive]="['active']">
+            Legal Notice
+          </a>
+      </li>
     </ul>
 
     <a *ngIf="!authService.authenticated" class="btn btn-info" routerLink="/login" (click)="navbarCollapsed = true">Login</a>
