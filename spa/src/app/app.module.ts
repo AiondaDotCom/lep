@@ -24,9 +24,11 @@ import { RegisterComponent } from './register/register.component';
 import { HelpComponent } from './help/help.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
+// Shared Components
+import { DashboardComponent } from './shared/dashboard/dashboard.component';
+
 // User Component
 import { UserComponent } from './user/user.component';
-import { DashboardComponent } from './user/dashboard/dashboard.component';
 import { SettingsComponent } from './user/settings/settings.component';
 import { AccountManagementComponent } from './user/settings/account-management/account-management.component';
 import { MiscellaneousComponent } from './user/settings/miscellaneous/miscellaneous.component';
@@ -34,6 +36,8 @@ import { MiscellaneousComponent } from './user/settings/miscellaneous/miscellane
 // Admin Components
 import { AdminComponent } from './admin/admin.component';
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
+import { AdminAccountManagerComponent } from './admin/admin-account-manager/admin-account-manager.component';
+import { UserDashboardComponent } from './user/user-dashboard/user-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +57,9 @@ import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard
     MiscellaneousComponent,
     // Admin
     AdminComponent,
-    AdminDashboardComponent
+    AdminDashboardComponent,
+    AdminAccountManagerComponent,
+    UserDashboardComponent
   ],
   imports: [
     BrowserModule,

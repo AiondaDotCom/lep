@@ -10,7 +10,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { HelpComponent } from './help/help.component';
 
 import { UserComponent } from './user/user.component';
-import { DashboardComponent } from './user/dashboard/dashboard.component';
+import { UserDashboardComponent } from './user/user-dashboard/user-dashboard.component';
 import { SettingsComponent } from './user/settings/settings.component';
 import { AccountManagementComponent } from './user/settings/account-management/account-management.component';
 import { MiscellaneousComponent } from './user/settings/miscellaneous/miscellaneous.component';
@@ -47,6 +47,10 @@ const routes: Routes = [
       {
         path: 'dashboard',
         component: AdminDashboardComponent
+      },
+      {
+        path: 'settings',
+        component: AccountManagementComponent
       }
     ]
   },
@@ -64,7 +68,7 @@ const routes: Routes = [
       },
       {
         path: 'dashboard',
-        component: DashboardComponent
+        component: UserDashboardComponent
       },
       {
         path: 'settings',
