@@ -26,11 +26,6 @@ function login(req, res) {
 
   // Try to get the ip adress
   var ip = req.headers['x-forwarded-for'];
-  console.log('HEADERS: >>>>', req.headers);
-  console.log('IP: >>>>',ip);
-  //res.json(ip);
-
-
 
   var expiresInNSeconds = 15 * 60; // Expires in 15 minutes
   var expireTimestamp = Math.floor(Date.now() / 1000) + expiresInNSeconds;
@@ -58,13 +53,13 @@ function login(req, res) {
                 'accountType': accountType,
                 'lastLogin': lastLoginTimestamp
               });
-              return loginLog.logInteraction(userName, 'login', false, 'Successful login');
+              return loginLog.logInteraction(userName, 'login', false, 'Successful login', ip);
             })
         })
     })
     .catch(function(err) {
       if (err && err.code == 401 ){
-        loginLog.logInteraction(userName, 'login', true, 'Attempted login with wrong password');
+        loginLog.logInteraction(userName, 'login', true, 'Attempted login with wrong password', ip);
       }
       error.sendMsg(res, err);
     })

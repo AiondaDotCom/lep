@@ -1,14 +1,15 @@
 var connection = require('../helpers/db');
 
 
-module.exports.logInteraction = function(username, action, error, description) {
+module.exports.logInteraction = function(username, action, error, description, ip) {
   // This function is used to create a protocol of user interactions
   return new Promise(function(fulfill, reject) {
     connection.query('INSERT INTO loginLog SET ?', {
       'username': username,
       'action': action,
       'error': error,
-      'description': description
+      'description': description,
+      'ip': ip
     }, function(err, rows, fields) {
       if (err) {
         // Something went wrong
@@ -57,7 +58,8 @@ module.exports.getLastNLoginTimestamps = function(username, n) {
             newRows.push({
               error: error,
               timestamp: row.timestamp,
-              description: row.description
+              description: row.description,
+              ip: row.ip
             });
           }
           fulfill(newRows);
