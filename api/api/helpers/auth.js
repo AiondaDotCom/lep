@@ -27,6 +27,10 @@ module.exports.findUserInDB = function(username) {
   })
 }
 
+module.exports.getDomainWhitelist = function() {
+  return domainWhitelist;
+}
+
 module.exports.checkEmailWhitelist = function(emailadress) {
   return new Promise(function(fulfill, reject) {
     var domain = emailadress.substring(emailadress.lastIndexOf("@") + 1);

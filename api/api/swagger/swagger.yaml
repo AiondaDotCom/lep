@@ -267,6 +267,25 @@ paths:
             $ref: "#/definitions/ErrorResponse"
 
 
+  /getDomainWhitelist:
+    x-swagger-router-controller: misc
+    get:
+      description: Returns the current active domainwhitelist that is used to determine wether a mailadress is allowed, or not
+      # used as the method name of the controller
+      operationId: getDomainWhitelist
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+
   /doc/download:
     x-swagger-router-controller: document
     get:
