@@ -12,7 +12,6 @@ CREATE TABLE users (
   );
 
 ALTER TABLE users ADD accountstate VARCHAR(20);
-
 ALTER TABLE users MODIFY accountstate VARCHAR(100);
 
 SELECT * FROM users;
@@ -24,14 +23,18 @@ CREATE TABLE loginLog (
   action      VARCHAR(100) NOT NULL,
   error       BIT(1)       NOT NULL,
   description VARCHAR(500) ,
+  ip          VARCHAR(50),
   timestamp   TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
   index loginLog_user_index(`username`),
   foreign key (`username`) references users(`username`) on delete cascade,
   PRIMARY KEY (id)
   );
 
-  INSERT INTO loginLog (username, action, description) VALUES ('admin@admin', 'login', 'long description goes here');
+  INSERT INTO loginLog (username, action, description) VALUES ('admin@admin', 'login', 'long description goes here', 'localhost');
   SELECT * FROM loginLog WHERE username='awe@some';
+
+  # Rootuser anlegen
+  insert into users (username, password, realname, accounttype, accountstate) values ('admin@admin', '...', 'Master', 'admin', 'active')
 
   # Erfolgreiche logins auslesen
   SELECT * FROM loginLog WHERE username='admin@admin' AND action='login' AND error=false;
