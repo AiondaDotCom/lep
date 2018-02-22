@@ -26,10 +26,10 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 
 // User Component
 import { UserComponent } from './user/user.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { SettingsComponent } from './settings/settings.component';
-import { AccountManagementComponent } from './settings/account-management/account-management.component';
-import { MiscellaneousComponent } from './settings/miscellaneous/miscellaneous.component';
+import { DashboardComponent } from './user/dashboard/dashboard.component';
+import { SettingsComponent } from './user/settings/settings.component';
+import { AccountManagementComponent } from './user/settings/account-management/account-management.component';
+import { MiscellaneousComponent } from './user/settings/miscellaneous/miscellaneous.component';
 
 //import { LoginFormComponent } from './login/login-form/login-form.component';
 

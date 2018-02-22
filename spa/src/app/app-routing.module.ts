@@ -3,16 +3,18 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes, CanActivate } from '@angular/router';
 
 import { AuthGuard } from './auth/auth.guard';
-import { UserComponent } from './user/user.component';
 
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { SettingsComponent } from './settings/settings.component';
-import { AccountManagementComponent } from './settings/account-management/account-management.component';
-import { MiscellaneousComponent } from './settings/miscellaneous/miscellaneous.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { HelpComponent } from './help/help.component';
+
+import { UserComponent } from './user/user.component';
+
+import { DashboardComponent } from './user/dashboard/dashboard.component';
+import { SettingsComponent } from './user/settings/settings.component';
+import { AccountManagementComponent } from './user/settings/account-management/account-management.component';
+import { MiscellaneousComponent } from './user/settings/miscellaneous/miscellaneous.component';
 
 const routes: Routes = [
   {
