@@ -79,6 +79,7 @@ export class AuthService {
     localStorage.setItem('jwt', authResult.jwt);
     localStorage.setItem('profile', JSON.stringify(profile));
     localStorage.setItem('expireTimestamp', JSON.stringify(expTime));
+    localStorage.setItem('accountType', authResult.accountType);
     this.userProfile = profile;
     this.setLoggedIn(true);
   }
@@ -88,6 +89,7 @@ export class AuthService {
     localStorage.removeItem('jwt');
     localStorage.removeItem('expireTimestamp');
     localStorage.removeItem('userProfile');
+    localStorage.removeItem('accountType');
     this.userProfile = undefined;
     this.setLoggedIn(false);
   }
