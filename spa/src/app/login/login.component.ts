@@ -21,7 +21,16 @@ export class LoginComponent implements OnInit, OnDestroy {
   error: boolean;
   success: boolean;
 
-  constructor(private authService: AuthService, private router: Router, private messageService: MessageService, private spinnerService: LoadingIndicatorService) { }
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private messageService: MessageService,
+    private spinnerService: LoadingIndicatorService) {
+    // Check if the user is already logged in and redirect to dashboard
+    if (this.authService.authenticated) {
+      this.router.navigate([`/${this.authService.accountType}/dashboard`]);
+    }
+  }
 
   ngOnInit() { }
 
@@ -51,7 +60,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       err => {
         this.spinnerService.stop('signIn')
 
-        if (err.status == 401){
+        if (err.status == 401) {
           // Unauthorized
         }
         this.error = true;
