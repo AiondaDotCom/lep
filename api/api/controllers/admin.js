@@ -37,7 +37,10 @@ function getAccountList(req, res) {
     })
     .then(function() {
       // Request list
-      res.json(process.env)
+      return auth.getUserList()
+    })
+    .then(function(userList){
+      res.json(userList)
     })
     .catch(function(err) {
       error.sendMsg(res, err);

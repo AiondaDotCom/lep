@@ -318,6 +318,27 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
 
+  /admin/getAccountList:
+    x-swagger-router-controller: admin
+    get:
+      description: |
+        Returns list of registered accounts and corresponding metadata
+      operationId: getAccountList
+      parameters:
+        - name: token
+          in: query
+          description: JSON Web token
+          required: true
+          type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
   /getDomainWhitelist:
     x-swagger-router-controller: misc

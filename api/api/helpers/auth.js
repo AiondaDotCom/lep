@@ -27,6 +27,27 @@ module.exports.findUserInDB = function(username) {
   })
 }
 
+module.exports.getUserList = function() {
+  // Query database for given username
+  return new Promise(function(fulfill, reject) {
+    connection.query('SELECT * FROM users', function(err, rows, fields) {
+      if (err) {
+        reject(err);
+      }
+      var accountList = [];
+      for (let row of rows) {
+        accountList.push({
+          username: row.username,
+          realname: row.realname,
+          accounttype: row.accounttype,
+          accountstate: row.accountstate
+        })
+      }
+      fulfill(accountList);
+    })
+  })
+}
+
 module.exports.getDomainWhitelist = function() {
   return domainWhitelist;
 }
