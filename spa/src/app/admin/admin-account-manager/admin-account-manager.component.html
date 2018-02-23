@@ -1,3 +1,21 @@
-<p>
-  admin-account-manager works!
-</p>
+<h2>Account manager</h2>
+
+<h3>Account list</h3>
+
+<table class="table">
+  <tr>
+    <th>Username</th>
+    <th>Real Name</th>
+    <th>Account type</th>
+    <th>Accountstate</th>
+  </tr>
+  <tr
+    *ngFor="let account of accountList"
+    [class.table-success]="account.accountstate=='active'"
+    >
+    <td>{{account.username}}</td>
+    <td>{{account.realname}}</td>
+    <td>{{account.accounttype}}</td>
+    <td>{{account.accountstate}}</td>
+  </tr>
+</table>

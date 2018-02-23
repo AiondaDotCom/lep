@@ -63,4 +63,12 @@ export class ApiService {
   getDomainWhitelist(): Observable<any> {
     return this.http.get(`${this.apiUrl}/getDomainWhitelist`)
   }
+
+  getAccountList(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/admin/getAccountList`, {
+      params: {
+        'token': localStorage.getItem('jwt')
+      }
+    })
+  }
 }
