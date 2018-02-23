@@ -32,12 +32,11 @@ paths:
     x-swagger-router-controller: login
     get:
       description: Endpoint used to obtain a JSON Webtoken from the server. This token is used to authenicate the user for subsequent requestes
-      # used as the method name of the controller
       operationId: login
       parameters:
         - name: name
           in: query
-          description: Username
+          description: Username (emailadress is used to identify the useraccount)
           required: true
           type: string
         - name: password
@@ -46,27 +45,40 @@ paths:
           required: true
           type: string
       responses:
-        "200":
+        200:
           description: Success
           schema:
             type: object
             required:
               - jwt
+              - userName
+              - expireTimestamp
+              - accountType
             properties:
               jwt:
                 type: string
-        "401":
+              userName:
+                type: string
+              expireTimestamp:
+                type: number
+              accountType:
+                type: string
+              lastLogin:
+                type: string
+        401:
           description: Unauthorized
           schema:
-            $ref: "#/definitions/ErrorResponse"
+            $ref: "#/definitions/UnauthorizedResponse"
         default:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+
+
   /user/requestRegistration:
     x-swagger-router-controller: login
     get:
-      description: Create a new account. It is checked, if the username is in an allowed set of domains
+      description: Request the registration of a new account. It is checked, whether the emailadress is in an allowed set of domains. A registration link (with token) is sent to that adress.
       operationId: requestRegistration
       parameters:
         - name: email
@@ -75,16 +87,25 @@ paths:
           required: true
           type: string
       responses:
-        "200":
+        200:
           description: Success
           schema:
-            # a pointer to a definition
-            $ref: "#/definitions/HelloWorldResponse"
-        # responses may fall through to errors
+            type: object
+            required:
+              - message
+            properties:
+              message:
+                type: string
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/UnauthorizedResponse"
+
         default:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+
   /user/register:
     x-swagger-router-controller: login
     get:
@@ -108,20 +129,23 @@ paths:
           required: true
           type: string
       responses:
-        "200":
+        200:
           description: Success
           schema:
-            # a pointer to a definition
-            $ref: "#/definitions/HelloWorldResponse"
-        # responses may fall through to errors
+            $ref: "#/definitions/MessageResponse"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/UnauthorizedResponse"
         default:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+
   /user/delete:
     x-swagger-router-controller: login
     get:
-      description: Delete account
+      description: Delete account. Authorization via email and password
       operationId: deleteAccount
       parameters:
         - name: name
@@ -135,16 +159,19 @@ paths:
           required: true
           type: string
       responses:
-        "200":
+        200:
           description: Success
           schema:
-            # a pointer to a definition
-            $ref: "#/definitions/HelloWorldResponse"
-        # responses may fall through to errors
+            $ref: "#/definitions/MessageResponse"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/UnauthorizedResponse"
         default:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+
   /user/modify:
     x-swagger-router-controller: login
     get:
@@ -166,32 +193,37 @@ paths:
           required: true
           type: string
       responses:
-        "200":
+        200:
           description: Success
           schema:
-            # a pointer to a definition
-            $ref: "#/definitions/HelloWorldResponse"
-        # responses may fall through to errors
+            $ref: "#/definitions/MessageResponse"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/UnauthorizedResponse"
         default:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
 
-  /user/resetPassword:
+  /user/requestPasswordReset:
     x-swagger-router-controller: login
     get:
-      description: Reset password
-      operationId: resetPassword
+      description: |
+        If the user has forgotten the password, he can reset it.
+        This can be done by sending a password-reset-link to the  emailadress identifying the account.
+        The link contains a token that allows the user to enter a new password, which is then saved via the /user/resetPassword endpoint.
+      operationId: requestPasswordReset
       parameters:
         - name: email
           in: query
           required: true
           type: string
       responses:
-        "200":
+        200:
           description: Success
           schema:
-            $ref: "#/definitions/HelloWorldResponse"
+            $ref: "#/definitions/MessageResponse"
         default:
           description: Error
           schema:
@@ -200,7 +232,9 @@ paths:
   /user/getLoginLog:
     x-swagger-router-controller: login
     get:
-      description: Get login log
+      description: |
+        Returns the login history for the account the token was issued for (Determined via the payload.username property).
+        The returned list is limeted to 50 items to prevent too much data.
       operationId: getLoginLog
       parameters:
         - name: token
@@ -208,10 +242,28 @@ paths:
           required: true
           type: string
       responses:
-        "200":
+        200:
           description: Success
           schema:
-            $ref: "#/definitions/HelloWorldResponse"
+            type: array
+            items:
+              type: object
+              required:
+                - error
+                - timestamp
+              properties:
+                error:
+                  type: boolean
+                timestamp:
+                  type: string
+                description:
+                  type: string
+                ip:
+                  type: string
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/UnauthorizedResponse"
         default:
           description: Error
           schema:
@@ -220,8 +272,8 @@ paths:
   /restricted:
     x-swagger-router-controller: restricted
     get:
-      description: Endpoint used to test the jwt authentication
-      # used as the method name of the controller
+      description: |
+        Endpoint used to test the json webtoken authentication.
       operationId: restricted
       parameters:
         - name: jwt
@@ -230,12 +282,14 @@ paths:
           required: true
           type: string
       responses:
-        "200":
+        200:
           description: Success
           schema:
-            # a pointer to a definition
-            $ref: "#/definitions/HelloWorldResponse"
-        # responses may fall through to errors
+            $ref: "#/definitions/MessageResponse"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/UnauthorizedResponse"
         default:
           description: Error
           schema:
@@ -245,8 +299,8 @@ paths:
   /admin/getConfig:
     x-swagger-router-controller: admin
     get:
-      description: Returns the configuration (environment variables,...)
-      # used as the method name of the controller
+      description: |
+        Returns the configuration (environment variables,...)
       operationId: getConfig
       parameters:
         - name: token
@@ -255,12 +309,10 @@ paths:
           required: true
           type: string
       responses:
-        "200":
+        200:
           description: Success
           schema:
-            # a pointer to a definition
-            $ref: "#/definitions/HelloWorldResponse"
-        # responses may fall through to errors
+            type: object
         default:
           description: Error
           schema:
@@ -270,16 +322,16 @@ paths:
   /getDomainWhitelist:
     x-swagger-router-controller: misc
     get:
-      description: Returns the current active domainwhitelist that is used to determine wether a mailadress is allowed, or not
-      # used as the method name of the controller
+      description: |
+        Returns the current active domain-whitelist that is used to determine wether a mailadress is allowed, or not.
       operationId: getDomainWhitelist
       responses:
-        "200":
+        200:
           description: Success
           schema:
-            # a pointer to a definition
-            $ref: "#/definitions/HelloWorldResponse"
-        # responses may fall through to errors
+            type: array
+            items:
+              type: string
         default:
           description: Error
           schema:
@@ -289,8 +341,8 @@ paths:
   /doc/download:
     x-swagger-router-controller: document
     get:
-      description: Allows user to download specific files
-      # used as the method name of the controller
+      description: |
+        Allows user to download specific files
       operationId: downloadDocument
       parameters:
         - name: token
@@ -298,23 +350,20 @@ paths:
           required: true
           type: string
       responses:
-        "200":
+        200:
           description: Success
           schema:
-            # a pointer to a definition
-            $ref: "#/definitions/HelloWorldResponse"
-        # responses may fall through to errors
+            $ref: "#/definitions/MessageResponse"
         default:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
 
-
   /doc/upload:
     x-swagger-router-controller: document
     post:
-      description: Allows user to download specific files
-      # used as the method name of the controller
+      description: |
+        Allows user to upload specific files
       operationId: uploadDocument
       parameters:
         - name: token
@@ -327,19 +376,23 @@ paths:
           required: true
           type: file
       responses:
-        "200":
+        200:
           description: Success
           schema:
-            # a pointer to a definition
-            $ref: "#/definitions/HelloWorldResponse"
-        # responses may fall through to errors
+            $ref: "#/definitions/MessageResponse"
         default:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
 
 definitions:
-  HelloWorldResponse:
+  MessageResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  UnauthorizedResponse:
     required:
       - message
     properties:

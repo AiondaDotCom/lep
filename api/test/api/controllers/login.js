@@ -126,7 +126,8 @@ describe('controllers', function() {
           .end(function(err, res) {
             should.not.exist(err);
 
-            res.body.should.be.eql('Access granted!')
+            res.body.should.have.property('message')
+            res.body.message.should.be.eql('Access granted!')
 
             done();
           });

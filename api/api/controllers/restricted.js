@@ -14,7 +14,7 @@ function restricted(req, res) {
 
   auth.verifyToken(token)
     .then(function(){
-      res.json('Access granted!')
+      res.json({message: 'Access granted!'})
     })
     .catch(function(err){
       error.sendMsg(res, err);

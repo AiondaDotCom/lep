@@ -16,7 +16,7 @@ module.exports = {
   requestRegistration: requestRegistration,
   deleteAccount: deleteAccount,
   modifyAccount: modifyAccount,
-  resetPassword: resetPassword,
+  requestPasswordReset: requestPasswordReset,
   getLoginLog: getLoginLog
 };
 
@@ -58,7 +58,7 @@ function login(req, res) {
         })
     })
     .catch(function(err) {
-      if (err && err.code == 401 ){
+      if (err && err.code == 401) {
         loginLog.logInteraction(userName, 'login', true, 'Attempted login with wrong password', ip);
       }
       error.sendMsg(res, err);
@@ -111,7 +111,9 @@ function requestRegistration(req, res) {
       return auth.generateToken(expireTimestamp, payload)
     })
     .then(function(token) {
-      res.json('registration mail sent');
+      res.json({
+        message: 'registration mail sent'
+      });
 
       let bodyText = `To complete your registration please visit:\nhttps://aionda-lep.herokuapp.com/register?email=${email}&token=${token}`;
       let bodyHtml = `To complete your registration please visit:
@@ -243,7 +245,7 @@ function modifyAccount(req, res) {
     })
 }
 
-function resetPassword(req, res) {
+function requestPasswordReset(req, res) {
   var email = req.swagger.params.email.value;
 
   auth.findUserInDB(email)
@@ -256,32 +258,34 @@ function resetPassword(req, res) {
       }
       return auth.generateToken(expireTimestamp, payload)
     })
-    .then(function(token){
+    .then(function(token) {
       // Send link to reset Password via mail
 
       let bodyText = `To reset your password please visit:
 https://aionda-lep.herokuapp.com/register?email=${email}&token=${token}`;
 
       mail.send(email, 'resetPassword@aionda-lep.herokuapp.com', 'Reset password', bodyText, bodyText)
-      res.json({'message': `Email with password reset link was sent to ${email}`})
+      res.json({
+        'message': `Email with password reset link was sent to ${email}`
+      })
     })
     .catch(function(err) {
       error.sendMsg(res, err);
     })
 }
 
-function getLoginLog(req, res){
+function getLoginLog(req, res) {
   var token = req.swagger.params.token.value;
 
   auth.verifyToken(token)
-    .then(function(payload){
+    .then(function(payload) {
       var username = payload.username;
       return loginLog.getLastNLoginTimestamps(username, 50)
     })
-    .then(function(logEntries){
+    .then(function(logEntries) {
       res.send(logEntries)
     })
-    .catch(function(err){
+    .catch(function(err) {
       error.sendMsg(res, err);
     })
 }
