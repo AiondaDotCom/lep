@@ -44,3 +44,26 @@ export class AuthGuardAdmin implements CanActivate {
     }
   }
 }
+
+
+@Injectable()
+
+export class AuthGuardModerator implements CanActivate {
+
+  constructor(private authService: AuthService, private router: Router) {
+    console.log('authguard')
+  }
+
+  canActivate(
+    next: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+    if (this.authService.authenticated && this.authService.accountType == 'moderator') {
+      return true;
+    }
+    else {
+      this.authService.logout();
+      this.router.navigate(['/login']);
+      return false;
+    }
+  }
+}

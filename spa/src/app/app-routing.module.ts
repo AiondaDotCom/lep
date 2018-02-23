@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 
 import { RouterModule, Routes, CanActivate } from '@angular/router';
 
-import { AuthGuardUser, AuthGuardAdmin } from './auth/auth.guard';
+import { AuthGuardUser, AuthGuardModerator, AuthGuardAdmin } from './auth/auth.guard';
 
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
@@ -18,6 +18,9 @@ import { MiscellaneousComponent } from './user/settings/miscellaneous/miscellane
 
 import { AdminComponent } from './admin/admin.component';
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
+
+import { ModeratorComponent } from './moderator/moderator.component';
+import { ModeratorDashboardComponent } from './moderator/moderator-dashboard/moderator-dashboard.component';
 
 const routes: Routes = [
   {
@@ -52,6 +55,24 @@ const routes: Routes = [
       {
         path: 'settings',
         component: AccountManagementComponent
+      }
+    ]
+  },
+  {
+    path: 'moderator',
+    component: ModeratorComponent,
+    canActivate: [
+      AuthGuardModerator
+    ],
+    children: [
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
+      },
+      {
+        path: 'dashboard',
+        component: ModeratorDashboardComponent
       }
     ]
   },
@@ -112,6 +133,6 @@ const routes: Routes = [
   ],
   exports: [RouterModule],
   declarations: [],
-  providers: [AuthGuardAdmin, AuthGuardUser]
+  providers: [AuthGuardAdmin, AuthGuardModerator, AuthGuardUser]
 })
 export class AppRoutingModule { }
