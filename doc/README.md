@@ -8,6 +8,7 @@
 ### Login
 When a user logs in, the `/user/login` endpint returns a JSON Webtoken.
 This token contains as payload:
+
 | Key                | Value           |
 | ------------------ | -------------|
 | exp                | Expiration Timestamp of the token. Once a token is expired it cannot be used anymore |
@@ -20,6 +21,7 @@ This token contains as payload:
 
 ### Account types
 There are three account types:
+
 | account type | description |
 | ------------ | ----------- |
 | admin        | Has access to anything |
