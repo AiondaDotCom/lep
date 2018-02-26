@@ -32,6 +32,13 @@ export class AuthService {
       this.logout();
     }
 
+    // Renew the json webtoken every minute
+    // TODO: Stop polling, when failing
+    this.renewToken();
+    setInterval(() => {
+      this.renewToken();
+    }, 1 * 60 * 1000); // Every minute
+
     api.getDomainWhitelist()
       .subscribe(data => {
         console.log('Domainwhitelist successfully fetched');
@@ -41,6 +48,18 @@ export class AuthService {
       err => {
         console.log('Error fetching domainWhitelist')
         this.whitelist = ['Error: could not load domainwhitelist']
+      })
+  }
+
+  renewToken() {
+    this.api.renewToken()
+      .subscribe(data => {
+        console.log(data)
+        localStorage.setItem('jwt', data.newToken);
+        localStorage.setItem('expireTimestamp', JSON.stringify(data.newExpireTimestamp * 1000));
+      },
+      err => {
+        console.log(err)
       })
   }
 

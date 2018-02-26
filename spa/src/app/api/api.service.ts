@@ -71,4 +71,13 @@ export class ApiService {
       }
     })
   }
+
+  renewToken(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/user/renewToken`, {
+      params: {
+        'token': localStorage.getItem('jwt')
+      }
+    })
+  }
+
 }
