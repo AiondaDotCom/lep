@@ -269,6 +269,40 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
 
+
+  /user/renewToken:
+    x-swagger-router-controller: login
+    get:
+      description: |
+        Returns a token with a new expireTimestamp. The token contains a maximumExpireTimestamp, which defines the date until which renewing the token is allowed
+      operationId: renewToken
+      parameters:
+        - name: token
+          in: query
+          required: true
+          type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            required:
+              - newToken
+              - newExpireTimestamp
+            properties:
+              newToken:
+                type: string
+              newExpireTimestamp:
+                type: number
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/UnauthorizedResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
   /restricted:
     x-swagger-router-controller: restricted
     get:

@@ -5,10 +5,16 @@ var error = require('../helpers/error');
 var loginLog = require('../helpers/loginLog');
 var auth = require('../helpers/auth');
 var connection = require('../helpers/db')
+var helper = require('../helpers/helper');
 
 var [dbURL, privateKey, publicKey] = require('../helpers/setupEnv').init()
 
 const saltRounds = 10;
+
+const tokenExpireDuration = 15*60; // 15 Minutes
+const tokenMaxExpireDuration = 24*60*60; // 24 hours
+
+const registerTokenExpireDuration = 24*60*60;
 
 module.exports = {
   login: login,
@@ -17,7 +23,8 @@ module.exports = {
   deleteAccount: deleteAccount,
   modifyAccount: modifyAccount,
   requestPasswordReset: requestPasswordReset,
-  getLoginLog: getLoginLog
+  getLoginLog: getLoginLog,
+  renewToken: renewToken
 };
 
 function login(req, res) {
@@ -27,8 +34,8 @@ function login(req, res) {
   // Try to get the ip adress
   var ip = req.headers['x-forwarded-for'];
 
-  var expiresInNSeconds = 15 * 60; // Expires in 15 minutes
-  var expireTimestamp = Math.floor(Date.now() / 1000) + expiresInNSeconds;
+  var expireTimestamp = helper.now() + tokenExpireDuration; // Expires in 15 minutes
+  var maxExpireTimestamp = helper.now() + tokenMaxExpireDuration; // 24 hours
 
   auth.findUserInDB(userName)
     .then(function(user) {
@@ -39,7 +46,9 @@ function login(req, res) {
         .then(function(authResult) {
           let payload = {
             accountType: accountType,
-            username: userName
+            username: userName,
+            maxExpireTimestamp: maxExpireTimestamp,
+            nRenew: 0
           }
           return auth.generateToken(expireTimestamp, payload)
         })
@@ -101,8 +110,7 @@ function requestRegistration(req, res) {
     })
     .then(function() {
       // Everything is ok, Generate TOKEN
-      var expiresInNSeconds = 24 * 60 * 60; // Expires in 24 hours
-      var expireTimestamp = Math.floor(Date.now() / 1000) + expiresInNSeconds;
+      var expireTimestamp = helper.now() + registerTokenExpireDuration;
       let payload = {
         accountType: 'user',
         action: 'registration',
@@ -251,7 +259,7 @@ function requestPasswordReset(req, res) {
   auth.findUserInDB(email)
     .then(function(user) {
       // Generate token that allows the user to reset the password
-      var expireTimestamp = Math.floor(Date.now() / 1000) + 15 * 60; // Expires in 15 minutes
+      var expireTimestamp =  helper.now() + tokenExpireDuration;
       let payload = {
         action: 'resetPassword',
         email: email
@@ -284,6 +292,50 @@ function getLoginLog(req, res) {
     })
     .then(function(logEntries) {
       res.send(logEntries)
+    })
+    .catch(function(err) {
+      error.sendMsg(res, err);
+    })
+}
+
+
+
+function renewToken(req, res) {
+  var token = req.swagger.params.token.value;
+
+  var newExpireTimestamp = helper.now() + tokenExpireDuration;
+
+  auth.verifyToken(token)
+    .then(function(payload) {
+      console.log(payload);
+      var maxExpireTimestamp = payload.maxExpireTimestamp;
+      return new Promise(function(fulfill, reject) {
+          if (maxExpireTimestamp > helper.now()) {
+            // We are allowed to renew this token
+            fulfill(true);
+          } else {
+            // Token is not being renewed
+            reject({
+              code: 400, // 400 Bad Request
+              message: `The token cannot be renewed. Please login again.`
+            })
+          }
+        })
+        .then(function() {
+          let newPayload = {
+            accountType: payload.accountType,
+            username: payload.userName,
+            maxExpireTimestamp: payload.maxExpireTimestamp,
+            nRenew: payload.nRenew + 1
+          }
+          return auth.generateToken(newExpireTimestamp, newPayload)
+        })
+        .then(function(token) {
+          res.send({
+            'newToken': token,
+            'newExpireTimestamp': newExpireTimestamp
+          })
+        })
     })
     .catch(function(err) {
       error.sendMsg(res, err);
