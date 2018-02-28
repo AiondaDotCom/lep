@@ -1,7 +1,7 @@
 var jwt = require('jsonwebtoken'); // Generate and verify jwts
 var bcrypt = require('bcrypt'); // Hash passwords
 var connection = require('../helpers/db');
-var [dbURL, privateKey, publicKey] = require('../helpers/setupEnv').init()
+var [dbURL, privateKey, publicKey, saltRounds] = require('../helpers/setupEnv').init()
 var domainWhitelist = require('../../../assets/police_domain_names.json').DE;
 
 module.exports.findUserInDB = function(username) {
@@ -90,9 +90,10 @@ module.exports.verifyPayload = function(payload){
   console.log(payload)
   return new Promise(function(fulfill, reject){
     if (typeof payload.username !== 'undefined' &&
-        typeof payload.accountType != 'undefined' &&
-        typeof payload.maxExpireTimestamp != 'undefined' &&
-        typeof payload.nRenew != 'undefined'){
+        typeof payload.accountType != 'undefined'// &&
+        //typeof payload.maxExpireTimestamp != 'undefined' &&
+        //typeof payload.nRenew != 'undefined'
+      ){
       fulfill(payload);
     }
     else {
@@ -170,4 +171,40 @@ module.exports.verifyPassword = function(password, passwordHash) {
       }
     })
   })
+}
+
+
+
+module.exports.createAccount = function(email, fullName, password, accountType) {
+  // Warning: Authentication has to be done before calling this function!
+  return module.exports.hashPassword(password, saltRounds)
+    .then(function(passwordHash) {
+      // Password was hashed successfully, update user information
+      // TODO: Prevent user from updating multiple times (verify if accountstate is 'registration_pending')
+      return new Promise(function(fulfill, reject) {
+        connection.query('UPDATE users SET ? WHERE username=?', [{
+          password: passwordHash,
+          accounttype: accountType,
+          realname: fullName,
+          accountstate: 'active'
+        },email], function(err, rows, fields) {
+          if (err) {
+            // Username already exists in database
+            if (err.code == 'ER_DUP_ENTRY') {
+              reject({
+                code: 400,
+                message: `User ${email} already exists`
+              })
+            } else {
+              reject(err)
+            }
+          }
+
+          // Insertion into DB was successful
+          console.log(`Inserted ${email}`)
+
+          fulfill();
+        });
+      })
+    })
 }

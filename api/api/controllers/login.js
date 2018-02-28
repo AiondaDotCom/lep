@@ -7,14 +7,12 @@ var auth = require('../helpers/auth');
 var connection = require('../helpers/db')
 var helper = require('../helpers/helper');
 
-var [dbURL, privateKey, publicKey] = require('../helpers/setupEnv').init()
+var [dbURL, privateKey, publicKey, saltRounds] = require('../helpers/setupEnv').init()
 
-const saltRounds = 10;
+const tokenExpireDuration = 15 * 60; // 15 Minutes
+const tokenMaxExpireDuration = 24 * 60 * 60; // 24 hours
 
-const tokenExpireDuration = 15*60; // 15 Minutes
-const tokenMaxExpireDuration = 24*60*60; // 24 hours
-
-const registerTokenExpireDuration = 24*60*60;
+const registerTokenExpireDuration = 24 * 60 * 60;
 
 module.exports = {
   login: login,
@@ -114,7 +112,7 @@ function requestRegistration(req, res) {
       let payload = {
         accountType: 'user',
         action: 'registration',
-        email: email
+        username: email
       }
       return auth.generateToken(expireTimestamp, payload)
     })
@@ -141,58 +139,30 @@ function register(req, res) {
   var token = req.swagger.params.token.value;
 
   var accountType = 'user';
-  // TODO: decide what accountType to use
 
   auth.verifyToken(token)
     .then(function(payload) {
       return new Promise(function(fulfill, reject) {
-          if (payload.action == 'registration') {
-            // token is valid for registration
-            console.log(payload)
-            fulfill()
-          } else {
-            // Token valid, but not assigned for registration
-            reject({
-              code: 401,
-              message: 'Verification failed'
-            })
-          }
-        })
-        .then(function() {
-          return auth.hashPassword(password, saltRounds)
-        })
-        .then(function(passwordHash) {
-          // Password was hashed successfully, update user information
-          // TODO: Prevent user from updating multiple times (verify if accountstate is 'registration_pending')
-          return new Promise(function(fulfill, reject) {
-            connection.query('UPDATE users SET ? WHERE username=?', [{
-              password: passwordHash,
-              accounttype: accountType,
-              realname: fullName,
-              accountstate: 'active'
-            }, payload.email], function(err, rows, fields) {
-              if (err) {
-                // Username already exists in database
-                if (err.code == 'ER_DUP_ENTRY') {
-                  reject({
-                    code: 400,
-                    message: `User ${payload.email} already exists`
-                  })
-                } else {
-                  reject(err)
-                }
-              }
-
-              // Insertion into DB was successful
-              console.log(`Inserted ${payload.email}`)
-              res.json({
-                'message': `User ${payload.email} created`
-              });
-              fulfill();
-            });
+        if (payload.action == 'registration') {
+          // token is valid for registration
+          console.log(payload)
+          fulfill()
+        } else {
+          // Token valid, but not assigned for registration
+          reject({
+            code: 401,
+            message: 'Token was not issued for registration'
           })
-        })
-
+        }
+      })
+      .then(function() {
+        return auth.createAccount(payload.username, fullName, password, accountType)
+      })
+      .then(function() {
+        res.json({
+          'message': `User ${payload.email} created`
+        });
+      })
     })
     .catch(function(err) {
       error.sendMsg(res, err)
@@ -259,7 +229,7 @@ function requestPasswordReset(req, res) {
   auth.findUserInDB(email)
     .then(function(user) {
       // Generate token that allows the user to reset the password
-      var expireTimestamp =  helper.now() + tokenExpireDuration;
+      var expireTimestamp = helper.now() + tokenExpireDuration;
       let payload = {
         action: 'resetPassword',
         email: email

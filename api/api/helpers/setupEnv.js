@@ -16,7 +16,8 @@ module.exports.init = function() {
   if (!publicKey) {
     throw new Error('ENV VAR "DEVEL_PUBLIC_KEY" missing');
   }
-  return [dbURL, privateKey, publicKey]
+  let saltRounds = 10;
+  return [dbURL, privateKey, publicKey, saltRounds]
 }
 
 /*
