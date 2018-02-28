@@ -288,6 +288,7 @@ function getLoginLog(req, res) {
   auth.verifyToken(token)
     .then(function(payload) {
       var username = payload.username;
+      console.log('getloginLog' + username)
       return loginLog.getLastNLoginTimestamps(username, 50)
     })
     .then(function(logEntries) {
@@ -324,7 +325,7 @@ function renewToken(req, res) {
         .then(function() {
           let newPayload = {
             accountType: payload.accountType,
-            username: payload.userName,
+            username: payload.username,
             maxExpireTimestamp: payload.maxExpireTimestamp,
             nRenew: payload.nRenew + 1
           }

@@ -86,20 +86,48 @@ module.exports.generateToken = function(expireTimestamp, payload) {
   })
 }
 
+module.exports.verifyPayload = function(payload){
+  console.log(payload)
+  return new Promise(function(fulfill, reject){
+    if (typeof payload.username !== 'undefined' &&
+        typeof payload.accountType != 'undefined' &&
+        typeof payload.maxExpireTimestamp != 'undefined' &&
+        typeof payload.nRenew != 'undefined'){
+      fulfill(payload);
+    }
+    else {
+      reject({
+        code: 401,
+        message: 'Token invalid (invalid payload)'
+      })
+    }
+  })
+}
 
 module.exports.verifyToken = function(token) {
   return new Promise(function(fulfill, reject) {
     jwt.verify(token, publicKey, function(err, decoded) {
       if (err) {
+        var myMessage = '';
+        if (err.message){
+          myMessage = `Token invalid (${err.message})`
+        }
+        else {
+          myMessage = `Token invalid`
+        }
         reject({
           code: 401,
-          message: 'Token invalid'
+          message: myMessage
         });
       }
       fulfill(decoded) // Return payload
     })
   })
+  .then(function(payload){
+    return module.exports.verifyPayload(payload)
+  })
 }
+
 
 module.exports.isAdmin = function(tokenPayload) {
   return new Promise(function(fulfill, reject) {
