@@ -30,7 +30,7 @@ import { DashboardComponent } from './shared/dashboard/dashboard.component';
 // User Component
 import { UserComponent } from './user/user.component';
 import { SettingsComponent } from './user/settings/settings.component';
-import { AccountManagementComponent } from './user/settings/account-management/account-management.component';
+import { AccountManagementComponent } from './shared/account-management/account-management.component';
 import { MiscellaneousComponent } from './user/settings/miscellaneous/miscellaneous.component';
 
 // Admin Components

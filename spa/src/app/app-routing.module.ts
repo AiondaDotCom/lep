@@ -13,7 +13,7 @@ import { LegalNoticeComponent } from './shared/legal-notice/legal-notice.compone
 import { UserComponent } from './user/user.component';
 import { UserDashboardComponent } from './user/user-dashboard/user-dashboard.component';
 import { SettingsComponent } from './user/settings/settings.component';
-import { AccountManagementComponent } from './user/settings/account-management/account-management.component';
+import { AccountManagementComponent } from './shared/account-management/account-management.component';
 import { MiscellaneousComponent } from './user/settings/miscellaneous/miscellaneous.component';
 
 import { AdminComponent } from './admin/admin.component';
