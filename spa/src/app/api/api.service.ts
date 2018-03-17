@@ -80,4 +80,8 @@ export class ApiService {
     })
   }
 
+  whatIsMyIP(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/whatIsMyIP`)
+  }
+
 }

@@ -13,7 +13,8 @@ import { MessageService } from '../../message.service';
 export class AccountManagementComponent implements OnInit {
 
   loginLogList = [];
-
+  myIP;
+  
   constructor(
     private router: Router,
     private authService: AuthService,
@@ -26,6 +27,15 @@ export class AccountManagementComponent implements OnInit {
   }
 
   requestLoginLog() {
+    this.api.whatIsMyIP().subscribe(
+      result => {
+        this.myIP = result.ip
+      },
+      err => {
+        console.log(err);
+      }
+    );
+
     this.api.getLoginLog().subscribe(
       result => {
         console.log(result);
