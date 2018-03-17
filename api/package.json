@@ -16,7 +16,8 @@
     "swagger-express-mw": "^0.1.0",
     "swagger": "^0.7.5",
     "should": "^7.1.0",
-    "supertest": "^1.0.0"
+    "supertest": "^1.0.0",
+    "inquirer": "^5.1.0"
   },
   "scripts": {
     "start": "node api/app.js",
