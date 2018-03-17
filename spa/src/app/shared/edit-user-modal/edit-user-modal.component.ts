@@ -7,9 +7,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EditUserModalComponent implements OnInit {
 
+  newUser = {
+    accountType: 'user',
+    username: ''
+  }
+
   constructor() { }
 
   ngOnInit() {
+  }
+
+
+  createUser() {
+    console.log('Create user!')
   }
 
 }

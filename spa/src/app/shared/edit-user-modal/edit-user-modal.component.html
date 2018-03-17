@@ -1,3 +1,31 @@
-<p>
-  edit-user-modal works!
-</p>
+<form (ngSubmit)="createUser()"  #createUserForm="ngForm">
+
+  <div class="form-group">
+    <label for="inputEmail" class="sr-only">Email address</label>
+    <input type="email" class="form-control" id="inputEmail" required email
+            [(ngModel)]="newUser.username" name="inputEmail"
+            placeholder="Email address" autofocus>
+  </div>
+
+  <div class="form-check">
+    <label class="form-check-label">
+      <input [(ngModel)]="newUser.accountType" type="radio" name="accountType" value="admin" checked>
+      Admin
+    </label>
+  </div>
+  <div class="form-check">
+    <label class="form-check-label">
+      <input [(ngModel)]="newUser.accountType" type="radio" name="accountType" value="moderator" checked>
+      Moderator
+    </label>
+  </div>
+  <div class="form-check">
+    <label class="form-check-label">
+      <input [(ngModel)]="newUser.accountType" type="radio" name="accountType" value="user">
+      User
+    </label>
+  </div>
+  <br>
+  {{newUser|json}}
+  <button type="submit" class="btn btn-primary" (click)="createUser()">Create user</button>
+</form>
