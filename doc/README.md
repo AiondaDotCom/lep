@@ -28,6 +28,8 @@ There are three account types:
 | moderator    | Is allowed to process requests |
 | user         | Account type to send requests via the portal. Only whitelisted domains are able to register an account |
 
+### Setup
+Initially one admin account has to be created in order to manage the LEP. This can be done via the [createAccountCLI.js](api/helpers/).
 
 ## Detailed informations
 ### [API](api/)
