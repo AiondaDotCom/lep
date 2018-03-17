@@ -41,6 +41,7 @@ import { UserDashboardComponent } from './user/user-dashboard/user-dashboard.com
 import { LegalNoticeComponent } from './shared/legal-notice/legal-notice.component';
 import { ModeratorComponent } from './moderator/moderator.component';
 import { ModeratorDashboardComponent } from './moderator/moderator-dashboard/moderator-dashboard.component';
+import { EditUserModalComponent } from './shared/edit-user-modal/edit-user-modal.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +66,8 @@ import { ModeratorDashboardComponent } from './moderator/moderator-dashboard/mod
     UserDashboardComponent,
     LegalNoticeComponent,
     ModeratorComponent,
-    ModeratorDashboardComponent
+    ModeratorDashboardComponent,
+    EditUserModalComponent
   ],
   imports: [
     BrowserModule,
