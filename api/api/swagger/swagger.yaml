@@ -7,6 +7,16 @@ host: localhost:10010
 # basePath prefixes all resource paths
 basePath: /
 #
+tags:
+  - name: user
+    description: |
+      Endpoints related to user account management
+  - name: document
+    description: |
+      Up and download of documents
+  - name: admin
+    description: |
+      Actions that only admins are allowed to do
 schemes:
   # tip: remove http to make production-grade
   - http
@@ -31,6 +41,8 @@ paths:
   /user/login:
     x-swagger-router-controller: login
     get:
+      tags:
+        - user
       description: Endpoint used to obtain a JSON Webtoken from the server. This token is used to authenicate the user for subsequent requestes
       operationId: login
       parameters:
@@ -78,7 +90,10 @@ paths:
   /user/requestRegistration:
     x-swagger-router-controller: login
     get:
-      description: Request the registration of a new account. It is checked, whether the emailadress is in an allowed set of domains. A registration link (with token) is sent to that adress.
+      tags:
+        - user
+      description: |
+        Request the registration of a new account. It is checked, whether the emailadress is in an allowed set of domains. A registration link (with token) is sent to that adress.
       operationId: requestRegistration
       parameters:
         - name: email
@@ -109,7 +124,10 @@ paths:
   /user/register:
     x-swagger-router-controller: login
     get:
-      description: Create a new account. It is checked, if the username is in an allowed set of domains
+      tags:
+        - user
+      description: |
+        Create a new account. It is checked, if the username is in an allowed set of domains
       operationId: register
       parameters:
         - name: token
@@ -145,6 +163,8 @@ paths:
   /user/delete:
     x-swagger-router-controller: login
     get:
+      tags:
+        - user
       description: Delete account. Authorization via email and password
       operationId: deleteAccount
       parameters:
@@ -175,6 +195,8 @@ paths:
   /user/modify:
     x-swagger-router-controller: login
     get:
+      tags:
+        - user
       description: Modify account (change password, etc.)
       operationId: modifyAccount
       parameters:
@@ -209,6 +231,8 @@ paths:
   /user/requestPasswordReset:
     x-swagger-router-controller: login
     get:
+      tags:
+        - user
       description: |
         If the user has forgotten the password, he can reset it.
         This can be done by sending a password-reset-link to the  emailadress identifying the account.
@@ -232,6 +256,8 @@ paths:
   /user/getLoginLog:
     x-swagger-router-controller: login
     get:
+      tags:
+        - user
       description: |
         Returns the login history for the account the token was issued for (Determined via the payload.username property).
         The returned list is limeted to 50 items to prevent too much data.
@@ -273,6 +299,8 @@ paths:
   /user/renewToken:
     x-swagger-router-controller: login
     get:
+      tags:
+        - user
       description: |
         Returns a token with a new expireTimestamp. The token contains a maximumExpireTimestamp, which defines the date until which renewing the token is allowed
       operationId: renewToken
@@ -333,6 +361,8 @@ paths:
   /admin/getConfig:
     x-swagger-router-controller: admin
     get:
+      tags:
+        - admin
       description: |
         Returns the configuration (environment variables,...)
       operationId: getConfig
@@ -355,6 +385,8 @@ paths:
   /admin/getAccountList:
     x-swagger-router-controller: admin
     get:
+      tags:
+        - admin
       description: |
         Returns list of registered accounts and corresponding metadata
       operationId: getAccountList
@@ -413,6 +445,8 @@ paths:
   /doc/download:
     x-swagger-router-controller: document
     get:
+      tags:
+        - document
       description: |
         Allows user to download specific files
       operationId: downloadDocument
@@ -434,6 +468,8 @@ paths:
   /doc/upload:
     x-swagger-router-controller: document
     post:
+      tags:
+        - document
       description: |
         Allows user to upload specific files
       operationId: uploadDocument
