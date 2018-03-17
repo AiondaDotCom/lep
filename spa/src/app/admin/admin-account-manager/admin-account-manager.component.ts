@@ -16,14 +16,19 @@ export class AdminAccountManagerComponent implements OnInit {
   ngOnInit() {
     this.api.getAccountList()
       .subscribe(
-        data => {
-          console.log(data)
-          this.accountList = data
-        },
-        err => {
-          console.log('Failed loading account list')
-        }
+      data => {
+        console.log(data)
+        this.accountList = data
+      },
+      err => {
+        console.log('Failed loading account list')
+      }
       )
+  }
+
+  selectUser(username) {
+    // Open edit user model for the corresponding user
+    console.log(`select user ${username}`)
   }
 
 }

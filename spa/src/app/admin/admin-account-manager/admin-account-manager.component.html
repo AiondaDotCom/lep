@@ -1,8 +1,10 @@
 <h2>Account manager</h2>
 
-<h3>Account list</h3>
 
-<table class="table">
+<app-edit-user-modal></app-edit-user-modal>
+
+
+<table class="table table-hover">
   <tr>
     <th>Username</th>
     <th>Real Name</th>
@@ -12,6 +14,8 @@
   <tr
     *ngFor="let account of accountList"
     [class.table-success]="account.accountstate=='active'"
+    (click)="selectUser(account.username)"
+    class="clickable-row"
     >
     <td>{{account.username}}</td>
     <td>{{account.realname}}</td>
