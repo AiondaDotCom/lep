@@ -73,6 +73,10 @@ const routes: Routes = [
       {
         path: 'dashboard',
         component: ModeratorDashboardComponent
+      },
+      {
+        path: 'settings',
+        component: AccountManagementComponent
       }
     ]
   },
