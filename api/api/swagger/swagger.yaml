@@ -392,6 +392,23 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
 
+  /whatIsMyIP:
+    x-swagger-router-controller: misc
+    get:
+      description: |
+        Returns the IP, that the request was issued from
+      operationId: whatIsMyIP
+      responses:
+        200:
+          description: Success
+          schema:
+            type: array
+            items:
+              type: string
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
   /doc/download:
     x-swagger-router-controller: document
