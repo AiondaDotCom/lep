@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 import { MomentModule } from 'angular2-moment';
 
 //import { SettingsModule } from './settings/settings.module';
-//import { AdminModule } from './admin/admin.module';
+import { AdminModule } from './admin/admin.module';
 //import { UserModule } from './user/user.module';
 import { AuthService } from './auth/auth.service';
 import { WhitelistdDomainValidatorDirective } from './auth/whitelisted-domains.directive';
@@ -42,6 +42,8 @@ import { LegalNoticeComponent } from './shared/legal-notice/legal-notice.compone
 import { ModeratorComponent } from './moderator/moderator.component';
 import { ModeratorDashboardComponent } from './moderator/moderator-dashboard/moderator-dashboard.component';
 import { EditUserModalComponent } from './shared/edit-user-modal/edit-user-modal.component';
+
+import { EditUserModule } from './shared/edit-user/edit-user.module';
 
 @NgModule({
   declarations: [
@@ -76,7 +78,7 @@ import { EditUserModalComponent } from './shared/edit-user-modal/edit-user-modal
     ReactiveFormsModule,
     NgbModule.forRoot(),
     //  SettingsModule,
-    //AdminModule,
+    AdminModule,
     //  UserModule,
     AppRoutingModule,
     MomentModule
