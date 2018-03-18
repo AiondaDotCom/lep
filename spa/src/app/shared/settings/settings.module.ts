@@ -5,10 +5,13 @@ import { MomentModule } from 'angular2-moment';
 import { SettingsComponent } from './settings.component';
 import { AccountManagementComponent } from './account-management/account-management.component';
 
+import { LoadingIndicatorModule } from '../../loading-indicator/loading-indicator.module';
+
 @NgModule({
   imports: [
     CommonModule,
-    MomentModule
+    MomentModule,
+    LoadingIndicatorModule
   ],
   exports: [
     SettingsComponent,

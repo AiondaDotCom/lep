@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../../auth/auth.service';
 import { ApiService } from '../../../api/api.service';
 import { MessageService } from '../../../message.service';
+import { LoadingIndicatorService } from '../../../loading-indicator/loading-indicator.service';
 
 @Component({
   selector: 'app-account-management',
@@ -19,7 +20,8 @@ export class AccountManagementComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private api: ApiService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private spinnerService: LoadingIndicatorService
   ) { }
 
   ngOnInit() {
@@ -27,6 +29,8 @@ export class AccountManagementComponent implements OnInit {
   }
 
   requestLoginLog() {
+    this.spinnerService.start('loadLoginLog')
+
     this.api.whatIsMyIP().subscribe(
       result => {
         this.myIP = result.ip
@@ -38,12 +42,13 @@ export class AccountManagementComponent implements OnInit {
 
     this.api.getLoginLog().subscribe(
       result => {
+        this.spinnerService.stop('loadLoginLog')
         console.log(result);
         this.loginLogList = result;
       },
       err => {
         console.log(err);
-        //this.restrictedContent = err;
+        this.spinnerService.stop('loadLoginLog')
       }
     );
   }
