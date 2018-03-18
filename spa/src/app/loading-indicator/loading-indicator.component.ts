@@ -4,12 +4,20 @@ import { LoadingIndicatorService } from './loading-indicator.service';
 
 @Component({
   selector: 'loading-indicator',
-  template: `<img *ngIf="isVisible" src="assets/loadingWhite.svg">`
+  template: `<span *ngIf="isVisible">
+                <img [src]="myFilePath">
+                <span *ngIf="message">{{message}}</span>
+             </span>`
 })
 
 export class LoadingIndicatorComponent implements OnInit {
 
+  // Default spinner
+  myFilePath = 'assets/loadingWhite.svg';
+
+  @Input() spinnerFilePath: string;
   @Input() spinnerName: string;
+  @Input() message: string;
 
   constructor( private loadingIndicatorService: LoadingIndicatorService ) { }
 
@@ -17,6 +25,11 @@ export class LoadingIndicatorComponent implements OnInit {
     if(!this.spinnerName){
       console.error('Parameter spinnerName missing..')
     }
+
+    if(this.spinnerFilePath){
+      this.myFilePath = this.spinnerFilePath
+    }
+
     this.loadingIndicatorService.register(this.spinnerName)
   }
 

@@ -8,15 +8,20 @@ export class LoadingIndicatorService {
   constructor() { }
 
   register(newSpinner) {
-    this.spinners[newSpinner] = false;
-    console.log('registered spinners: ', this.spinners);
+    if (!(newSpinner in this.spinners)) {
+      this.spinners[newSpinner] = false;
+      console.log('registered spinners: ', this.spinners);
+    }
   }
 
   start(spinnerName: string): void {
+    console.log(`starting spinner ${spinnerName}`)
     this.spinners[spinnerName] = true;
+    console.log(this.spinners)
   }
 
   stop(spinnerName: string): void {
+    console.log(`stopping spinner ${spinnerName}`)
     this.spinners[spinnerName] = false;
   }
 
