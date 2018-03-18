@@ -8,70 +8,45 @@ import { AppRoutingModule } from './app-routing.module';
 import { Router } from '@angular/router';
 import { MomentModule } from 'angular2-moment';
 
-//import { SettingsModule } from './settings/settings.module';
+// Import user role specific modules
 import { AdminModule } from './admin/admin.module';
 import { UserModule } from './user/user.module';
 import { ModeratorModule } from './moderator/moderator.module';
 
+import { LoginModule } from './login/login.module';
+
+// Import services
 import { AuthService } from './auth/auth.service';
-import { WhitelistdDomainValidatorDirective } from './auth/whitelisted-domains.directive';
 import { MessageService } from './message.service';
-import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
-import { LoadingIndicatorService } from './loading-indicator/loading-indicator.service';
 import { ApiService } from './api/api.service';
 
+// Import directives
+import { WhitelistdDomainValidatorDirective } from './auth/whitelisted-domains.directive';
+
 // Toplevel components
-import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { HelpComponent } from './help/help.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { LegalNoticeComponent } from './shared/legal-notice/legal-notice.component';
 
-// Shared Components
-import { DashboardComponent } from './shared/dashboard/dashboard.component';
-
-// User Component
-import { UserComponent } from './user/user.component';
 import { SettingsComponent } from './user/settings/settings.component';
 import { AccountManagementComponent } from './shared/account-management/account-management.component';
 import { MiscellaneousComponent } from './user/settings/miscellaneous/miscellaneous.component';
 
-// Admin Components
-import { AdminComponent } from './admin/admin.component';
-import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
-import { AdminAccountManagerComponent } from './admin/admin-account-manager/admin-account-manager.component';
-import { UserDashboardComponent } from './user/user-dashboard/user-dashboard.component';
-import { LegalNoticeComponent } from './shared/legal-notice/legal-notice.component';
-import { ModeratorComponent } from './moderator/moderator.component';
-import { ModeratorDashboardComponent } from './moderator/moderator-dashboard/moderator-dashboard.component';
-import { EditUserModalComponent } from './shared/edit-user-modal/edit-user-modal.component';
-
-import { EditUserModule } from './shared/edit-user/edit-user.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     WhitelistdDomainValidatorDirective,
-    // General
-    LoginComponent,
-    DashboardComponent,
+    // Toplevel components
     PageNotFoundComponent,
     RegisterComponent,
     HelpComponent,
-    LoadingIndicatorComponent,
-    // User
-    UserComponent,
+    LegalNoticeComponent,
+    //
     SettingsComponent,
     AccountManagementComponent,
-    MiscellaneousComponent,
-    // Admin
-    AdminComponent,
-    AdminDashboardComponent,
-    AdminAccountManagerComponent,
-    UserDashboardComponent,
-    LegalNoticeComponent,
-    ModeratorComponent,
-    ModeratorDashboardComponent,
-    EditUserModalComponent
+    MiscellaneousComponent
   ],
   imports: [
     BrowserModule,
@@ -79,14 +54,16 @@ import { EditUserModule } from './shared/edit-user/edit-user.module';
     FormsModule,
     ReactiveFormsModule,
     NgbModule.forRoot(),
-    //  SettingsModule,
+    //
     AdminModule,
     UserModule,
     ModeratorModule,
+    LoginModule,
+    //
     AppRoutingModule,
     MomentModule
   ],
-  providers: [AuthService, MessageService, LoadingIndicatorService, ApiService],
+  providers: [AuthService, MessageService, ApiService],
   bootstrap: [AppComponent]
 })
 

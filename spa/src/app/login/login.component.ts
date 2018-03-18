@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { LoadingIndicatorModule } from '../loading-indicator/loading-indicator.module';
+
 import { AuthService } from '../auth/auth.service';
 import { MessageService } from '../message.service';
 import { LoadingIndicatorService } from '../loading-indicator/loading-indicator.service';
