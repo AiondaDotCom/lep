@@ -3,15 +3,15 @@ import { CommonModule } from '@angular/common';
 
 import { RouterModule, Routes, CanActivate } from '@angular/router';
 
-
 import { AuthGuardUser } from '../auth/auth.guard';
 
 import { UserComponent } from '../user/user.component';
 import { UserDashboardComponent } from '../user/user-dashboard/user-dashboard.component';
-import { SettingsComponent } from '../user/settings/settings.component';
-import { AccountManagementComponent } from '../shared/account-management/account-management.component';
-import { MiscellaneousComponent } from '../user/settings/miscellaneous/miscellaneous.component';
+import { UserSettingsComponent } from './user-settings/user-settings.component';
 
+//import { AccountManagementComponent } from '../shared/account-management/account-management.component';
+//import { SettingsComponent } from '..//settings/settings.component';
+//import { MiscellaneousComponent } from '../user/settings/miscellaneous/miscellaneous.component';
 
 const routes: Routes = [
   {
@@ -32,7 +32,7 @@ const routes: Routes = [
       },
       {
         path: 'settings',
-        component: SettingsComponent,
+        component: UserSettingsComponent/*,
         children: [
           {
             path: '',
@@ -47,7 +47,7 @@ const routes: Routes = [
             path: 'misc',
             component: MiscellaneousComponent
           }
-        ]
+        ]*/
       }
     ]
   }

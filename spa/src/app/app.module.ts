@@ -29,10 +29,6 @@ import { HelpComponent } from './help/help.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { LegalNoticeComponent } from './shared/legal-notice/legal-notice.component';
 
-import { SettingsComponent } from './user/settings/settings.component';
-import { AccountManagementComponent } from './shared/account-management/account-management.component';
-import { MiscellaneousComponent } from './user/settings/miscellaneous/miscellaneous.component';
-
 
 @NgModule({
   declarations: [
@@ -42,11 +38,7 @@ import { MiscellaneousComponent } from './user/settings/miscellaneous/miscellane
     PageNotFoundComponent,
     RegisterComponent,
     HelpComponent,
-    LegalNoticeComponent,
-    //
-    SettingsComponent,
-    AccountManagementComponent,
-    MiscellaneousComponent
+    LegalNoticeComponent
   ],
   imports: [
     BrowserModule,

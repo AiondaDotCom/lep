@@ -5,11 +5,9 @@ import { RouterModule, Routes, CanActivate } from '@angular/router';
 
 import { AuthGuardModerator } from '../auth/auth.guard';
 
-import { AccountManagementComponent } from '../shared/account-management/account-management.component';
-
-import { ModeratorComponent } from '../moderator/moderator.component';
-import { ModeratorDashboardComponent } from '../moderator/moderator-dashboard/moderator-dashboard.component';
-
+import { ModeratorComponent } from './moderator.component';
+import { ModeratorDashboardComponent } from './moderator-dashboard/moderator-dashboard.component';
+import { ModeratorSettingsComponent } from './moderator-settings/moderator-settings.component';
 
 const routes: Routes = [
   {
@@ -30,7 +28,7 @@ const routes: Routes = [
       },
       {
         path: 'settings',
-        component: AccountManagementComponent
+        component: ModeratorSettingsComponent
       }
     ]
   }
