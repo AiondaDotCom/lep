@@ -11,6 +11,7 @@ import { MomentModule } from 'angular2-moment';
 //import { SettingsModule } from './settings/settings.module';
 import { AdminModule } from './admin/admin.module';
 import { UserModule } from './user/user.module';
+import { ModeratorModule } from './moderator/moderator.module';
 
 import { AuthService } from './auth/auth.service';
 import { WhitelistdDomainValidatorDirective } from './auth/whitelisted-domains.directive';
@@ -80,7 +81,8 @@ import { EditUserModule } from './shared/edit-user/edit-user.module';
     NgbModule.forRoot(),
     //  SettingsModule,
     AdminModule,
-    //  UserModule,
+    UserModule,
+    ModeratorModule,
     AppRoutingModule,
     MomentModule
   ],
