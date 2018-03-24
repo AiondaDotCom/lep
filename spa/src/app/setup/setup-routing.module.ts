@@ -6,6 +6,8 @@ import { RouterModule, Routes, CanActivate } from '@angular/router';
 import { AuthGuardSetup } from './setup.guard';
 
 import { SetupComponent } from './setup.component';
+import { AuthComponent } from './auth/auth.component';
+import { CreateAdminComponent } from './create-admin/create-admin.component';
 
 const routes: Routes = [
   {
@@ -13,6 +15,21 @@ const routes: Routes = [
     component: SetupComponent,
     canActivate: [
       AuthGuardSetup
+    ],
+    children: [
+      {
+        path: '',
+        redirectTo: 'auth',
+        pathMatch: 'full'
+      },
+      {
+        path: 'auth',
+        component: AuthComponent
+      },
+      {
+        path: 'create-admin',
+        component: CreateAdminComponent
+      }
     ]
   }
 ];

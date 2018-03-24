@@ -1,3 +1,10 @@
-<p>
-  setup works!
-</p>
+<h1>Welcome to the LEP Setup guide</h1>
+
+
+<nav class="nav nav-pills nav-justified">
+  <a class="nav-link" routerLink="auth" [routerLinkActive]="['active']">Step 1 Auth</a>
+  <a class="nav-link" routerLink="create-admin" [routerLinkActive]="['active']">Step 2 Create Admin User</a>
+</nav>
+
+
+<router-outlet></router-outlet>
