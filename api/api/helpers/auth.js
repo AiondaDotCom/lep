@@ -1,6 +1,6 @@
 var jwt = require('jsonwebtoken'); // Generate and verify jwts
 var bcrypt = require('bcrypt'); // Hash passwords
-var connection = require('../helpers/db');
+var connection = require('../helpers/db').connection;
 var [dbURL, privateKey, publicKey, saltRounds] = require('../helpers/setupEnv').init()
 var domainWhitelist = require('../../../assets/police_domain_names.json').DE;
 
@@ -86,17 +86,16 @@ module.exports.generateToken = function(expireTimestamp, payload) {
   })
 }
 
-module.exports.verifyPayload = function(payload){
+module.exports.verifyPayload = function(payload) {
   console.log(payload)
-  return new Promise(function(fulfill, reject){
+  return new Promise(function(fulfill, reject) {
     if (typeof payload.username !== 'undefined' &&
-        typeof payload.accountType != 'undefined'// &&
-        //typeof payload.maxExpireTimestamp != 'undefined' &&
-        //typeof payload.nRenew != 'undefined'
-      ){
+      typeof payload.accountType != 'undefined' // &&
+      //typeof payload.maxExpireTimestamp != 'undefined' &&
+      //typeof payload.nRenew != 'undefined'
+    ) {
       fulfill(payload);
-    }
-    else {
+    } else {
       reject({
         code: 401,
         message: 'Token invalid (invalid payload)'
@@ -107,26 +106,25 @@ module.exports.verifyPayload = function(payload){
 
 module.exports.verifyToken = function(token) {
   return new Promise(function(fulfill, reject) {
-    jwt.verify(token, publicKey, function(err, decoded) {
-      if (err) {
-        var myMessage = '';
-        if (err.message){
-          myMessage = `Token invalid (${err.message})`
+      jwt.verify(token, publicKey, function(err, decoded) {
+        if (err) {
+          var myMessage = '';
+          if (err.message) {
+            myMessage = `Token invalid (${err.message})`
+          } else {
+            myMessage = `Token invalid`
+          }
+          reject({
+            code: 401,
+            message: myMessage
+          });
         }
-        else {
-          myMessage = `Token invalid`
-        }
-        reject({
-          code: 401,
-          message: myMessage
-        });
-      }
-      fulfill(decoded) // Return payload
+        fulfill(decoded) // Return payload
+      })
     })
-  })
-  .then(function(payload){
-    return module.exports.verifyPayload(payload)
-  })
+    .then(function(payload) {
+      return module.exports.verifyPayload(payload)
+    })
 }
 
 
@@ -187,7 +185,7 @@ module.exports.createAccount = function(email, fullName, password, accountType) 
           accounttype: accountType,
           realname: fullName,
           accountstate: 'active'
-        },email], function(err, rows, fields) {
+        }, email], function(err, rows, fields) {
           if (err) {
             // Username already exists in database
             if (err.code == 'ER_DUP_ENTRY') {

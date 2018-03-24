@@ -2,7 +2,8 @@
 
 var error = require('../helpers/error');
 var auth = require('../helpers/auth');
-var connection = require('../helpers/db')
+var db = require('../helpers/db');
+var connection = db.connection;
 
 module.exports = {
   status: status,
@@ -12,6 +13,7 @@ module.exports = {
 
 function status(req, res) {
   // TODO: Reaturn correct information
+  db.healthCheck();
   res.json({
     message: 'Status: OK',
     healthy: true,

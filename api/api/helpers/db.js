@@ -22,4 +22,11 @@ if (process.env.DEVELOPMENT) {
 
 connection.connect();
 
-module.exports = connection;
+module.exports = {
+  connection: connection,
+  healthCheck: healthCheck
+};
+
+function healthCheck() {
+  console.log('Performing DB health check');
+}

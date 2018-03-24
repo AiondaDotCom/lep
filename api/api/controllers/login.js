@@ -4,7 +4,7 @@ var mail = require('../helpers/mail');
 var error = require('../helpers/error');
 var loginLog = require('../helpers/loginLog');
 var auth = require('../helpers/auth');
-var connection = require('../helpers/db')
+var connection = require('../helpers/db').connection;
 var helper = require('../helpers/helper');
 
 var [dbURL, privateKey, publicKey, saltRounds] = require('../helpers/setupEnv').init()

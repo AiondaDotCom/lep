@@ -1,4 +1,4 @@
-var connection = require('../helpers/db');
+var connection = require('../helpers/db').connection;
 
 
 module.exports.logInteraction = function(username, action, error, description, ip) {

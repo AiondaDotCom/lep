@@ -2,7 +2,7 @@
 
 var auth = require('../helpers/auth');
 var error = require('../helpers/error');
-var connection = require('../helpers/db')
+var connection = require('../helpers/db').connection;
 
 module.exports = {
   restricted: restricted
