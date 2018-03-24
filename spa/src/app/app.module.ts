@@ -13,6 +13,8 @@ import { AdminModule } from './admin/admin.module';
 import { UserModule } from './user/user.module';
 import { ModeratorModule } from './moderator/moderator.module';
 
+import { SetupModule } from './setup/setup.module';
+
 import { LoginModule } from './login/login.module';
 
 // Import services
@@ -51,6 +53,7 @@ import { LegalNoticeComponent } from './shared/legal-notice/legal-notice.compone
     UserModule,
     ModeratorModule,
     LoginModule,
+    SetupModule,
     //
     AppRoutingModule,
     MomentModule
