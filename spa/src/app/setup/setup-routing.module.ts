@@ -8,6 +8,7 @@ import { AuthGuardSetup } from './setup.guard';
 import { SetupComponent } from './setup.component';
 import { AuthComponent } from './auth/auth.component';
 import { CreateAdminComponent } from './create-admin/create-admin.component';
+import { DatabaseComponent } from './database/database.component';
 
 const routes: Routes = [
   {
@@ -27,8 +28,12 @@ const routes: Routes = [
         component: AuthComponent
       },
       {
-        path: 'create-admin',
+        path: 'admin',
         component: CreateAdminComponent
+      },
+      {
+        path: 'database',
+        component: DatabaseComponent
       }
     ]
   }

@@ -8,6 +8,7 @@ import { SetupRoutingModule } from './setup-routing.module';
 import { SetupComponent } from './setup.component';
 import { AuthComponent } from './auth/auth.component';
 import { CreateAdminComponent } from './create-admin/create-admin.component';
+import { DatabaseComponent } from './database/database.component';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { CreateAdminComponent } from './create-admin/create-admin.component';
   declarations: [
     SetupComponent,
     AuthComponent,
-    CreateAdminComponent
+    CreateAdminComponent,
+    DatabaseComponent
   ]
 })
 export class SetupModule { }
