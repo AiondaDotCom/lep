@@ -29,6 +29,51 @@ consumes:
 produces:
   - application/json
 paths:
+  /status:
+    x-swagger-router-controller: misc
+    get:
+      tags:
+        - general
+      description: |
+        Rough server health infomations (e.g. if the API Backend is configured and running correct)
+      operationId: status
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            required:
+              - message
+              - healthy
+              - setupMode
+              - prod
+            properties:
+              message:
+                description: |
+                  Human readable server status
+                type: string
+              healthy:
+                description: |
+                  true, if everything works as expected (database, ...)
+                type: boolean
+              setupMode:
+                description: |
+                  true, if the backend is not configured yet
+                type: boolean
+              production:
+                description: |
+                  true, if api is in production mode
+                type: boolean
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/UnauthorizedResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+
     #
     # User management related things
     # /user/login
