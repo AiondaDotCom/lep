@@ -74,6 +74,41 @@ paths:
             $ref: "#/definitions/ErrorResponse"
 
 
+  /setup/testDatabaseConnection:
+    x-swagger-router-controller: setup
+    get:
+      tags:
+        - user
+      description: |
+        Tries to connect to MYSQL database with given credentials.
+        Requires a special 'setupToken' that is only issued once and is only valid during setup
+      operationId: testDatabaseConnection
+      parameters:
+        - name: setupToken
+          in: query
+          description: JWT used for setup purposes
+          required: true
+          type: string
+        - name: url
+          in: query
+          description: |
+            Database URL (mysql://user:password@host:3306/database)
+          required: true
+          type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/MessageResponse"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/UnauthorizedResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
     #
     # User management related things
     # /user/login

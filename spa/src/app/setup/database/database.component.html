@@ -41,4 +41,7 @@
 
   <button type="submit" class="btn btn-lg btn-primary btn-block"
          [disabled]="formDir.invalid">Test DB connection</button>
+  <div *ngIf="connectionTestRelult">
+    {{connectionTestRelult}}
+  </div>
 </form>

@@ -14,6 +14,20 @@ export class MessageService {
     this.clear();
   }
 
+  success(msg: string): void {
+    this.message({
+      type: 'success',
+      message: msg
+    })
+  }
+
+  error(msg: string): void {
+    this.message({
+      type: 'danger',
+      message: msg
+    })
+  }
+
   message(msg: Message): void {
     console.log(`Message: ${msg.type}, ${msg.message}`);
     console.log(this.messages)

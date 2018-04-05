@@ -13,6 +13,10 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
+  getServerStatus(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/status`)
+  }
+
   restricted(): Observable<any> {
     // Demo metod to test jwt token on restricted content
     return this.http.get(`${this.apiUrl}/restricted`, {
@@ -82,6 +86,14 @@ export class ApiService {
 
   whatIsMyIP(): Observable<any> {
     return this.http.get(`${this.apiUrl}/whatIsMyIP`)
+  }
+
+  testDatabaseConnection(setupToken: string, url: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/setup/testDatabaseConnection`, {
+      params: {
+        'setupToken': setupToken,
+        'url': url
+      })
   }
 
 }
