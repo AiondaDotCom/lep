@@ -14,6 +14,7 @@ export class DatabaseComponent implements OnInit {
 
   databaseSetupForm: FormGroup;
   databaseConfigValid: boolean = false;
+  isCollapsed = true;
 
   constructor(
     public fb: FormBuilder,
@@ -25,9 +26,9 @@ export class DatabaseComponent implements OnInit {
 
   ngOnInit() {
     this.databaseSetupForm = this.fb.group({
-      'databaseURL': ['mysql://root:superSecure@mysql:3306/qgx4mamkob3zgpg7', Validators.required],
-      'databaseUser': ['admin', Validators.required],
-      'databasePassword': ['superSecure', Validators.required]
+      'databaseURL': ['mysql://root:superSecure@mysql:3306/qgx4mamkob3zgpg7', Validators.required]//,
+      //'databaseUser': ['admin', Validators.required],
+      //'databasePassword': ['superSecure', Validators.required]
     });
   }
 

@@ -1,10 +1,49 @@
+<h2>MYSQL Database settings</h2>
+<div class="container">
+  Please input the URL that your MYSQL instance uses. The format is as following:
+  <pre style="display:inline;">mysql://user:password@domain:port/database</pre>
+  <button type="button" class="btn btn-outline-success btn-sm" (click)="isCollapsed=!isCollapsed"
+          [attr.aria-expanded]="!isCollapsed" aria-controls="infoTableCollapse">
+          toggle info</button>
+
+  <div id="infoTableCollapse" [ngbCollapse]="isCollapsed">
+    <table class="table">
+      <tr>
+        <td>user</td>
+        <td>username to connect to mysql</td>
+      </tr>
+      <tr>
+        <td>password</td>
+        <td>corresponding password</td>
+      </tr>
+      <tr>
+        <td>domain</td>
+        <td>URL or IP used to access the DB server.
+            (Note that the domain has to be accessible from the server that is running the API.
+            If API and MYSQL are running on the same machine, you might want to use 'localhost' as domain)
+        </td>
+      </tr>
+      <tr>
+        <td>port</td>
+        <td>Port of the MYSQL server (the default mysql port is 3306)</td>
+      </tr>
+      <tr>
+        <td>database</td>
+        <td>Name of the database to store LEP related data. The database has to be created manually</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div class="container">
+
+<div class="spacer1"></div>
+
 <form (ngSubmit)="testDatabaseConnection()"
       [formGroup]="databaseSetupForm"
       #formDir="ngForm"
       class="form-signin form-signin-wide"
       autocomplete="off">
-
-  <h2>MYSQL Database settings</h2>
 
   <div class="form-group row">
     <label for="databaseURL" class="col-2 col-form-label">URL</label>
@@ -16,6 +55,7 @@
     </div>
   </div>
 
+<!--
   <div class="form-group row">
     <label for="databaseUser" class="col-2 col-form-label">User</label>
     <div class="col-10">
@@ -33,7 +73,7 @@
               name="databasePassword">
     </div>
   </div>
-
+-->
 
   <div *ngIf="registerMessage" class="alert" [class.alert-danger]="error == true" [class.alert-success]="error == false" role="alert">
     {{ registerMessage }}
@@ -45,3 +85,5 @@
 <button class="btn btn-lg btn-success"
       (click)="saveDatabaseConfiguration()"
       [disabled]="!databaseConfigValid">Save</button>
+
+</div>
