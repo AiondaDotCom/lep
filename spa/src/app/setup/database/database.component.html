@@ -1,3 +1,44 @@
-<p>
-  database works!
-</p>
+<form (ngSubmit)="testDatabaseConnection()"
+      [formGroup]="databaseSetupForm"
+      #formDir="ngForm"
+      class="form-signin form-signin-wide"
+      autocomplete="off">
+
+  <h2>MYSQL Database settings</h2>
+
+  <div class="form-group row">
+    <label for="databaseURL" class="col-2 col-form-label">URL</label>
+    <div class="col-10">
+      <input type="text" class="form-control" id="databaseURL"
+              name="databaseURL"
+              formControlName="databaseURL"
+              autofocus>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="databaseUser" class="col-2 col-form-label">User</label>
+    <div class="col-10">
+      <input type="text" class="form-control" id="databaseUser"
+              name="databaseUser"
+              formControlName="databaseUser">
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="databasePassword" class="col-2 col-form-label">Password</label>
+    <div class="col-10">
+      <input type="password" class="form-control" id="databasePassword"
+              formControlName="databasePassword"
+              name="databasePassword">
+    </div>
+  </div>
+
+
+  <div *ngIf="registerMessage" class="alert" [class.alert-danger]="error == true" [class.alert-success]="error == false" role="alert">
+    {{ registerMessage }}
+  </div>
+
+  <button type="submit" class="btn btn-lg btn-primary btn-block"
+         [disabled]="formDir.invalid">Test DB connection</button>
+</form>
