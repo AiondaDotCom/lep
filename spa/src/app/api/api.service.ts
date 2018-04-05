@@ -93,7 +93,8 @@ export class ApiService {
       params: {
         'setupToken': setupToken,
         'url': url
-      })
+      }
+    })
   }
 
 }
