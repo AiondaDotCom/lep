@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, Title } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -63,8 +63,17 @@ import { LegalNoticeComponent } from './shared/legal-notice/legal-notice.compone
 })
 
 export class AppModule {
-  constructor(router: Router) {
+  constructor(
+    router: Router,
+    title: Title
+  ) {
     // Debug information of router configuration
     console.log('Routes: ', JSON.stringify(router.config, undefined, 2));
+
+    // Event is fired when url changes
+    router.events.subscribe((event) => {
+      let pageTitle = router.url.replace(/\//g, ' '); // Replace slashes with spaces
+      title.setTitle(`Aionda LEP - ${pageTitle}`)
+    })
   }
 }
