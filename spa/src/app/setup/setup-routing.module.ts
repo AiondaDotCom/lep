@@ -9,6 +9,7 @@ import { SetupComponent } from './setup.component';
 import { AuthComponent } from './auth/auth.component';
 import { CreateAdminComponent } from './create-admin/create-admin.component';
 import { DatabaseComponent } from './database/database.component';
+import { FinishComponent } from './finish/finish.component';
 
 const routes: Routes = [
   {
@@ -34,6 +35,10 @@ const routes: Routes = [
       {
         path: 'database',
         component: DatabaseComponent
+      },
+      {
+        path: 'finish',
+        component: FinishComponent
       }
     ]
   }

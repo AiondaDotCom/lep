@@ -13,7 +13,7 @@ import { MessageService } from '../../message.service';
 export class DatabaseComponent implements OnInit {
 
   databaseSetupForm: FormGroup;
-  connectionTestResult: string;
+  databaseConfigValid: boolean = false;
 
   constructor(
     public fb: FormBuilder,
@@ -39,16 +39,18 @@ export class DatabaseComponent implements OnInit {
     this.api.testDatabaseConnection(localStorage.getItem('jwt'), url)
       .subscribe(
       result => {
-        //this.error = false;
-        this.connectionTestResult = result.message;
         this.messageService.success(result.message)
+        this.databaseConfigValid = true;
       },
       err => {
-        //this.error = true;
-        this.connectionTestResult = `ERROR: ${err.error.message}`;
         this.messageService.error(err.error.message);
+        this.databaseConfigValid = false;
         console.log(err);
       });
+  }
+
+  saveDatabaseConfiguration() {
+    console.log('Saving configuration...')
   }
 
 }

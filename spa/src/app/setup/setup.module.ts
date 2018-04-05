@@ -10,6 +10,7 @@ import { SetupComponent } from './setup.component';
 import { AuthComponent } from './auth/auth.component';
 import { CreateAdminComponent } from './create-admin/create-admin.component';
 import { DatabaseComponent } from './database/database.component';
+import { FinishComponent } from './finish/finish.component';
 
 @NgModule({
   imports: [
@@ -23,7 +24,8 @@ import { DatabaseComponent } from './database/database.component';
     SetupComponent,
     AuthComponent,
     CreateAdminComponent,
-    DatabaseComponent
+    DatabaseComponent,
+    FinishComponent
   ]
 })
 export class SetupModule { }

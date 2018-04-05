@@ -39,9 +39,9 @@
     {{ registerMessage }}
   </div>
 
-  <button type="submit" class="btn btn-lg btn-primary btn-block"
-         [disabled]="formDir.invalid">Test DB connection</button>
-  <div *ngIf="connectionTestRelult">
-    {{connectionTestRelult}}
-  </div>
+  <button type="submit" class="btn btn-lg btn-primary"
+        [disabled]="formDir.invalid">Test DB Config</button>
 </form>
+<button class="btn btn-lg btn-success"
+      (click)="saveDatabaseConfiguration()"
+      [disabled]="!databaseConfigValid">Save</button>
