@@ -30,7 +30,7 @@ function login(req, res) {
   var userPassword = req.swagger.params.password.value;
 
   // Try to get the ip adress
-  var ip = req.headers['x-forwarded-for'];
+  var ip = req.headers['x-forwarded-for'].split(',')[0];
 
   var expireTimestamp = helper.now() + tokenExpireDuration; // Expires in 15 minutes
   var maxExpireTimestamp = helper.now() + tokenMaxExpireDuration; // 24 hours
