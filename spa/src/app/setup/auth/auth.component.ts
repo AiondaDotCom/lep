@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 
 import { ApiService } from '../../api/api.service';
 import { MessageService } from '../../message.service';
+import { SetupService } from '../setup.service';
 
 @Component({
   selector: 'app-auth',
@@ -16,7 +17,8 @@ export class AuthComponent implements OnInit {
   constructor(
     public fb: FormBuilder,
     private api: ApiService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private setupService: SetupService
   ) {}
 
   ngOnInit() {
@@ -27,6 +29,8 @@ export class AuthComponent implements OnInit {
 
   setupAuthentication() {
     console.log(`Testing token (${this.setupAuthenticationForm.value.setupToken})`)
+    this.setupService.unlockStep(3);
+    this.setupService.navigateStep(2);
   }
 
 }

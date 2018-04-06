@@ -12,6 +12,7 @@ import { AuthComponent } from './auth/auth.component';
 import { CreateAdminComponent } from './create-admin/create-admin.component';
 import { DatabaseComponent } from './database/database.component';
 import { FinishComponent } from './finish/finish.component';
+import { SetupService } from './setup.service';
 
 @NgModule({
   imports: [
@@ -28,6 +29,7 @@ import { FinishComponent } from './finish/finish.component';
     CreateAdminComponent,
     DatabaseComponent,
     FinishComponent
-  ]
+  ],
+  providers: [SetupService]
 })
 export class SetupModule { }

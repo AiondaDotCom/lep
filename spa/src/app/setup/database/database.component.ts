@@ -4,6 +4,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 
 import { ApiService } from '../../api/api.service';
 import { MessageService } from '../../message.service';
+import { SetupService } from '../setup.service';
 
 @Component({
   selector: 'app-database',
@@ -21,7 +22,8 @@ export class DatabaseComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private api: ApiService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private setupService: SetupService
   ) { }
 
   ngOnInit() {
@@ -42,6 +44,7 @@ export class DatabaseComponent implements OnInit {
       result => {
         this.messageService.success(result.message)
         this.databaseConfigValid = true;
+        this.setupService.unlockStep(4);
       },
       err => {
         this.messageService.error(err.error.message);

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { SetupService } from '../setup.service';
+
 @Component({
   selector: 'app-create-admin',
   templateUrl: './create-admin.component.html',
@@ -7,7 +9,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CreateAdminComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private setupService: SetupService
+  ) { }
 
   ngOnInit() {
   }
