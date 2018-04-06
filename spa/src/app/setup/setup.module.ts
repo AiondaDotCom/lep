@@ -5,6 +5,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { SetupRoutingModule } from './setup-routing.module';
+import { RegisterModule } from '../register/register.module';
 
 import { SetupComponent } from './setup.component';
 import { AuthComponent } from './auth/auth.component';
@@ -18,7 +19,8 @@ import { FinishComponent } from './finish/finish.component';
     RouterModule,
     NgbModule,
     ReactiveFormsModule,
-    SetupRoutingModule
+    SetupRoutingModule,
+    RegisterModule
   ],
   declarations: [
     SetupComponent,

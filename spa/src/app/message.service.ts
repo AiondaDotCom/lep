@@ -29,6 +29,7 @@ export class MessageService {
   }
 
   message(msg: Message): void {
+    this.clear()
     console.log(`Message: ${msg.type}, ${msg.message}`);
     console.log(this.messages)
     this.messages.push(msg);

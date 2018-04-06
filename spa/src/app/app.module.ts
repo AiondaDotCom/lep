@@ -14,8 +14,8 @@ import { UserModule } from './user/user.module';
 import { ModeratorModule } from './moderator/moderator.module';
 
 import { SetupModule } from './setup/setup.module';
-
 import { LoginModule } from './login/login.module';
+import { RegisterModule } from './register/register.module';
 
 // Import services
 import { AuthService } from './auth/auth.service';
@@ -26,7 +26,6 @@ import { ApiService } from './api/api.service';
 import { WhitelistdDomainValidatorDirective } from './auth/whitelisted-domains.directive';
 
 // Toplevel components
-import { RegisterComponent } from './register/register.component';
 import { HelpComponent } from './help/help.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { LegalNoticeComponent } from './shared/legal-notice/legal-notice.component';
@@ -38,7 +37,6 @@ import { LegalNoticeComponent } from './shared/legal-notice/legal-notice.compone
     WhitelistdDomainValidatorDirective,
     // Toplevel components
     PageNotFoundComponent,
-    RegisterComponent,
     HelpComponent,
     LegalNoticeComponent
   ],
@@ -54,6 +52,7 @@ import { LegalNoticeComponent } from './shared/legal-notice/legal-notice.compone
     ModeratorModule,
     LoginModule,
     SetupModule,
+    RegisterModule,
     //
     AppRoutingModule,
     MomentModule

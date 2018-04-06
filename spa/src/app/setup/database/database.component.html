@@ -1,5 +1,6 @@
-<h2>MYSQL Database settings</h2>
 <div class="container">
+  <h2>MYSQL Database settings</h2>
+
   Please input the URL that your MYSQL instance uses. The format is as following:
   <pre style="display:inline;">mysql://user:password@domain:port/database</pre>
   <button type="button" class="btn btn-outline-success btn-sm" (click)="isCollapsed=!isCollapsed"
@@ -86,4 +87,9 @@
       (click)="saveDatabaseConfiguration()"
       [disabled]="!databaseConfigValid">Save</button>
 
+</div>
+
+<div *ngIf="databaseConfigValid" class="container">
+  <h2>Create tables</h2>
+  Please confirm the creation of the following tables
 </div>
