@@ -127,6 +127,20 @@ module.exports.verifyToken = function(token) {
     })
 }
 
+module.exports.verifyTokenAction = function(tokenPayload, tokenAction) {
+  return new Promise(function(fulfill, reject) {
+    if (tokenPayload.action && tokenPayload.action == tokenAction){
+      fulfill(true)
+    }
+    else {
+      reject({
+        code: 401,
+        message: `Token was not issued for this action (action=${tokenPayload.action})`
+      })
+    }
+  })
+}
+
 
 module.exports.isAdmin = function(tokenPayload) {
   return new Promise(function(fulfill, reject) {
