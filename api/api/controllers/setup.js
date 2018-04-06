@@ -37,8 +37,7 @@ function testDatabaseConnection(req, res) {
 
   auth.verifyToken(setupToken)
     .then(function(payload){
-      // TODO: Verify if token was issued for setup
-      return auth.isAdmin(payload)
+      return auth.verifyTokenAction(payload, 'setup')
     })
     .then(function(){
       return db.testDatabaseConnection(databaseURL)

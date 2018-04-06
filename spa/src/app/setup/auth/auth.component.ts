@@ -33,11 +33,16 @@ export class AuthComponent implements OnInit {
     this.api.verifySetupToken(token)
       .subscribe(
       result => {
+        // The supplied token is correct -> store it
+        localStorage.setItem('setupToken', token);
+
         this.messageService.success(result.message)
         this.setupService.unlockStep(3);
         this.setupService.navigateStep(2);
       },
       err => {
+        localStorage.removeItem('setupToken');
+
         this.messageService.error(err.error.message);
         console.log(err);
       });

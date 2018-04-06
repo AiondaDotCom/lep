@@ -39,7 +39,7 @@ export class DatabaseComponent implements OnInit {
 
     console.log('Testing connection...')
     // TODO: Use special token
-    this.api.testDatabaseConnection(localStorage.getItem('jwt'), url)
+    this.api.testDatabaseConnection(localStorage.getItem('setupToken'), url)
       .subscribe(
       result => {
         this.messageService.success(result.message)
