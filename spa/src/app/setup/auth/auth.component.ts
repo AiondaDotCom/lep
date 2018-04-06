@@ -19,7 +19,7 @@ export class AuthComponent implements OnInit {
     private api: ApiService,
     private messageService: MessageService,
     private setupService: SetupService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.setupAuthenticationForm = this.fb.group({
@@ -28,9 +28,19 @@ export class AuthComponent implements OnInit {
   }
 
   setupAuthentication() {
-    console.log(`Testing token (${this.setupAuthenticationForm.value.setupToken})`)
-    this.setupService.unlockStep(3);
-    this.setupService.navigateStep(2);
+    let token = this.setupAuthenticationForm.value.setupToken
+    console.log(`Testing token (${token})`)
+    this.api.verifySetupToken(token)
+      .subscribe(
+      result => {
+        this.messageService.success(result.message)
+        this.setupService.unlockStep(3);
+        this.setupService.navigateStep(2);
+      },
+      err => {
+        this.messageService.error(err.error.message);
+        console.log(err);
+      });
   }
 
 }

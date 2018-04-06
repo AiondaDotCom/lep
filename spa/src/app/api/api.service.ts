@@ -88,6 +88,18 @@ export class ApiService {
     return this.http.get(`${this.apiUrl}/whatIsMyIP`)
   }
 
+  /*
+   * Setup related endpoints
+   */
+
+  verifySetupToken(setupToken: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/setup/verifyToken`, {
+      params: {
+        'setupToken': setupToken
+      }
+    })
+  }
+
   testDatabaseConnection(setupToken: string, url: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/setup/testDatabaseConnection`, {
       params: {
