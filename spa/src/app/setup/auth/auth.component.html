@@ -1,3 +1,23 @@
-<p>
-  auth works!
-</p>
+<h2>Authentication for setup</h2>
+  In order to perform the setup procedure please input the setup token that was
+  generated during the first startup process.
+
+
+  <form (ngSubmit)="setupAuthentication()"
+        [formGroup]="setupAuthenticationForm"
+        #formDir="ngForm"
+        autocomplete="off">
+
+    <div class="form-group row">
+      <label for="setupToken" class="col-2 col-form-label">Token</label>
+      <div class="col-10">
+        <input type="text" class="form-control" id="setupToken"
+                name="setupToken"
+                formControlName="setupToken"
+                autofocus>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-lg btn-primary"
+          [disabled]="formDir.invalid">Verify token</button>
+  </form>
