@@ -9,11 +9,14 @@ import { SetupService } from '../setup.service';
 })
 export class CreateAdminComponent implements OnInit {
 
+  setupToken: string;
+
   constructor(
     private setupService: SetupService
   ) { }
 
   ngOnInit() {
+    this.setupToken = localStorage.getItem('setupToken');
   }
 
 }
