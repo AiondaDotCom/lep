@@ -30,7 +30,8 @@ function getDomainWhitelist(req, res) {
 
 function whatIsMyIP(req, res) {
   // Returns the ip adress of the client
-  var ip = req.headers['x-forwarded-for'];
+  var ip = req.headers['x-forwarded-for'].split(',')[0];
+
   res.json({
     ip: ip
   })
