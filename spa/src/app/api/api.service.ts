@@ -68,6 +68,16 @@ export class ApiService {
     return this.http.get(`${this.apiUrl}/getDomainWhitelist`)
   }
 
+  addDomainToWhitelist(domain: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/admin/addDomainToWhitelist`, {
+      params: {
+        'token': localStorage.getItem('jwt'),
+        domain: domain
+      }
+    })
+  }
+
+
   getAccountList(): Observable<any> {
     return this.http.get(`${this.apiUrl}/admin/getAccountList`, {
       params: {
@@ -77,6 +87,10 @@ export class ApiService {
   }
 
   renewToken(): Observable<any> {
+    let token = localStorage.getItem('jwt');
+    //if (token === null || token === undefined) {
+    //  throw new Error('Token is not in localStorage');
+    //}
     return this.http.get(`${this.apiUrl}/user/renewToken`, {
       params: {
         'token': localStorage.getItem('jwt')
