@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { LoadingIndicatorModule } from '../loading-indicator/loading-indicator.module';
@@ -22,7 +24,9 @@ import { DomainWhitelistManagerComponent } from './domain-whitelist-manager/doma
     DashboardModule,
     SettingsModule,
     LoadingIndicatorModule,
-    EditUserModalModule
+    EditUserModalModule,
+    NgbModule,
+    ReactiveFormsModule
   ],
   declarations: [
     AdminComponent,
