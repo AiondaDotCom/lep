@@ -23,9 +23,6 @@
       </div>
     </div>
 
-    <div *ngIf="registerMessage" class="alert" [class.alert-danger]="error == true" [class.alert-success]="error == false" role="alert">
-      {{ registerMessage }}
-    </div>
 
     <button type="submit" class="btn btn-lg btn-primary btn-block"
            [disabled]="requestRegistrationForm.invalid">Submit</button>
