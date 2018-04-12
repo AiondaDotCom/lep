@@ -52,6 +52,22 @@ module.exports.getDomainWhitelist = function() {
   return domainWhitelist;
 }
 
+module.exports.addDomainToWhitelist = function(domain) {
+  // TODO: Insert domain into database
+  return new Promise(function(fulfill, reject) {
+    if (domainWhitelist.indexOf(domain) > -1) {
+      reject({
+        code: 400, // Bad Request
+        message: `Cannot add domain to whitelist. (Duplicate)`
+      })
+    }
+    else {
+      domainWhitelist.push(domain);
+      fulfill();
+    }
+  })
+}
+
 module.exports.checkEmailWhitelist = function(emailadress) {
   return new Promise(function(fulfill, reject) {
     var domain = emailadress.substring(emailadress.lastIndexOf("@") + 1);
@@ -129,10 +145,9 @@ module.exports.verifyToken = function(token) {
 
 module.exports.verifyTokenAction = function(tokenPayload, tokenAction) {
   return new Promise(function(fulfill, reject) {
-    if (tokenPayload.action && tokenPayload.action == tokenAction){
+    if (tokenPayload.action && tokenPayload.action == tokenAction) {
       fulfill(true)
-    }
-    else {
+    } else {
       reject({
         code: 401,
         message: `Token was not issued for this action (action=${tokenPayload.action})`

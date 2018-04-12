@@ -466,7 +466,6 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
 
-
   /admin/getConfig:
     x-swagger-router-controller: admin
     get:
@@ -490,7 +489,6 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-
   /admin/getAccountList:
     x-swagger-router-controller: admin
     get:
@@ -503,6 +501,34 @@ paths:
         - name: token
           in: query
           description: JSON Web token
+          required: true
+          type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /admin/addDomainToWhitelist:
+    x-swagger-router-controller: admin
+    get:
+      tags:
+        - admin
+      description: |
+        Add a domain to the domain whitelist
+      operationId: addDomainToWhitelist
+      parameters:
+        - name: token
+          in: query
+          description: JSON Web token
+          required: true
+          type: string
+        - name: domain
+          in: query
+          description: Domain to add
           required: true
           type: string
       responses:
