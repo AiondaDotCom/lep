@@ -13,6 +13,7 @@ import { AdminSettingsComponent } from './admin-settings/admin-settings.componen
 
 //import { DashboardModule } from '../shared/dashboard/dashboard.module';
 import { EditUserModalModule } from '../shared/edit-user-modal/edit-user-modal.module';
+import { DomainWhitelistManagerComponent } from './domain-whitelist-manager/domain-whitelist-manager.component';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import { EditUserModalModule } from '../shared/edit-user-modal/edit-user-modal.m
     AdminComponent,
     AdminDashboardComponent,
     AdminAccountManagerComponent,
-    AdminSettingsComponent
+    AdminSettingsComponent,
+    DomainWhitelistManagerComponent
   ]
 })
 
