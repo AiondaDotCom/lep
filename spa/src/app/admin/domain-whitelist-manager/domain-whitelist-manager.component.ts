@@ -12,11 +12,10 @@ import { MessageService } from '../../message.service';
   styleUrls: ['./domain-whitelist-manager.component.css']
 })
 export class DomainWhitelistManagerComponent implements OnInit {
-
   domainWhitelistForm: FormGroup;
-
+  addDomainToWhitelistModalRef;
+  confirmDeleteDomainModalRef;
   domainToDelete: string;
-
 
   constructor(
     public fb: FormBuilder,
@@ -32,28 +31,28 @@ export class DomainWhitelistManagerComponent implements OnInit {
     });
   }
 
-  open(content) {
-    this.modalService.open(content);
+  openAddDomainToWhitelistModal(content) {
+    this.addDomainToWhitelistModalRef = this.modalService.open(content);
   }
 
-  confirmDeleteDomain(content, domain: string){
-    this.modalService.open(content)
+  confirmDeleteDomain(content, domain: string) {
+    this.confirmDeleteDomainModalRef = this.modalService.open(content);
     this.domainToDelete = domain;
   }
 
-  deleteDomain(domain: string){
+  deleteDomain(domain: string) {
     console.log(`Delete domain. ${domain}`)
     this.api.removeDomainFromWhitelist(domain)
       .subscribe(
       data => {
         this.messageService.success(data.message);
         this.authService.refreshDomainWhitelist();
+        this.confirmDeleteDomainModalRef.close();
       },
       err => {
         this.messageService.error(err.error.message);
       })
   }
-
 
   saveDomain() {
     let domain = this.domainWhitelistForm.value.domain;
@@ -63,13 +62,11 @@ export class DomainWhitelistManagerComponent implements OnInit {
       data => {
         this.messageService.success(data.message);
         this.authService.refreshDomainWhitelist();
+        this.addDomainToWhitelistModalRef.close();
       },
       err => {
         this.messageService.error(err.error.message);
       })
     console.log(domain)
-
   }
-
-
 }
