@@ -11,7 +11,8 @@ const saltRounds = 10;
 module.exports = {
   getConfig: getConfig,
   getAccountList: getAccountList,
-  addDomainToWhitelist: addDomainToWhitelist
+  addDomainToWhitelist: addDomainToWhitelist,
+  removeDomainFromWhitelist: removeDomainFromWhitelist
 };
 
 function getConfig(req, res) {
@@ -77,6 +78,28 @@ function addDomainToWhitelist(req, res) {
     .then(function() {
       res.json({
         message: `Inserted domain ${domain} into whitelist`
+      })
+    })
+    .catch(function(err) {
+      error.sendMsg(res, err);
+    })
+}
+
+
+function removeDomainFromWhitelist(req, res) {
+  var token = req.swagger.params.token.value;
+  var domain = req.swagger.params.domain.value;
+
+  auth.verifyToken(token)
+    .then(function(payload) {
+      return auth.isAdmin(payload)
+    })
+    .then(function() {
+      return auth.removeDomainFromWhitelist(domain)
+    })
+    .then(function() {
+      res.json({
+        message: `Removed domain ${domain} from whitelist`
       })
     })
     .catch(function(err) {

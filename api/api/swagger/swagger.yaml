@@ -73,7 +73,6 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
 
-
   /setup/verifyToken:
     x-swagger-router-controller: setup
     get:
@@ -101,7 +100,6 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-
 
   /setup/testDatabaseConnection:
     x-swagger-router-controller: setup
@@ -194,8 +192,6 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-
-
   /user/requestRegistration:
     x-swagger-router-controller: login
     get:
@@ -229,7 +225,6 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-
   /user/register:
     x-swagger-router-controller: login
     get:
@@ -268,7 +263,6 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-
   /user/delete:
     x-swagger-router-controller: login
     get:
@@ -300,7 +294,6 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-
   /user/modify:
     x-swagger-router-controller: login
     get:
@@ -336,7 +329,6 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-
   /user/requestPasswordReset:
     x-swagger-router-controller: login
     get:
@@ -361,7 +353,6 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-
   /user/getLoginLog:
     x-swagger-router-controller: login
     get:
@@ -403,8 +394,6 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-
-
   /user/renewToken:
     x-swagger-router-controller: login
     get:
@@ -541,6 +530,35 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
 
+  /admin/removeDomainFromWhitelist:
+    x-swagger-router-controller: admin
+    get:
+      tags:
+        - admin
+      description: |
+        Deletes a domain from the domain whitelist
+      operationId: removeDomainFromWhitelist
+      parameters:
+        - name: token
+          in: query
+          description: JSON Web token. accountType hast to be admin
+          required: true
+          type: string
+        - name: domain
+          in: query
+          description: Domain to delete
+          required: true
+          type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
   /getDomainWhitelist:
     x-swagger-router-controller: misc
     get:
@@ -558,7 +576,6 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-
   /whatIsMyIP:
     x-swagger-router-controller: misc
     get:
@@ -599,7 +616,6 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-
   /doc/upload:
     x-swagger-router-controller: document
     post:

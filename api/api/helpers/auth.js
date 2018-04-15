@@ -68,6 +68,22 @@ module.exports.addDomainToWhitelist = function(domain) {
   })
 }
 
+module.exports.removeDomainFromWhitelist = function(domain) {
+  // TODO: Remove domain from database
+  return new Promise(function(fulfill, reject) {
+    if (domainWhitelist.indexOf(domain) > -1) {
+      domainWhitelist.splice(domainWhitelist.indexOf(domain), 1);
+      fulfill();
+    }
+    else {
+      reject({
+        code: 400, // Bad Request
+        message: `Cannot remove domain ${domain} from whitelist`
+      })
+    }
+  })
+}
+
 module.exports.checkEmailWhitelist = function(emailadress) {
   return new Promise(function(fulfill, reject) {
     var domain = emailadress.substring(emailadress.lastIndexOf("@") + 1);
