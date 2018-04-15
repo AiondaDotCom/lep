@@ -16,7 +16,7 @@
   </div>
   <div class="modal-footer">
     <button type="submit" class="btn btn-outline-danger"
-          (click)="deleteDomain()">Delete</button>
+          (click)="deleteDomain(domainToDelete)">Delete</button>
     <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Cancel</button>
   </div>
 </ng-template>
@@ -66,6 +66,6 @@
   <tr
     *ngFor="let domain of authService.domainWhitelist">
     <td>{{domain}}</td>
-    <td><button class="btn btn-outline-dark" (click)="deleteDomain(confirmContent, domain)">Delete</button></td>
+    <td><button class="btn btn-outline-dark" (click)="confirmDeleteDomain(confirmContent, domain)">Delete</button></td>
   </tr>
 </table>

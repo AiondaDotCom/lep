@@ -39,16 +39,7 @@ export class AuthService {
       this.renewToken();
     }, 1 * 60 * 1000); // Every minute
 
-    api.getDomainWhitelist()
-      .subscribe(data => {
-        console.log('Domainwhitelist successfully fetched');
-        this.whitelist = data;
-        localStorage.setItem('domainWhitelist', JSON.stringify(this.whitelist));
-      },
-      err => {
-        console.log('Error fetching domainWhitelist')
-        this.whitelist = ['Error: could not load domainwhitelist']
-      })
+    this.refreshDomainWhitelist();
   }
 
   renewToken() {
@@ -65,6 +56,19 @@ export class AuthService {
 
   get domainWhitelist() {
     return this.whitelist;
+  }
+
+  refreshDomainWhitelist() {
+    this.api.getDomainWhitelist()
+      .subscribe(data => {
+        console.log('Domainwhitelist successfully fetched');
+        this.whitelist = data;
+        localStorage.setItem('domainWhitelist', JSON.stringify(this.whitelist));
+      },
+      err => {
+        console.log('Error fetching domainWhitelist')
+        this.whitelist = ['Error: could not load domainwhitelist']
+      })
   }
 
   login(user: User): Observable<any> {

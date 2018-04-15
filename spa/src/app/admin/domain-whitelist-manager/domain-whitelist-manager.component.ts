@@ -36,10 +36,22 @@ export class DomainWhitelistManagerComponent implements OnInit {
     this.modalService.open(content);
   }
 
-  deleteDomain(content, domain: string){
+  confirmDeleteDomain(content, domain: string){
     this.modalService.open(content)
     this.domainToDelete = domain;
+  }
+
+  deleteDomain(domain: string){
     console.log(`Delete domain. ${domain}`)
+    this.api.removeDomainFromWhitelist(domain)
+      .subscribe(
+      data => {
+        this.messageService.success(data.message);
+        this.authService.refreshDomainWhitelist();
+      },
+      err => {
+        this.messageService.error(err.error.message);
+      })
   }
 
 
@@ -49,10 +61,11 @@ export class DomainWhitelistManagerComponent implements OnInit {
     this.api.addDomainToWhitelist(domain)
       .subscribe(
       data => {
-        this.messageService.success(data.message)
+        this.messageService.success(data.message);
+        this.authService.refreshDomainWhitelist();
       },
       err => {
-        this.messageService.error(err.error.message)
+        this.messageService.error(err.error.message);
       })
     console.log(domain)
 

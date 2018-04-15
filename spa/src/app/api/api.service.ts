@@ -77,6 +77,15 @@ export class ApiService {
     })
   }
 
+  removeDomainFromWhitelist(domain: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/admin/removeDomainFromWhitelist`, {
+      params: {
+        'token': localStorage.getItem('jwt'),
+        domain: domain
+      }
+    })
+  }
+
 
   getAccountList(): Observable<any> {
     return this.http.get(`${this.apiUrl}/admin/getAccountList`, {
