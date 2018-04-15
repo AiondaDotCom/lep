@@ -1,6 +1,27 @@
 <h2>Domain Whitelist Manager</h2>
 
 
+
+<ng-template #confirmContent let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Confirmation</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+    <p>Are you sure, you want to delete the domain <strong>{{domainToDelete}}</strong> from the whitelist?</p>
+
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-outline-danger"
+          (click)="deleteDomain()">Delete</button>
+    <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Cancel</button>
+  </div>
+</ng-template>
+
+
 <ng-template #content let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title">Add Domain to Whitelist</h4>
@@ -43,11 +64,8 @@
 
 <table class="table table-hover">
   <tr
-    *ngFor="let domain of authService.domainWhitelist"
-    (click)="selectUser(account.username)"
-    class="clickable-row"
-    >
+    *ngFor="let domain of authService.domainWhitelist">
     <td>{{domain}}</td>
-    <td>Delete</td>
+    <td><button class="btn btn-outline-dark" (click)="deleteDomain(confirmContent, domain)">Delete</button></td>
   </tr>
 </table>

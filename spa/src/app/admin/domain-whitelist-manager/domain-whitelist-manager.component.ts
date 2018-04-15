@@ -15,6 +15,8 @@ export class DomainWhitelistManagerComponent implements OnInit {
 
   domainWhitelistForm: FormGroup;
 
+  domainToDelete: string;
+
 
   constructor(
     public fb: FormBuilder,
@@ -33,6 +35,13 @@ export class DomainWhitelistManagerComponent implements OnInit {
   open(content) {
     this.modalService.open(content);
   }
+
+  deleteDomain(content, domain: string){
+    this.modalService.open(content)
+    this.domainToDelete = domain;
+    console.log(`Delete domain. ${domain}`)
+  }
+
 
   saveDomain() {
     let domain = this.domainWhitelistForm.value.domain;
