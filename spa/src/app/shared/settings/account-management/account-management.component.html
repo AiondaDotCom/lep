@@ -1,8 +1,9 @@
 <h2>Account management</h2>
 
-<button class="btn btn-warning">
+<button (click)="openEditUserModal()" class="btn btn-warning" #modifyUserModal>
   Modify account
 </button>
+<app-edit-user></app-edit-user>
 <button (click)="deleteAccount()" class="btn btn-danger">
   Delete account
 </button>

@@ -7,12 +7,15 @@ import { AccountManagementComponent } from './account-management/account-managem
 
 import { LoadingIndicatorModule } from '../../loading-indicator/loading-indicator.module';
 import { LoginLogComponent } from './account-management/login-log/login-log.component';
+import { EditUserModule } from '../../shared/edit-user/edit-user.module';
+
 
 @NgModule({
   imports: [
     CommonModule,
     MomentModule,
-    LoadingIndicatorModule
+    LoadingIndicatorModule,
+    EditUserModule
   ],
   exports: [
     SettingsComponent,
@@ -22,7 +25,8 @@ import { LoginLogComponent } from './account-management/login-log/login-log.comp
     SettingsComponent,
     AccountManagementComponent,
     LoginLogComponent
-  ]
+  ]//,
+  //entryComponents: [ EditUserModalComponent ]
 })
 
 export class SettingsModule { }

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { EditUserModalComponent } from './edit-user-modal.component';
+import { EditUserComponent } from './edit-user.component';
 
 @NgModule({
   imports: [
@@ -11,10 +11,11 @@ import { EditUserModalComponent } from './edit-user-modal.component';
     ReactiveFormsModule
   ],
   declarations: [
-    EditUserModalComponent
+    EditUserComponent
   ],
   exports: [
-    EditUserModalComponent
-  ]
+    EditUserComponent
+  ],
+  entryComponents: [ EditUserComponent ]
 })
-export class EditUserModalModule { }
+export class EditUserModule { }

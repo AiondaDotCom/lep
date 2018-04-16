@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 
 import { AuthService } from '../../../auth/auth.service';
@@ -17,12 +18,16 @@ export class AccountManagementComponent implements OnInit {
     private authService: AuthService,
     private api: ApiService,
     private messageService: MessageService,
-    private spinnerService: LoadingIndicatorService
+    private spinnerService: LoadingIndicatorService,
+    private modalService: NgbModal
   ) { }
 
   ngOnInit() {
   }
 
+  openEditUserModal(content) {
+    //this.modalService.open(EditUserModalComponent);
+  }
 
   deleteAccount() {
     let username = 'changeme';

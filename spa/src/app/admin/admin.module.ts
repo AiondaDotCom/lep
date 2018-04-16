@@ -13,8 +13,7 @@ import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.compo
 import { AdminAccountManagerComponent } from './admin-account-manager/admin-account-manager.component';
 import { AdminSettingsComponent } from './admin-settings/admin-settings.component';
 
-//import { DashboardModule } from '../shared/dashboard/dashboard.module';
-import { EditUserModalModule } from '../shared/edit-user-modal/edit-user-modal.module';
+import { EditUserModule } from '../shared/edit-user/edit-user.module';
 import { DomainWhitelistManagerComponent } from './domain-whitelist-manager/domain-whitelist-manager.component';
 
 @NgModule({
@@ -24,7 +23,7 @@ import { DomainWhitelistManagerComponent } from './domain-whitelist-manager/doma
     DashboardModule,
     SettingsModule,
     LoadingIndicatorModule,
-    EditUserModalModule,
+    EditUserModule,
     NgbModule,
     ReactiveFormsModule
   ],
