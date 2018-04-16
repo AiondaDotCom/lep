@@ -12,10 +12,6 @@ import { LoadingIndicatorService } from '../../../loading-indicator/loading-indi
   styleUrls: ['./account-management.component.css']
 })
 export class AccountManagementComponent implements OnInit {
-
-  loginLogList = [];
-  myIP;
-
   constructor(
     private router: Router,
     private authService: AuthService,
@@ -25,33 +21,8 @@ export class AccountManagementComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.requestLoginLog()
   }
 
-  requestLoginLog() {
-    this.spinnerService.start('loadLoginLog')
-
-    this.api.whatIsMyIP().subscribe(
-      result => {
-        this.myIP = result.ip
-      },
-      err => {
-        console.log(err);
-      }
-    );
-
-    this.api.getLoginLog().subscribe(
-      result => {
-        this.spinnerService.stop('loadLoginLog')
-        console.log(result);
-        this.loginLogList = result;
-      },
-      err => {
-        console.log(err);
-        this.spinnerService.stop('loadLoginLog')
-      }
-    );
-  }
 
   deleteAccount() {
     let username = 'changeme';

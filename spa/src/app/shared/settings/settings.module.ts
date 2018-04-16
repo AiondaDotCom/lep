@@ -6,6 +6,7 @@ import { SettingsComponent } from './settings.component';
 import { AccountManagementComponent } from './account-management/account-management.component';
 
 import { LoadingIndicatorModule } from '../../loading-indicator/loading-indicator.module';
+import { LoginLogComponent } from './account-management/login-log/login-log.component';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { LoadingIndicatorModule } from '../../loading-indicator/loading-indicato
   ],
   declarations: [
     SettingsComponent,
-    AccountManagementComponent
+    AccountManagementComponent,
+    LoginLogComponent
   ]
 })
 

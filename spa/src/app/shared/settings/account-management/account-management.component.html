@@ -1,22 +1,11 @@
 <h2>Account management</h2>
 
-<h3>Change password</h3>
-
-<h3>Delete account</h3>
-  <button (click)="deleteAccount()" class="btn btn-danger">
-    Delete account
-  </button>
+<button class="btn btn-warning">
+  Modify account
+</button>
+<button (click)="deleteAccount()" class="btn btn-danger">
+  Delete account
+</button>
 
 <h3>Login log</h3>
-  <loading-indicator spinnerFilePath="assets/loadingBlue.svg" spinnerName="loadLoginLog" message="Fetching Login Log"></loading-indicator>
-  <span *ngIf="myIP">Your IP is: {{myIP}}</span>
-  <ul class="list-group">
-    <li class="list-group-item"
-        *ngFor="let entry of loginLogList"
-        [class.list-group-item-danger]="entry.error == true"
-        [class.list-group-item-success]="entry.error == false">
-        {{entry.description}}
-        <span *ngIf="entry.ip">(from {{entry.ip == myIP ? 'your IP': 'IP ' + entry.ip}})</span>
-        <span class="badge badge-primary float-right">{{entry.timestamp | amTimeAgo}}</span>
-    </li>
-  </ul>
+  <app-login-log></app-login-log>
