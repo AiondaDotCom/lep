@@ -49,7 +49,7 @@ module.exports.getUserList = function() {
 }
 
 module.exports.getDomainWhitelist = function() {
-  return domainWhitelist;
+  return domainWhitelist.sort();
 }
 
 module.exports.addDomainToWhitelist = function(domain) {
