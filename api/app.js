@@ -6,6 +6,7 @@ var fs = require('fs');
 var db = require('./api/helpers/db');
 var auth = require('./api/helpers/auth');
 var helper = require('./api/helpers/helper');
+var settings = require('./api/helpers/settings');
 
 module.exports = app; // for testing
 
@@ -15,6 +16,25 @@ var config = {
 
 // Do DB sanity Check
 //db.healthCheck();
+
+
+console.log('Importing domainWhitelist from env');
+settings.getDomainWhitelist()
+  .then((rows)=>{
+    if (rows.length == 0){
+      // only import whitelist if empty
+      return settings.importWhitelistFomEnv();
+    }
+    else {
+      console.log('domainWhitelist not empty -> not importing env...');
+    }
+  })
+  .then(()=>{
+    console.log('import domainWhitelist successful')
+  })
+  .catch((err)=>{
+    console.log(`Error importing domainWhitelist: ${err}`);
+  })
 
 // Create setup token
 // TODO: Only output token, when in setup mode

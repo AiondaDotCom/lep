@@ -33,6 +33,13 @@ CREATE TABLE loginLog (
   INSERT INTO loginLog (username, action, description) VALUES ('admin@admin', 'login', 'long description goes here', 'localhost');
   SELECT * FROM loginLog WHERE username='awe@some';
 
+  CREATE TABLE domainWhitelist (
+    id          INT(6)       UNSIGNED NOT NULL AUTO_INCREMENT,
+    domain      VARCHAR(200) NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY (domain)
+    );
+
   # Rootuser anlegen
   insert into users (username, password, realname, accounttype, accountstate) values ('admin@admin', '...', 'Master', 'admin', 'active')
 

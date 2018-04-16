@@ -3,6 +3,7 @@
 var error = require('../helpers/error');
 var auth = require('../helpers/auth');
 var connection = require('../helpers/db').connection;
+var settings = require('../helpers/settings');
 
 var [dbURL, privateKey, publicKey] = require('../helpers/setupEnv').init()
 
@@ -73,7 +74,7 @@ function addDomainToWhitelist(req, res) {
       return auth.isAdmin(payload)
     })
     .then(function() {
-      return auth.addDomainToWhitelist(domain)
+      return settings.addDomainToWhitelist(domain)
     })
     .then(function() {
       res.json({
@@ -95,7 +96,7 @@ function removeDomainFromWhitelist(req, res) {
       return auth.isAdmin(payload)
     })
     .then(function() {
-      return auth.removeDomainFromWhitelist(domain)
+      return settings.removeDomainFromWhitelist(domain)
     })
     .then(function() {
       res.json({

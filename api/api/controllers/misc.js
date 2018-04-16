@@ -3,6 +3,7 @@
 var error = require('../helpers/error');
 var auth = require('../helpers/auth');
 var db = require('../helpers/db');
+var settings = require('../helpers/settings');
 var connection = db.connection;
 
 module.exports = {
@@ -24,8 +25,14 @@ function status(req, res) {
 
 function getDomainWhitelist(req, res) {
   // No protection of this endpoint
-  let whitelist = auth.getDomainWhitelist();
-  res.json(whitelist);
+  //let whitelist = auth.getDomainWhitelist();
+  settings.getDomainWhitelist()
+    .then((whitelist)=>{
+      res.json(whitelist);
+    })
+    .catch(function(err) {
+      error.sendMsg(res, err)
+    })
 }
 
 function whatIsMyIP(req, res) {

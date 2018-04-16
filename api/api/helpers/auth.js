@@ -1,7 +1,8 @@
 var jwt = require('jsonwebtoken'); // Generate and verify jwts
 var bcrypt = require('bcrypt'); // Hash passwords
 var connection = require('../helpers/db').connection;
-var [dbURL, privateKey, publicKey, saltRounds] = require('../helpers/setupEnv').init()
+var [dbURL, privateKey, publicKey, saltRounds] = require('../helpers/setupEnv').init();
+var settings = require('../helpers/settings');
 var domainWhitelist = require('../../../assets/police_domain_names.json').DE;
 
 module.exports.findUserInDB = function(username) {
@@ -48,53 +49,21 @@ module.exports.getUserList = function() {
   })
 }
 
-module.exports.getDomainWhitelist = function() {
-  return domainWhitelist.sort();
-}
-
-module.exports.addDomainToWhitelist = function(domain) {
-  // TODO: Insert domain into database
-  return new Promise(function(fulfill, reject) {
-    if (domainWhitelist.indexOf(domain) > -1) {
-      reject({
-        code: 400, // Bad Request
-        message: `Cannot add domain to whitelist. (Duplicate)`
-      })
-    }
-    else {
-      domainWhitelist.push(domain);
-      fulfill();
-    }
-  })
-}
-
-module.exports.removeDomainFromWhitelist = function(domain) {
-  // TODO: Remove domain from database
-  return new Promise(function(fulfill, reject) {
-    if (domainWhitelist.indexOf(domain) > -1) {
-      domainWhitelist.splice(domainWhitelist.indexOf(domain), 1);
-      fulfill();
-    }
-    else {
-      reject({
-        code: 400, // Bad Request
-        message: `Cannot remove domain ${domain} from whitelist`
-      })
-    }
-  })
-}
 
 module.exports.checkEmailWhitelist = function(emailadress) {
+  var domain = emailadress.substring(emailadress.lastIndexOf("@") + 1);
   return new Promise(function(fulfill, reject) {
-    var domain = emailadress.substring(emailadress.lastIndexOf("@") + 1);
-    if (domainWhitelist.includes(domain)) {
-      fulfill();
-    } else {
-      reject({
-        code: 400, // 400 Bad Request
-        message: `Email adress '${emailadress}' is not whitelisted`
-      });
-    }
+    settings.isDomainInWhitelist(domain)
+      .then((result) => {
+        if (result) {
+          fulfill();
+        } else {
+          reject({
+            code: 400, // 400 Bad Request
+            message: `Email adress '${emailadress}' is not whitelisted`
+          });
+        }
+      })
   })
 }
 
