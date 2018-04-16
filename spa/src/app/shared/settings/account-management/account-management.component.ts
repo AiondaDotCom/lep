@@ -25,9 +25,9 @@ export class AccountManagementComponent implements OnInit {
   ngOnInit() {
   }
 
-  openEditUserModal(content) {
+  //openEditUserModal(content) {
     //this.modalService.open(EditUserModalComponent);
-  }
+//  }
 
   deleteAccount() {
     let username = 'changeme';

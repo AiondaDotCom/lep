@@ -4,6 +4,21 @@
 <app-edit-user adminMode="true"></app-edit-user>
 
 
+<ng-template #editUserModal let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Edit User {{editUsername}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-edit-user adminMode="true"></app-edit-user>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Cancel</button>
+  </div>
+</ng-template>
+
 <table class="table table-hover">
   <tr>
     <th>Username</th>
@@ -14,7 +29,7 @@
   <tr
     *ngFor="let account of accountList"
     [class.table-success]="account.accountstate=='active'"
-    (click)="selectUser(account.username)"
+    (click)="openEditUserModal(editUserModal, account.username)"
     class="clickable-row"
     >
     <td>{{account.username}}</td>

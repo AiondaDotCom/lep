@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ApiService } from '../../api/api.service';
 
@@ -10,8 +11,13 @@ import { ApiService } from '../../api/api.service';
 export class AdminAccountManagerComponent implements OnInit {
 
   accountList = []
+  editUserModalRef;
+  editUsername: string;
 
-  constructor(private api: ApiService) { }
+  constructor(
+    private api: ApiService,
+    private modalService: NgbModal
+  ) { }
 
   ngOnInit() {
     this.api.getAccountList()
@@ -26,8 +32,10 @@ export class AdminAccountManagerComponent implements OnInit {
       )
   }
 
-  selectUser(username) {
+  openEditUserModal(content, username) {
     // Open edit user model for the corresponding user
+    this.editUsername = username;
+    this.editUserModalRef = this.modalService.open(content);
     console.log(`select user ${username}`)
   }
 
