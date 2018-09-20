@@ -1,0 +1,30 @@
+<form (ngSubmit)="requestRegistration()" [formGroup]="requestRegistrationForm" #formDir="ngForm" class="form-signin">
+  <h2 class="form-signin-heading">Create new account</h2>
+  If you already have an account you might want to <a routerLink="/login">Login</a>
+    <div class="form-group">
+
+      <!--<label for="requestRegistrationEmail">Name</label>-->
+      <input id="requestRegistrationEmail" class="form-control"
+             formControlName="requestRegistrationEmail"
+             placeholder="test@example.com" required>
+
+      <div *ngIf="requestRegistrationEmail.invalid && (requestRegistrationEmail.dirty || requestRegistrationEmail.touched)"
+           class="alert alert-danger">
+
+        <div *ngIf="requestRegistrationEmail.errors.required">
+          Email is required.
+        </div>
+        <div *ngIf="requestRegistrationEmail.errors.email">
+          Please enter a valid email
+        </div>
+        <div *ngIf="requestRegistrationEmail.errors.forbiddenName">
+          The domain you entered is not <a routerLink="/help" fragment="whitelistedDomains">whitelisted</a>.
+        </div>
+      </div>
+    </div>
+
+
+    <button type="submit" class="btn btn-lg btn-primary btn-block"
+           [disabled]="requestRegistrationForm.invalid">Submit</button>
+
+</form>

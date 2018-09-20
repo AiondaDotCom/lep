@@ -1,0 +1,12 @@
+<loading-indicator spinnerFilePath="assets/loadingBlue.svg" spinnerName="loadLoginLog" message="Fetching Login Log"></loading-indicator>
+<span *ngIf="myIP">Your IP is: {{myIP}}</span>
+<ul class="list-group">
+  <li class="list-group-item"
+      *ngFor="let entry of loginLogList"
+      [class.list-group-item-danger]="entry.error == true"
+      [class.list-group-item-success]="entry.error == false">
+      {{entry.description}}
+      <span *ngIf="entry.ip">(from {{entry.ip == myIP ? 'your IP': 'IP ' + entry.ip}})</span>
+      <span class="badge badge-primary float-right">{{entry.timestamp | amTimeAgo}}</span>
+  </li>
+</ul>

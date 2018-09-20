@@ -1,0 +1,42 @@
+rule build-image
+      command = docker build -t $out $in
+
+build build_api: build-image api
+build build_spa: build-image spa
+build aionda_lep: build-image . || build_api build_spa
+
+
+
+
+rule database
+      command = $COMMAND | docker exec -i $$(docker-compose ps -q mysql) mysql mysql -v -uroot -psuperSecure 
+pool database
+      depth = 1
+
+build databaseDrop: database
+      COMMAND = echo 'drop database aiondaLEP;'
+      pool = database
+build databaseInit: database
+      COMMAND = cat api/databaseInit.sql
+      pool = database
+
+
+
+
+rule compose
+      command = docker-compose $out
+pool compose
+      depth = 1
+build run lep npm test: compose aionda_lep
+build rm -sf: compose
+      pool = compose
+build clean: phony rm -sf
+build pull: compose
+build ps: compose
+build logs: compose
+build up -d: compose aionda_lep
+      pool = compose
+build stop: compose
+      pool = compose
+
+default up

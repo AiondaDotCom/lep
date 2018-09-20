@@ -1,4 +1,4 @@
-# Law Enforcement Portal (LEP)
+# Law Enforcement Portal (LEP) [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/AiondaDotCom/lep)
 
 The LEP is a solution to establish an automated digital communication between police agencies and service providers (websites, internet and email service providers etc.).
 In case of investigations of crimes there is a need to cooporate with police agencies which today is mostly done manually by human repetitive tasks.

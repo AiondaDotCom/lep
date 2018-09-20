@@ -1,0 +1,25 @@
+<h2>Document Manager <button class="btn btn-outline-dark" (click)="loadDocumentList()"><i class="fas fa-sync-alt"></i></button></h2>
+
+  <table class="table table-hover">
+      <tr>
+        <th>Filename</th>
+        <th>Uploader</th>
+        <th>Description</th>
+        <th>Date</th>
+        <th>Size</th>
+        <th></th>
+      </tr>
+      <tr
+        *ngFor="let file of downloadFileList"
+        >
+        <td>{{file.name}}</td>
+        <td>{{file.userName}}</td>
+        <td>{{file.description}}</td>
+        <td>{{file.timestamp | amTimeAgo}}</td>
+        <td>{{file.filesize | humanReadableSize}}</td>
+        <td><button type="submit" class="btn btn-outline-success"
+          (click)="downloadDocument(file.id)"><i class="fas fa-download"></i> Download</button>
+          <button type="submit" class="btn btn-outline-danger"
+          (click)="deleteDocument(file.id)"><i class="fas fa-trash-alt"></i> Delete</button></td>
+      </tr>
+    </table>

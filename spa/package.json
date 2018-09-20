@@ -1,0 +1,41 @@
+{
+  "name": "aionda-lep-spa",
+  "version": "0.0.1",
+  "private": true,
+  "license": "MIT",
+  "description": "The LEP is a solution to establish an automated digital communication between police agencies and service providers",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build --prod",
+    "lint": "ng lint"
+  },
+  "dependencies": {
+    "@angular/animations": "^6.1.4",
+    "@angular/cli": "^1.6.1",
+    "@angular/common": "^6.1.4",
+    "@angular/compiler": "^6.1.4",
+    "@angular/compiler-cli": "^6.1.4",
+    "@angular/core": "^6.1.4",
+    "@angular/forms": "^6.1.4",
+    "@angular/http": "^6.1.4",
+    "@angular/language-service": "^6.1.4",
+    "@angular/platform-browser": "^6.1.4",
+    "@angular/platform-browser-dynamic": "^6.1.4",
+    "@angular/router": "^6.1.4",
+    "@fortawesome/fontawesome-free": "^5.2.0",
+    "@ng-bootstrap/ng-bootstrap": "^3.0.0",
+    "@types/node": "^10.0.0",
+    "angular-in-memory-web-api": "^0.6.0",
+    "angular2-moment": "^1.8.0",
+    "bootstrap": "^4.0.0",
+    "codelyzer": "^4.0.1",
+    "core-js": "^2.4.1",
+    "rxjs": "^6.2.2",
+    "rxjs-compat": "^6.0.0-rc.0",
+    "ts-node": "~3.2.0",
+    "tslint": "~5.7.0",
+    "typescript": "~2.9.2",
+    "zone.js": "^0.8.14"
+  }
+}

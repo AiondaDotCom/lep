@@ -1,0 +1,11 @@
+{
+    "name": "LEP",
+    "description": "The LEP is a solution to establish an automated digital communication between police agencies and service providers ",
+    "keywords": [
+      "lep"
+    ],
+    "website": "https://github.com/AiondaDotCom/lep",
+    "repository": "https://github.com/AiondaDotCom/lep",
+    "logo": "http://aionda.com/wp-content/uploads/2017/04/206x206_white.png",
+    "success_url": "/"
+  }

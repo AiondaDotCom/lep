@@ -1,0 +1,14 @@
+<h1>LEP Setup</h1>
+
+<nav class="nav nav-pills nav-justified">
+  <a class="nav-link btn"          [class.disabled]="!(allowedStep >= 1)" routerLink="auth" [routerLinkActive]="['active']">Step 1 Auth</a>
+  <a class="nav-link btn disabled" [class.disabled]="!(allowedStep >= 2)" routerLink="admin" [routerLinkActive]="['active']">Step 2 Create Admin User</a>
+  <a class="nav-link btn disabled" [class.disabled]="!(allowedStep >= 3)" routerLink="database" [routerLinkActive]="['active']">Step 3 Create Database</a>
+  <a class="nav-link btn disabled" [class.disabled]="!(allowedStep >= 4)" routerLink="finish" [routerLinkActive]="['active']">Step 4 Finish</a>
+</nav>
+
+<div class="spacer1"></div>
+
+<div class="container">
+  <router-outlet></router-outlet>
+</div>

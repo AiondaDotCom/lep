@@ -1,0 +1,65 @@
+<h2>Account manager 
+  <button type="button" class="btn btn-outline-success"
+         (click)="openCreateUserModal(createUserModal)">
+    <i class="fas fa-plus-square"></i> New Account
+  </button>
+</h2>
+
+
+<!--<app-edit-user adminMode="true"></app-edit-user>-->
+
+<ng-template #createUserModal let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title">Create User</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <app-edit-user adminMode="true" [(newUser)]=newUser></app-edit-user>
+      <div *ngIf="createUserErrorMessage" class="alert alert-danger">
+          {{ createUserErrorMessage }}
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-outline-success" (click)="createUser()">Create account</button>
+      <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Cancel</button>
+    </div>
+  </ng-template>
+
+<ng-template #editUserModal let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Edit User {{editUsername}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-edit-user debug="true" adminMode="true" [(newUser)]=myUser></app-edit-user>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-outline-danger" (click)="deleteUser(myUser)">Delete account</button>
+    <button type="submit" class="btn btn-outline-success" (click)="modifyUser()">Modify account</button>
+    <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Cancel</button>
+  </div>
+</ng-template>
+
+<table class="table table-hover">
+  <tr>
+    <th>Username</th>
+    <th>Real Name</th>
+    <th>Account type</th>
+    <th>Accountstate</th>
+  </tr>
+  <tr
+    *ngFor="let account of accountList"
+    [class.table-success]="account.accountstate=='active'"
+    (click)="openEditUserModal(editUserModal, account)"
+    class="clickable-row"
+    >
+    <td>{{account.username}}</td>
+    <td>{{account.realname}}</td>
+    <td>{{account.accounttype}}</td>
+    <td>{{account.accountstate}}</td>
+  </tr>
+</table>

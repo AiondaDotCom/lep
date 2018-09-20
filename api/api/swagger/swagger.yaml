@@ -1,0 +1,877 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: Aionda LEP
+# during dev, should point to your local machine
+host: localhost:80
+# basePath prefixes all resource paths
+basePath: /api
+#
+tags:
+  - name: user
+    description: |
+      Endpoints related to user account management
+  - name: document
+    description: |
+      Up and download of documents
+  - name: admin
+    description: |
+      Actions that only admins are allowed to do
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+  - multipart/form-data
+# format of the responses to the client (Accepts)
+#produces:
+#  - application/json
+paths:
+  /status:
+    x-swagger-router-controller: misc
+    get:
+      tags:
+        - general
+      description: |
+        Rough server health infomations (e.g. if the API Backend is configured and running correct)
+      operationId: status
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            required:
+              - message
+              - healthy
+              - setupMode
+              - production
+            properties:
+              message:
+                description: |
+                  Human readable server status
+                type: string
+              healthy:
+                description: |
+                  true, if everything works as expected (database, ...)
+                type: boolean
+              setupMode:
+                description: |
+                  true, if the backend is not configured yet
+                type: boolean
+              production:
+                description: |
+                  true, if api is in production mode
+                type: boolean
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/UnauthorizedResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /setup/verifyToken:
+    x-swagger-router-controller: setup
+    get:
+      tags:
+        - setup
+      description: |
+        Verifies if the supplied setup token is valid
+      operationId: verifyToken
+      parameters:
+        - name: setupToken
+          in: query
+          description: JWT used for setup purposes
+          required: true
+          type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/MessageResponse"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/UnauthorizedResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /setup/testDatabaseConnection:
+    x-swagger-router-controller: setup
+    get:
+      tags:
+        - setup
+      description: |
+        Tries to connect to MYSQL database with given credentials.
+        Requires a special 'setupToken' that is only issued once and is only valid during setup
+      operationId: testDatabaseConnection
+      parameters:
+        - name: setupToken
+          in: query
+          description: JWT used for setup purposes
+          required: true
+          type: string
+        - name: url
+          in: query
+          description: |
+            Database URL (mysql://user:password@host:3306/database)
+          required: true
+          type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/MessageResponse"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/UnauthorizedResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+    #
+    # User management related things
+    # /user/login
+    # /user/requestRegistration
+    # /user/modify
+    # /user/delete
+    # /user/resetPassword
+    # /user/getLoginLog
+    #
+  /user/login:
+    x-swagger-router-controller: login
+    get:
+      tags:
+        - user
+      description: Endpoint used to obtain a JSON Webtoken from the server. This token is used to authenicate the user for subsequent requestes
+      operationId: login
+      parameters:
+        - name: name
+          in: query
+          description: Username (emailadress is used to identify the useraccount)
+          required: true
+          type: string
+        - name: password
+          in: query
+          description: Password corresponding to username
+          required: true
+          type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            required:
+              - jwt
+              - userName
+              - expireTimestamp
+              - accountType
+              - userID
+            properties:
+              userID:
+                type: number
+              jwt:
+                type: string
+              userName:
+                type: string
+              expireTimestamp:
+                type: number
+              accountType:
+                type: string
+              lastLogin:
+                type: string
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/UnauthorizedResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /user/requestRegistration:
+    x-swagger-router-controller: login
+    get:
+      tags:
+        - user
+      description: |
+        Request the registration of a new account. It is checked, whether the emailadress is in an allowed set of domains. A registration link (with token) is sent to that adress.
+      operationId: requestRegistration
+      parameters:
+        - name: email
+          in: query
+          description: emailadress
+          required: true
+          type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            required:
+              - message
+            properties:
+              message:
+                type: string
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/UnauthorizedResponse"
+
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /user/register:
+    x-swagger-router-controller: login
+    get:
+      tags:
+        - user
+      description: |
+        Create a new account. It is checked, if the username is in an allowed set of domains
+      operationId: register
+      parameters:
+        - name: token
+          in: query
+          required: true
+          type: string
+        - name: email
+          in: query
+          required: true
+          type: string
+        - name: password
+          in: query
+          required: true
+          type: string
+        - name: fullName
+          in: query
+          required: true
+          type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/MessageResponse"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/UnauthorizedResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /user/delete:
+    x-swagger-router-controller: login
+    get:
+      tags:
+        - user
+      description: Delete account. Authorization via email and password
+      operationId: deleteAccount
+      parameters:
+        - name: name
+          in: query
+          description: username
+          required: true
+          type: string
+        - name: password
+          in: query
+          description: Password
+          required: true
+          type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/MessageResponse"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/UnauthorizedResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /user/modify:
+    x-swagger-router-controller: login
+    get:
+      tags:
+        - user
+      description: Modify account (change password, etc.)
+      operationId: modifyAccount
+      parameters:
+        - name: name
+          in: query
+          description: username
+          required: true
+          type: string
+        - name: password
+          in: query
+          description: Password
+          required: true
+          type: string
+        - name: newpassword
+          in: query
+          required: true
+          type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/MessageResponse"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/UnauthorizedResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /user/requestPasswordReset:
+    x-swagger-router-controller: login
+    get:
+      tags:
+        - user
+      description: |
+        If the user has forgotten the password, he can reset it.
+        This can be done by sending a password-reset-link to the  emailadress identifying the account.
+        The link contains a token that allows the user to enter a new password, which is then saved via the /user/resetPassword endpoint.
+      operationId: requestPasswordReset
+      parameters:
+        - name: email
+          in: query
+          required: true
+          type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/MessageResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /user/getLoginLog:
+    x-swagger-router-controller: login
+    get:
+      tags:
+        - user
+      description: |
+        Returns the login history for the account the token was issued for (Determined via the payload.username property).
+        The returned list is limeted to 50 items to prevent too much data.
+      operationId: getLoginLog
+      parameters:
+        - name: token
+          in: query
+          required: true
+          type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            type: array
+            items:
+              type: object
+              required:
+                - error
+                - timestamp
+              properties:
+                error:
+                  type: boolean
+                timestamp:
+                  type: string
+                description:
+                  type: string
+                ip:
+                  type: string
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/UnauthorizedResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /user/renewToken:
+    x-swagger-router-controller: login
+    get:
+      tags:
+        - user
+      description: |
+        Returns a token with a new expireTimestamp. The token contains a maximumExpireTimestamp, which defines the date until which renewing the token is allowed
+      operationId: renewToken
+      parameters:
+        - name: token
+          in: query
+          required: true
+          type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            required:
+              - newToken
+              - newExpireTimestamp
+            properties:
+              newToken:
+                type: string
+              newExpireTimestamp:
+                type: number
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/UnauthorizedResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /restricted:
+    x-swagger-router-controller: restricted
+    get:
+      description: |
+        Endpoint used to test the json webtoken authentication.
+      operationId: restricted
+      parameters:
+        - name: jwt
+          in: query
+          description: JSON Web token
+          required: true
+          type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/MessageResponse"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/UnauthorizedResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /admin/status:
+    x-swagger-router-controller: admin
+    get:
+      tags:
+        - admin
+      description: |
+        Detailed server status information
+      operationId: status
+      parameters:
+      - name: token
+        in: query
+        description: JSON Web token
+        required: true
+        type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/UnauthorizedResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /admin/getConfig:
+    x-swagger-router-controller: admin
+    get:
+      tags:
+        - admin
+      description: |
+        Returns the configuration (environment variables,...)
+      operationId: getConfig
+      parameters:
+        - name: token
+          in: query
+          description: JSON Web token
+          required: true
+          type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /admin/getAccountList:
+    x-swagger-router-controller: admin
+    get:
+      tags:
+        - admin
+      description: |
+        Returns list of registered accounts and corresponding metadata
+      operationId: getAccountList
+      parameters:
+        - name: token
+          in: query
+          description: JSON Web token
+          required: true
+          type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                username:
+                  type: string
+                realname:
+                  type: string
+                accounttype:
+                  type: string
+                accountstate:
+                  type: string
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /admin/createAccount:
+    x-swagger-router-controller: admin
+    get:
+      tags:
+        - admin
+      description: |
+        Creates new account
+      operationId: createAccount
+      parameters:
+        - name: token
+          in: query
+          description: JSON Web token; Has to have admin privileges
+          required: true
+          type: string
+        - name: email
+          in: query
+          description: Emailadress of account to be created
+          required: true
+          type: string
+        - name: fullName
+          in: query
+          description: Full Name of person
+          required: true
+          type: string
+        - name: password
+          in: query
+          description: Password
+          required: true
+          type: string
+        - name: accountType
+          in: query
+          description: Accounttype. Possible options ['admin', 'moderator', 'user']
+          required: true
+          type: string
+        - name: accountState
+          in: query
+          description: Accountstate. Possible options ['active', 'disabled']
+          required: true
+          type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /admin/deleteAccount:
+    x-swagger-router-controller: admin
+    get:
+      tags:
+        - admin
+      description: |
+        Deletes account
+      operationId: deleteAccount
+      parameters:
+        - name: token
+          in: query
+          description: JSON Web token; Has to have admin privileges
+          required: true
+          type: string
+        - name: deleteID
+          in: query
+          description: ID of account to be deleted
+          required: true
+          type: number
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /admin/addDomainToWhitelist:
+    x-swagger-router-controller: admin
+    get:
+      tags:
+        - admin
+      description: |
+        Add a domain to the domain whitelist
+      operationId: addDomainToWhitelist
+      parameters:
+        - name: token
+          in: query
+          description: JSON Web token
+          required: true
+          type: string
+        - name: domain
+          in: query
+          description: Domain to add
+          required: true
+          type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /admin/removeDomainFromWhitelist:
+    x-swagger-router-controller: admin
+    get:
+      tags:
+        - admin
+      description: |
+        Deletes a domain from the domain whitelist
+      operationId: removeDomainFromWhitelist
+      parameters:
+        - name: token
+          in: query
+          description: JSON Web token. accountType hast to be admin
+          required: true
+          type: string
+        - name: domain
+          in: query
+          description: Domain to delete
+          required: true
+          type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /getDomainWhitelist:
+    x-swagger-router-controller: misc
+    get:
+      description: |
+        Returns the current active domain-whitelist that is used to determine wether a mailadress is allowed, or not.
+      operationId: getDomainWhitelist
+      responses:
+        200:
+          description: Success
+          schema:
+            type: array
+            items:
+              type: string
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /whatIsMyIP:
+    x-swagger-router-controller: misc
+    get:
+      description: |
+        Returns the IP, that the request was issued from
+      operationId: whatIsMyIP
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            required:
+              - ip
+            properties:
+              ip:
+                type: string
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /getDatabaseID:
+    x-swagger-router-controller: misc
+    get:
+      description: |
+        Returns the ID stored in DB
+      operationId: getDatabaseID
+      responses:
+        200:
+          description: Success
+          schema:
+            type: string
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /doc/list:
+    x-swagger-router-controller: document
+    get:
+      tags:
+        - document
+        - admin
+      description: |
+        List documents stored in db (only admins are allowed)
+      operationId: getDocumentList
+      parameters:
+        - name: token
+          in: query
+          required: true
+          type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: number
+                userName:
+                  type: string
+                name:
+                  type: string
+                description:
+                  type: string
+                filesize:
+                  type: string
+                timestamp:
+                  type: string
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /doc/download:
+    x-swagger-router-controller: document
+    get:
+      tags:
+        - document
+      description: |
+        Allows user to download specific files identyfied by ID
+      operationId: downloadDocument
+      parameters:
+        - name: token
+          in: query
+          required: true
+          type: string
+        - name: fileID
+          in: query
+          required: true
+          type: number
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/MessageResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /doc/upload:
+    x-swagger-router-controller: document
+    post:
+      tags:
+        - document
+      description: |
+        Allows user to upload specific files
+      operationId: uploadDocument
+      parameters:
+        - name: token
+          in: query
+          required: true
+          type: string
+        - name: file
+          in: formData
+          description: file to upload
+          required: true
+          type: file
+        - name: description
+          in: query
+          required: true
+          type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/MessageResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /doc/delete:
+    x-swagger-router-controller: document
+    get:
+      tags:
+        - document
+      description: |
+        Deletes a document identified by documentID.
+        Users are allowed to delete documents that they uploaded themselves.
+        Admins and Moderators can delete any document.
+      operationId: deleteDocument
+      parameters:
+        - name: token
+          in: query
+          description: JSON Web token.
+          required: true
+          type: string
+        - name: documentID
+          in: query
+          description: documentID to delete
+          required: true
+          type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+definitions:
+  MessageResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  UnauthorizedResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string

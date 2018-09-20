@@ -1,0 +1,12 @@
+<h2>Account management</h2>
+
+  <app-edit-user [(newUser)]="user"></app-edit-user>
+  <button class="btn btn-warning" #modifyUserModal>
+      Modify account
+  </button>
+  <button (click)="deleteAccount()" class="btn btn-danger">
+    Delete account
+  </button>
+
+<h3>Login log</h3>
+  <app-login-log></app-login-log>
