@@ -1,0 +1,71 @@
+<h2>Domain Whitelist Manager</h2>
+
+
+
+<ng-template #confirmContent let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Confirmation</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+    <p>Are you sure, you want to delete the domain <strong>{{domainToDelete}}</strong> from the whitelist?</p>
+
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-outline-danger"
+          (click)="deleteDomain(domainToDelete)">Delete</button>
+    <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Cancel</button>
+  </div>
+</ng-template>
+
+
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Add Domain to Whitelist</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+    <p>Please input the domain in order to add it to the domain whitelist.</p>
+
+    <form (ngSubmit)="saveDomain()"
+          [formGroup]="domainWhitelistForm"
+          #formDir="ngForm"
+          class="form-signin form-signin-wide"
+          autocomplete="off">
+
+      <div class="form-group row">
+        <label for="domain" class="col-2 col-form-label">Domain</label>
+        <div class="col-10">
+          <input type="text" class="form-control" id="domain"
+                  name="domain"
+                  formControlName="domain"
+                  autofocus>
+        </div>
+      </div>
+      </form>
+
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-outline-primary"
+          [disabled]="formDir.invalid"
+          (click)="saveDomain()">Save Domain</button>
+    <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
+  </div>
+</ng-template>
+
+<button class="btn btn-success" (click)="openAddDomainToWhitelistModal(content)">Add Domain</button>
+
+
+<table class="table table-hover">
+  <tr
+    *ngFor="let domain of authService.domainWhitelist">
+    <td>{{domain}}</td>
+    <td><button class="btn btn-outline-dark" (click)="confirmDeleteDomain(confirmContent, domain)">Delete</button></td>
+  </tr>
+</table>

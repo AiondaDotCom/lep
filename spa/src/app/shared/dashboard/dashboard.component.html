@@ -1,0 +1,53 @@
+<!--<div *ngIf="!authService.authenticated" class="jumbotron">
+  <h1 class="display-3">Dashboard</h1>
+  <p>You need to login!</p>
+</div>-->
+
+<!--<div *ngIf="authService.authenticated">-->
+  <!--<h1>Dashboard</h1>-->
+
+<p>Welcome {{authService.userProfile.userName}}!</p>
+
+<ul>
+  <li>Your account has <strong>{{authService.userProfile.accountType}}</strong> privileges</li>
+  <li>Your login expires {{authService.userProfile.expireTimestamp  | amFromUnix | amTimeAgo}}</li>
+  <li *ngIf="authService.userProfile.lastLogin">Your last successful login occured {{authService.userProfile.lastLogin | amTimeAgo}}</li>
+  <li *ngIf="!authService.userProfile.lastLogin">Welcome to your first login!</li>
+</ul>
+
+<div class="row">
+  <div class="col-md">
+    <h2>Test token</h2>
+
+    <button (click)="requestRestricted()" class="btn btn-danger">
+      <loading-indicator spinnerName="requestRestrictedContent"></loading-indicator>
+      Request restricted content
+    </button>
+    <br>
+    {{restrictedContent}}
+  </div>
+
+  <div class="col-md">
+    <h2>Upload file</h2>
+
+    <div class="form-group">
+      <!--<label for="file">Choose File</label>-->
+      <label class="btn btn-success">
+        <loading-indicator spinnerName="uploadFile"></loading-indicator>
+        <i class="fas fa-file-alt"></i> Choose File
+        <input type="file" id="file"
+               (change)="handleFileInput($event.target.files)" hidden>
+       </label>
+       <button *ngIf="uploadFileList && uploadFileList.length > 0" (click)="triggerUpload()" class="btn" [disabled]="disableUpload">Upload</button>
+     </div>
+
+     <ul>
+       <li *ngFor="let file of uploadFileList">{{file.name}}</li>
+     </ul>
+     <div *ngIf="uploadMessage" class="alert" [class.alert-danger]="uploadError == true" [class.alert-success]="uploadError == false" role="alert">
+       {{ uploadMessage }}
+     </div>
+   </div>
+
+ </div>
+<!--<div>-->

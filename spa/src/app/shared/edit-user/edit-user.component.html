@@ -1,0 +1,71 @@
+<form (ngSubmit)="createUser()"  #createUserForm="ngForm">
+  <div class="form-group row">
+    <label for="fullName" class="col-3 col-form-label">Email</label>
+    <div class="col-9">
+      <input type="email" class="form-control" id="inputEmail" required email
+              [(ngModel)]="newUser.email" name="inputEmail"
+              placeholder="Email address" autofocus>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="fullName" class="col-3 col-form-label">Name</label>
+    <div class="col-9">
+      <input type="text" class="form-control" id="fullName" required
+              name="fullName"
+              [(ngModel)]="newUser.fullName"
+              placeholder="Max Mustermann" autofocus autocomplete="off">
+    </div>
+  </div>
+
+
+  <div class="form-group row">
+      <label for="registerPassword" class="col-3 col-form-label">Password</label>
+      <div class="col-9">
+        <input id="registerPassword" type="password"
+                class="form-control" required
+                [(ngModel)]="newUser.password"
+                name="registerPassword"
+                placeholder="Password"
+                autocomplete="off">
+      </div>
+    </div>
+
+  <!-- Show account-type choice only in adminMode -->
+  <div *ngIf="adminMode">
+      <div class="form-group row">
+        <label class="col-3 col-form-label">Accounttype</label>
+        <div class="col-9">
+          <label class="radio-inline">
+            <input [(ngModel)]="newUser.accountType" type="radio" name="accountType" value="admin">Admin
+          </label>
+          <label class="radio-inline">
+            <input [(ngModel)]="newUser.accountType" type="radio" name="accountType" value="moderator">Moderator
+          </label>
+          <label class="radio-inline">
+            <input [(ngModel)]="newUser.accountType" type="radio" name="accountType" value="user">User
+          </label>
+        </div>
+      </div>
+
+
+      <div class="form-group row">
+          <label class="col-3 col-form-label">Accountstate</label>
+          <div class="col-9">
+            <label class="radio-inline">
+              <input [(ngModel)]="newUser.accountState" type="radio" name="accountState" value="active">Aktiv
+            </label>
+            <label class="radio-inline">
+              <input [(ngModel)]="newUser.accountState" type="radio" name="accountState" value="disabled">Deaktiviert
+            </label>
+          </div>
+        </div>
+  </div>
+  
+  <br>
+  <div *ngIf="debug">
+    {{newUser|json}}
+  </div>
+  
+  <!--<button type="submit" class="btn btn-primary" (click)="createUser()">Create user</button>-->
+</form>

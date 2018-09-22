@@ -1,0 +1,36 @@
+<form (ngSubmit)="signIn()"  #loginForm="ngForm" class="form-signin">
+  <h2 class="form-signin-heading">Please sign in</h2>
+  If you don't have an account you might want to <a routerLink="/register">Register</a>.
+
+  <label for="inputEmail" class="sr-only">Email address</label>
+  <input type="email" class="form-control" id="inputEmail" required email
+          [(ngModel)]="model.email" name="inputEmail"
+          placeholder="Email address" #email="ngModel" autofocus>
+
+  <label for="inputPassword" class="sr-only">Password</label>
+  <input type="password" class="form-control" id="inputPassword" required
+          [(ngModel)]="model.password" name="inputPassword"
+          placeholder="Password" #password="ngModel">
+
+  <div [hidden]="email.valid || email.pristine"
+       class="alert alert-danger">
+    Please input a valid mailadress
+  </div>
+
+  <div [hidden]="password.valid || password.pristine"
+       class="alert alert-danger">
+    Password is required
+  </div>
+
+  <div *ngIf="loginMessage" class="alert"
+    [class.alert-danger]="error == true"
+    [class.alert-success]="error == false" role="alert">
+    {{ loginMessage }}
+  </div>
+
+  <button [disabled]="!loginForm.form.valid"
+      class="btn btn-lg btn-primary btn-block"
+      type="submit">
+      <loading-indicator spinnerName="signIn"></loading-indicator>Sign in
+  </button>
+</form>

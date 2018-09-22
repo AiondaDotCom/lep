@@ -1,0 +1,8 @@
+<div *ngIf="requestRegistrationMode">
+  <app-request-registration></app-request-registration>
+</div>
+
+<div *ngIf="!requestRegistrationMode">
+  <h2>Complete your registration</h2>
+    <app-create-account editEmailDisabled="true" [email]="myEmail" [token]="token"></app-create-account>
+</div>

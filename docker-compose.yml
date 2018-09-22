@@ -1,0 +1,16 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - /srv/lep/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD
+  lep:
+    image: aionda_lep
+    environment:
+      - DEVELOPMENT
+      - SENDGRID_API_KEY
+      - MYSQL_CONFIG
+    ports:
+      - 80:80

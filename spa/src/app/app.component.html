@@ -1,0 +1,60 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+  <a class="navbar-brand" routerLink="/" (click)="navbarCollapsed = true">{{ title }}</a>
+  <!-- collapsable navbar see: https://github.com/ng-bootstrap/ng-bootstrap/issues/738 -->
+  <button class="navbar-toggler navbar-toggler-right" type="button" (click)="navbarCollapsed = !navbarCollapsed"
+         [attr.aria-expanded]="!navbarCollapsed" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+   <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div [ngbCollapse]="navbarCollapsed" class="collapse navbar-collapse" id="navbarCollapse">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a *ngIf="authService.authenticated"
+            class="nav-link"
+            [routerLink]="'/' + authService.accountType + '/dashboard'"
+            (click)="navbarCollapsed = true"
+            [routerLinkActive]="['active']">
+            Dashboard
+        </a>
+      </li>
+      <li class="nav-item">
+        <a *ngIf="authService.authenticated"
+            class="nav-link"
+            [routerLink]="'/' + authService.accountType + '/settings'"
+            (click)="navbarCollapsed = true"
+            [routerLinkActive]="['active']">
+            Settings
+          </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/help"
+            (click)="navbarCollapsed = true"
+            [routerLinkActive]="['active']">
+            Help
+          </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/legal-notice"
+            (click)="navbarCollapsed = true"
+            [routerLinkActive]="['active']">
+            Legal Notice
+          </a>
+      </li>
+    </ul>
+
+    <a *ngIf="!authService.authenticated" class="btn btn-info" routerLink="/login" (click)="navbarCollapsed = true">Login</a>
+    <a *ngIf="authService.authenticated" class="btn btn-danger" (click)="navbarCollapsed = true; logout()">Logout</a>
+  </div>
+</nav>
+
+<div class="container">
+  <!--<p *ngFor="let alert of this.messageService.lastMessage">-->
+  <div *ngIf="this.messageService.lastMessage">
+    <ngb-alert [type]="this.messageService.lastMessage.type" (close)="this.messageService.delete(this.messageService.lastMessage)">{{ this.messageService.lastMessage.message }}</ngb-alert>
+  </div>
+  <!--</p>-->
+</div>
+
+<main role="main" class="container">
+  <router-outlet></router-outlet>
+</main>

@@ -1,0 +1,40 @@
+<h2>Status</h2>
+
+<ul>
+  <li>
+    Datenbank config:
+    <ul>
+      <li>Host: {{status.db.host}}</li>
+      <li>DB: {{status.db.database}}</li>
+    </ul>
+  </li>
+  <li>
+    Verbindung zur MySQL Datenbank
+    <span *ngIf="status.mysqlCipher==''">unverschlüsselt <i class="fas fa-lock-open red"></i></span> 
+    <span *ngIf="status.mysqlCipher!=''">
+      verschlüsselt <i class="fas fa-lock green"></i> (Cipher: {{status.mysqlCipher}})  
+    </span>
+  </li>
+  <li>
+    max_allowed_packet: {{status.maxAllowedPacketSize | humanReadableSize}}
+  </li>
+  <li>
+    uptime: {{status.uptime}}
+  </li>
+  <li>
+    connections: {{status.connections}} (von maximal {{status.db.connectionLimit}})
+  </li>
+</ul>
+
+  <h3>Speichernutzung <button class="btn btn-outline-dark" (click)="refreshStatus()"><i class="fas fa-sync-alt"></i></button></h3>
+    <table class="table">
+        <tr>
+          <th>Tabelle</th>
+          <th>Speicher (MB)</th>
+        </tr>
+        <tr *ngFor="let table of status.memoryUsage">
+          <td>{{table.table}}</td>
+          <td>{{table.size | humanReadableSize}}</td>
+        </tr>
+      </table>
+    

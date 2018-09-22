@@ -1,0 +1,60 @@
+<form (ngSubmit)="register()" [formGroup]="registrationForm" #formDir="ngForm" class="form-signin form-signin-wide" autocomplete="off">
+  <!--<label for="inputEmail" class="sr-only">Email address</label>
+  <input type="email" class="form-control" id="inputEmail" required email [(ngModel)]="myEmail" name="inputEmail" placeholder="Email address" #email="ngModel" autofocus>
+
+  <div [hidden]="email.valid || email.pristine" class="alert alert-danger">
+    Please input a valid mailadress
+  </div>-->
+
+  <div class="form-group row">
+    <label for="inputTest" class="col-2 col-form-label">Email</label>
+    <div class="col-10">
+      <input type="text" class="form-control" id="inputTest"
+              name="inputTest"
+              formControlName="email">
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="fullName" class="col-2 col-form-label">Name</label>
+    <div class="col-10">
+      <input type="text" class="form-control" id="fullName" required
+              name="fullName"
+              formControlName="fullName"
+              placeholder="Max Mustermann" autofocus autocomplete="off">
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="registerPassword" class="col-2 col-form-label">Password</label>
+    <div class="col-10">
+      <input id="registerPassword" type="password"
+              class="form-control" required
+              formControlName="password"
+              name="registerPassword"
+              placeholder="Password"
+              autocomplete="off">
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="registerPasswordConfirm" class="col-2 col-form-label">Repeat Password</label>
+    <div class="col-10">
+      <input id="registerPasswordConfirm" type="password"
+              class="form-control" required
+              formControlName="passwordConfirm"
+              name="registerPasswordConfirm"
+              autocomplete="off">
+    </div>
+  </div>
+
+  <div *ngIf="passwordConfirm.touched">
+    <div *ngIf="registrationForm.hasError('mismatchedPasswords')" class="alert alert-danger">
+      Passwords do not match.
+    </div>
+  </div>
+
+
+  <button type="submit" class="btn btn-lg btn-primary btn-block"
+         [disabled]="formDir.invalid">Register</button>
+</form>
